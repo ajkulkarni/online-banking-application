@@ -76,8 +76,8 @@ PRIMARY KEY(id)
 
 CREATE TABLE transaction (
 id INT NOT NULL AUTO_INCREMENT,
-payer_account_number INT NOT NULL,
-payee_account_number INT NOT NULL,
+payer_id INT NOT NULL,
+payee_id INT NOT NULL,
 amount DECIMAL NOT NULL,
 hashvalue VARCHAR(255) NOT NULL,
 transaction_type VARCHAR(20) NOT NULL,
@@ -88,6 +88,6 @@ critical BOOLEAN NOT NULL,
 timestamp_created TIMESTAMP NOT NULL,
 timestamp_updated TIMESTAMP NOT NULL,
 PRIMARY KEY(id),
-FOREIGN KEY(payer_account_number) REFERENCES account(id)  ON UPDATE CASCADE,
-FOREIGN KEY(payee_account_number) REFERENCES account(id)  ON UPDATE CASCADE
+FOREIGN KEY(payer_id) REFERENCES account(id)  ON UPDATE CASCADE,
+FOREIGN KEY(payee_id) REFERENCES account(id)  ON UPDATE CASCADE
 ) ENGINE=InnoDB;
