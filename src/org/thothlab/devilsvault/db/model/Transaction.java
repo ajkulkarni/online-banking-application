@@ -86,5 +86,4 @@ public class Transaction {
 		this.timestamp_updated = timestamp_updated;
 	}
 	
-	
 }
