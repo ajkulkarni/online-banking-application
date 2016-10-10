@@ -54,7 +54,7 @@
 						<td><input type="submit" value="Login"  class = "btn"/></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='http://localhost:8080/CSE545-SS/register.html';"/></td>
+						<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
 						</tr>
 					
 					
@@ -64,9 +64,9 @@
 					</div> <!-- End Box -->
 				</form:form>
 				<script src='https://www.google.com/recaptcha/api.js'></script>
-				<p>Forgot your password? <u style="color:#f1c40f;">Click Here!</u></p>
+				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>
 				
-  
+  						
 				<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
     
         		<script src="/CSE545-SS/resources/js/index.js"></script>
@@ -79,5 +79,7 @@
 		</div> <!-- .content-wrapper -->
 	
 	</main> <!-- .cd-main-content -->
+	<tr>
+						
 </body>
 </html>

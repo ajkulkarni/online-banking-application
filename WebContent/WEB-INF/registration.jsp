@@ -4,6 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" class="no-js">
 <head>
+	
 	<meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="<c:url value="/resources/img/asu.png"/>">
@@ -598,6 +599,7 @@
 			  <script type="text/javascript">
 			  document.getElementById("si" + "mple" + "_spc").value = "62818724164157-62818724164157";
 			  </script>
+			  
 			</form>
 			
 		

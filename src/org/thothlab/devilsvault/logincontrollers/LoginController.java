@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import java.sql.*;
 //import net.roseindia.form.LoginForm;
 
 //import delegate.*;
@@ -89,6 +90,7 @@ public class LoginController {
 			}
 			else{
 				{
+					
 					ModelAndView modelandview1 = new ModelAndView("next");
 					return modelandview1;
 				}
@@ -140,6 +142,8 @@ public class LoginController {
 			}
 			else{
 				{
+					LoginDB Db = new LoginDB();
+					Db.insert_registration(register);
 					ModelAndView modelandview1 = new ModelAndView("loginform");
 					return modelandview1;
 				}
@@ -151,6 +155,27 @@ public class LoginController {
 		}
 
 	}
-
+	@RequestMapping(value ="forgot.html", method = RequestMethod.GET)
+	public ModelAndView getForgotPasswordForm() {
+ 
+		ModelAndView modelandview = new ModelAndView("forgotpassword");
+		
+		return modelandview;
+	}
+	@RequestMapping(value ="backtologin.html", method = RequestMethod.POST)
+	public ModelAndView sendEmail(@Valid LoginForm loginForm, BindingResult result, HttpServletRequest request) {
+ 	
+		ModelAndView modelandview = new ModelAndView("forgotpassword");
+		System.out.println("Forgotpassword email " + loginForm.getUserName());
+	
+		/*if(result.hasErrors())
+			return modelandview;*/
+		
+		LoginDB db = new LoginDB();
+		db.query(loginForm.getUserName());
+		modelandview = new ModelAndView("loginform");
+		return modelandview;
+		
+	}
 }
 

@@ -132,7 +132,7 @@ public class OneTimePassword {
             
          }
         }
-        System.out.println("INIT " + toHexString(initIV).length());
+        //System.out.println("INIT " + toHexString(initIV).length());
       
 		
 		
