@@ -1,9 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en" class="no-js">
 <head>
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 	<meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="<c:url value="/resources/img/asu.png"/>">
@@ -13,9 +16,12 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/CSE545-SS/resources/css/style.css">
 	<title>Home</title>
 </head>
 <body>
+
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
 		<a href="/cs445-ss" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
@@ -29,11 +35,47 @@
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
 			<div class="col-md-12" id="page-content">
-				<h1>Login Page</h1>
-			</div>
-							
+				
+				<form:form action="new.html"  commandName="loginForm" method="post">
+				
+					<div class="box">
+					<h3>Login Page</h3>
+					<br>
+					<br>
+					<input path="userName" type="email" name="userName" value="email" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
+					  
+					<input path="password" type="password" name="password" value="*****" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
 					
-		
+					
+					<br>
+					<br>
+					<div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+					<tr>
+						<td><input type="submit" value="Login"  class = "btn"/></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='http://localhost:8080/CSE545-SS/register.html';"/></td>
+						</tr>
+					
+					
+					
+					
+					  
+					</div> <!-- End Box -->
+				</form:form>
+				<script src='https://www.google.com/recaptcha/api.js'></script>
+				<p>Forgot your password? <u style="color:#f1c40f;">Click Here!</u></p>
+				
+  
+				<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+    
+        		<script src="/CSE545-SS/resources/js/index.js"></script>
+			</div>
+			
+			
+<% 
+
+%>		
 		</div> <!-- .content-wrapper -->
 	
 	</main> <!-- .cd-main-content -->
