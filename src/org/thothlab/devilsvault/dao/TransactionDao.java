@@ -1,5 +1,9 @@
 package org.thothlab.devilsvault.dao;
 
-public interface TransactionDao {
+import java.util.List;
 
+import org.thothlab.devilsvault.db.model.Transaction;
+
+public interface TransactionDao {
+	public List<Transaction> getOpenTransactions();
 }
