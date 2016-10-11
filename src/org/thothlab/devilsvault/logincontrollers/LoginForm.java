@@ -10,7 +10,21 @@ public class LoginForm {
 	@Size(min = 1, max = 20)
 	private String password;
 	private String captcha;
-	
+	private String ip;
+	private String type;
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}

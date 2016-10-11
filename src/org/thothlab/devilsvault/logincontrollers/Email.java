@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 public class Email {
 
-	public void send(String Subject,String email) {
+	public void send(String Subject,String email,String new_password, int check) {
 		
 		OneTimePassword otp = new OneTimePassword();
 		
@@ -42,7 +42,10 @@ public class Email {
 			message.setFrom(new InternetAddress("securebanking.ss4@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
 			message.setSubject("Please do not share this with anyone");
-			message.setText(Subject + otp.getotp());
+			if(check == 0)
+				message.setText(Subject + new_password);
+			else
+				message.setText(Subject + otp.getotp());
 
 			Transport.send(message);
 

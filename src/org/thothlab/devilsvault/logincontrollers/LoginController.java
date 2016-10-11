@@ -77,7 +77,13 @@ public class LoginController {
 	    }  
 		
 		
-		System.out.println("here lololol ip:"+ip);
+		//System.out.println("here lololol ip:"+ip);
+	    loginForm.setIp(ip);
+	    /*(if(loginForm.getType().equals("Internal"))
+	    {
+	    	boolean x = d.autheticate(loginForm);
+	    }*/
+	    
 		ModelAndView modelandview = new ModelAndView("loginform");
 		if(result.hasErrors())
 		{		
@@ -125,6 +131,9 @@ public class LoginController {
 		System.out.println(register.getPincode());
 		System.out.println(register.getStreet());
 		System.out.println(register.getHouse());
+		System.out.println(register.getUserAreacode());
+		System.out.println(register.getUserPhonecode());
+		System.out.println(register.getUserPhonenumber());
 		
 		
 		ModelAndView modelandview = new ModelAndView("registration");
@@ -132,27 +141,33 @@ public class LoginController {
 		String email1 = register.getUserEmail();
 		Boolean b = email1.matches(EMAIL_REGEX);
 		//System.out.println("is e-mail: "+email1+" :Valid = " + b);
+		
 		if(b==false||result.hasErrors())
 				return modelandview;
 			
-		if(request.getParameterMap().containsKey("g-recaptcha-response")){
+		if(request.getParameterMap().containsKey("g-recaptcha-response"))
+		{
 			if(request.getParameter("g-recaptcha-response") == "")
 			{
 				return modelandview;
 			}
 			else{
-				{
-					LoginDB Db = new LoginDB();
-					Db.insert_registration(register);
-					ModelAndView modelandview1 = new ModelAndView("loginform");
-					return modelandview1;
-				}
-			}
-		}
-		else{
+				
+					System.out.println("here");
+					LoginDB d = new LoginDB();
+					if(d.store(register).equals("email already exists"))
+					{
+						ModelAndView modelandview1 = new ModelAndView("loginform");
+						modelandview.addObject("error","Email already registered");
+						return modelandview1;
+					}
 					
-			return modelandview;
+				}
+			
 		}
+		modelandview = new ModelAndView("loginform");
+		System.out.println("Code reaching here");
+		return modelandview;
 
 	}
 	@RequestMapping(value ="forgot.html", method = RequestMethod.GET)
@@ -172,7 +187,9 @@ public class LoginController {
 			return modelandview;*/
 		
 		LoginDB db = new LoginDB();
-		db.query(loginForm.getUserName());
+		String result_email = db.query(loginForm.getUserName());
+		if(result_email.equals("invalid email/email not present"))
+			System.out.println("invalid email/email not present");
 		modelandview = new ModelAndView("loginform");
 		return modelandview;
 		

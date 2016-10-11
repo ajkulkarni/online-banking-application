@@ -27,9 +27,36 @@ public class RegistrationForm {
 	private String house;
 	private int pincode;
 	
+	private String userPhonecode;
+	private String userAreacode;
+	private String userPhonenumber;
 	private String addresslinetwo;
 	private String state;
 	
+	public String getUserPhonenumber()
+	{
+		return userPhonenumber;
+	}
+	public void setUserPhonenumber(String userPhonenumber)
+	{
+		this.userPhonenumber = userPhonenumber;
+	}
+	public String getUserAreacode()
+	{
+		return userAreacode;
+	}
+	public void setUserAreacode(String userAreacode)
+	{
+		this.userAreacode = userAreacode;
+	}
+	public String getUserPhonecode()
+	{
+		return userPhonecode;
+	}
+	public void setUserPhonecode(String userPhonecode)
+	{
+		this.userPhonecode = userPhonecode;
+	}
 	public String getState()
 	{
 		return state;

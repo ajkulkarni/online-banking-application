@@ -14,47 +14,6 @@
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta property="og:title" content="Encrypted Contact Form" >
-	<meta property="og:url" content="http://www.jotform.us/form/62831368525157" >
-	<meta property="og:description" content="Please click the link to complete this form.">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<meta name="HandheldFriendly" content="true" />
-	<title>Forgot Password</title>
-	<link href="https://cdn.jotfor.ms/static/formCss.css?3.3.15179" rel="stylesheet" type="text/css" />
-	<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/css/styles/nova.css?3.3.15179" />
-	<link type="text/css" media="print" rel="stylesheet" href="https://cdn.jotfor.ms/css/printForm.css?3.3.15179" />
-	<style type="text/css">
-	    .form-label-left{
-	        width:150px !important;
-	    }
-	    .form-line{
-	        padding-top:12px;
-	        padding-bottom:12px;
-	    }
-	    .form-label-right{
-	        width:150px !important;
-	    }
-	    body, html{
-	        margin:0;
-	        padding:0;
-	        background:false;
-	    }
-	
-	    .form-all{
-	        margin:0px auto;
-	        padding-top:20px;
-	        width:590px;
-	        color:Black !important;
-	        font-family:"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, sans-serif;
-	        font-size:14px;
-	    }
-	    .form-radio-item label, .form-checkbox-item label, .form-grading-label, .form-header{
-	        color: Black;
-	    }
-	
-	</style>
-	
 	<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/css/styles/buttons/form-submit-button-simple_orange.css?3.3.15179"/>
 	<script src="https://cdn.jotfor.ms/static/prototype.forms.js" type="text/javascript"></script>
 	<script src="https://cdn.jotfor.ms/static/jotform.forms.js?3.3.15179" type="text/javascript"></script>

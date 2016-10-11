@@ -39,24 +39,35 @@
 				<form:form action="new.html"  commandName="loginForm" method="post">
 				
 					<div class="box">
-					<h3>Login Page</h3>
+					<h1>Login Page</h1>
 					<br>
 					<br>
 					<input path="userName" type="email" name="userName" value="email" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
 					  
 					<input path="password" type="password" name="password" value="*****" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
-					
+					<br>
+					<br>
+					<label class="checkbox-inline">
+      					<input type="checkbox" value="">External User
+    				</label>
+    				<label class="checkbox-inline">
+      					<input type="checkbox" value="">Internal User
+    				</label>
+    				
 					
 					<br>
 					<br>
 					<div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+					<br>
+					<br>
 					<tr>
 						<td><input type="submit" value="Login"  class = "btn"/></td>
 					</tr>
 					<tr>
 						<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
 						</tr>
-					
+					<br>
+					<br>
 					
 					
 					
