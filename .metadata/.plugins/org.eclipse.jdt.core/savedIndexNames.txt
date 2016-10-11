@@ -1,2 +1,0 @@
-INDEX VERSION 1.129+/home/rakesh/projects/secure-banking-system/.metadata/.plugins/org.eclipse.jdt.core
-1891277477.index
