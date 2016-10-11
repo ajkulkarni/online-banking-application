@@ -33,7 +33,7 @@ public class TransactionDaoImpl implements TransactionDao {
 			ps.setString(1, "open");
 			Transaction transaction = null;
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				transaction = new Transaction();
 				transaction.setStatus("open");
 				transaction.setId(rs.getInt("id"));
