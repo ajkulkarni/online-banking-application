@@ -64,6 +64,11 @@
         <artifactId>spring-context</artifactId>
         <version>4.3.3.RELEASE</version>
     </dependency>
+    <dependency>
+    <groupId>jstl</groupId>
+    	<artifactId>jstl</artifactId>
+    	<version>1.2</version>
+	</dependency>
     <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
 	<dependency>
 	    <groupId>org.hibernate</groupId>
@@ -75,5 +80,11 @@
         <artifactId>jstl</artifactId>
         <version>1.2</version>
     </dependency>
-    </dependencies>
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>4.3.3.RELEASE</version>
+     </dependency>
+  </dependencies>
+  
 </project>
