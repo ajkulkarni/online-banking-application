@@ -49,6 +49,8 @@ public class TransactionDaoImpl implements TransactionDao {
 				transaction.setTimestamp_created(rs.getDate("timestamp_updated"));
 				transactionList.add(transaction);
 			}
+			rs.close();
+			ps.close();
 		}
 		catch(SQLException e) {
 			throw new RuntimeException(e);
