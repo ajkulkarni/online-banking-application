@@ -6,19 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
-import org.springframework.core;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.thothlab.devilsvault.ExternalUserModel.ExtUser;
 
 
 public class ExtUserDaoImpl implements ExtUserDao{
-	private JDBCType jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	public ExtUserDaoImpl(){}
 	public ExtUserDaoImpl(DataSource dataSource) {
-		this.jdbcTemplate = new JDBCType();
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public ArrayList<Float> ViewBalance(ExtUser user)
-	{
+	public ArrayList<Float> ViewBalance()
+	{	
+		ExtUser user = new ExtUser();
+		user.setID(101);
 		String sql ="SELECT * FROM  savings_accounts WHERE id="+user.getID();
 		ArrayList<Float> balances= new ArrayList<Float>();
 		List accounts = jdbcTemplate.queryForList(sql);

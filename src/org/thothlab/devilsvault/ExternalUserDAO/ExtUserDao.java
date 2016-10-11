@@ -7,6 +7,6 @@ import org.thothlab.devilsvault.ExternalUserModel.ExtUser;
 public interface ExtUserDao {
 
 	     
-	    public ArrayList<Float> ViewBalance(ExtUser user);
+	    public ArrayList<Float> ViewBalance();
 	     
 }

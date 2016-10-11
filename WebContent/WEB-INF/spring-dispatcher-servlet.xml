@@ -13,8 +13,9 @@
 		<context:component-scan base-package="org.thothlab.devilsvault.logincontrollers"/>
 		<context:component-scan base-package="org.thothlab.devilsvault.customercontrollers"/>
 		<context:component-scan base-package="org.thothlab.devilsvault.employeecontrollers"/>
+		<context:component-scan base-package="org.thothlab.devilsvault.ExternalUserController"/>
 		
-		 
+		
 		<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 			<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 			<property name="prefix" value="/WEB-INF/" />
