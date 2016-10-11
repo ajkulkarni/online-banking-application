@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -25,7 +26,7 @@ public class TransactionDaoImpl implements TransactionDao {
 		// TODO Auto-generated method stub
 		String sql = "SELECT * FROM transaction WHERE status = ?";
 		Connection conn = null;
-		List <Transaction> transactionList = null;
+		List <Transaction> transactionList = new LinkedList<>();
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
