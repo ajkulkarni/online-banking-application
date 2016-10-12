@@ -51,7 +51,7 @@
 					<ul>
 						<li><a href="#0">Checking</a></li>
 						<li><a href="#0">Savings</a></li>
-						<li><a href="#0">Credit Card</a></li>
+						<li><a href="credithome">Credit Card</a></li>
 					</ul>
 				</li>
 				<li>
