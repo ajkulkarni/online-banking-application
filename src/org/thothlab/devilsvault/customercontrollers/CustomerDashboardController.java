@@ -21,7 +21,7 @@ public class CustomerDashboardController {
 	}
 
 	@RequestMapping("/accounts_checkings")
-	public ModelAndView hellosavings(){
+	public ModelAndView hellocheckings(){
 		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
 		model.addObject("msg","Hello Checkings");
 		return model;
