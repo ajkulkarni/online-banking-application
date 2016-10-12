@@ -13,19 +13,25 @@
 					<h3 class="panel-title">Account Info</h3>
 				</div>
 				<div class="panel-body">
+					<table>
+				  <tr>
+				    <th>Transactions id:</th>
+				    <th>Amount</th>
+				  </tr>
+				  <tr>
+				    <td>xyz</td>
+				    <td>5000</td>
+				  </tr>
+				</table>
+				</div>
+				<div class="panel-body">
 					<div class="row">
 					<div class="col-sm-3">Account Balance:</div>
 					<div class="col-sm-3">${account_bal}</div>
 				</div>
-				
 				</div>
+				
 			</div>
-			
-			
-			
-			
-			
-			
 		</div>
 	</div> <!-- .content-wrapper -->
 	
