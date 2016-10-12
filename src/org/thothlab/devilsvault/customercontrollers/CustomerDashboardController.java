@@ -12,4 +12,18 @@ public class CustomerDashboardController {
 		model.addObject("msg","Hello Deepesh");
 		return model;
 	}
+
+	@RequestMapping("/accounts_savings")
+	public ModelAndView hellosavings(){
+		ModelAndView model = new ModelAndView("customerPages/accountsSavingsPage");
+		model.addObject("msg","Hello Accounts");
+		return model;
+	}
+
+	@RequestMapping("/accounts_checkings")
+	public ModelAndView hellosavings(){
+		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
+		model.addObject("msg","Hello Checkings");
+		return model;
+	}
 }
