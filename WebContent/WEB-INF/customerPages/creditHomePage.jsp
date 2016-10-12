@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@include file="creditHeader.jsp" %>
+<%@include file="customerHeader.jsp" %>
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
