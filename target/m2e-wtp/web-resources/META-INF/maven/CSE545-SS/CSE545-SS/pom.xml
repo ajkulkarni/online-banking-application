@@ -66,5 +66,10 @@
     <version>3.4</version>
 </dependency>
 
+	<dependency>
+  <groupId>com.twilio.sdk</groupId>
+  <artifactId>twilio-java-sdk</artifactId>
+  <version>6.3.0</version>
+</dependency>
 	</dependencies>
 </project>

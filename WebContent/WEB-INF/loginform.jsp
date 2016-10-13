@@ -47,12 +47,9 @@
 					<input path="password" type="password" name="password" value="*****" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
 					<br>
 					<br>
-					<label class="checkbox-inline">
-      					<input type="checkbox" value="">External User
-    				</label>
-    				<label class="checkbox-inline">
-      					<input type="checkbox" value="">Internal User
-    				</label>
+					<input type="radio" name="usertype" value="External User" required>External User<br>
+					<input type="radio" name="usertype" value="Internal User" required>Internal User<br>
+
     				
 					
 					<br>
@@ -64,7 +61,6 @@
 						<td><input type="submit" value="Login"  class = "btn"/></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
 						</tr>
 					<br>
 					<br>
@@ -74,6 +70,8 @@
 					  
 					</div> <!-- End Box -->
 				</form:form>
+				<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
+				
 				<script src='https://www.google.com/recaptcha/api.js'></script>
 				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>
 				

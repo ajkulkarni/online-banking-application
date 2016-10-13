@@ -25,6 +25,14 @@
 		JotForm.clearFieldOnHide="disable";
 		JotForm.onSubmissionError="jumpToSubmit";
 	   });
+	   $(document).ready(function(){
+		   
+		   $('#input_19').click(function(){
+			   $('#').hide();
+			   $('#').show();
+			   
+		   });
+	   });
 	</script>
 	<title>Home</title>
 </head>
@@ -60,6 +68,7 @@
 		          <input type="email" class=" form-textbox validate[required, Email]" id="input_16" name="userName" size="32" value="" />
 		        </div>
 		      </li>
+		      <br>
 		      <li class="form-line" data-type="control_button" id="id_19">
 		        <div id="cid_19" class="form-input-wide">
 		          <div style="margin-left:156px" class="form-buttons-wrapper">
@@ -69,10 +78,7 @@
 		          </div>
 		        </div>
 		      </li>
-		      <li style="display:none">
-		        Should be Empty:
-		        <input type="text" name="website" value="" />
-		      </li>
+		      
 		    </ul>
 		  </div>
 		

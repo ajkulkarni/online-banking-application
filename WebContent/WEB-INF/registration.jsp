@@ -487,27 +487,8 @@
 			        </label>
 			        <div id="cid_7" class="form-input jf-required">
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required, limitDate]" id="month_7" name="q7_dob[month]" type="tel" size="2" maxlength="2" value="" />
-			            <span class="date-separate">
-			              &nbsp;/
-			            </span>
-			            <label class="form-sub-label" for="month_7" id="sublabel_month" style="min-height: 13px;"> Month </label>
-			          </span>
-			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required, limitDate]" id="day_7" name="q7_dob[day]" type="tel" size="2" maxlength="2" value="" />
-			            <span class="date-separate">
-			              &nbsp;/
-			            </span>
-			            <label class="form-sub-label" for="day_7" id="sublabel_day" style="min-height: 13px;"> Day </label>
-			          </span>
-			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required, limitDate]" id="year_7" name="q7_dob[year]" type="tel" size="4" maxlength="4" value="" />
-			            <label class="form-sub-label" for="year_7" id="sublabel_year" style="min-height: 13px;"> Year </label>
-			          </span>
-			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <img class="showAutoCalendar" alt="Pick a Date" id="input_7_pick" src="https://cdn.jotfor.ms/images/calendar.png" align="absmiddle" />
-			            <label class="form-sub-label" for="input_7_pick" style="min-height: 13px;">  </label>
-			          </span>
+			          	<input type="date">
+			           
 			        </div>
 			      </li>
 			      <li class="form-line jf-required" data-type="control_phone" id="id_5">

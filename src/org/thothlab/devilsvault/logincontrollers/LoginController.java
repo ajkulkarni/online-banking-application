@@ -75,17 +75,19 @@ public class LoginController {
 	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
 	        ip = request.getRemoteAddr();  
 	    }  
-		
-		
+	    
+	  	String b = request.getParameter("usertype");
+	  	System.out.println(b);
+	  		
+		//System.out.println(loginForm.getUserType());
 		//System.out.println("here lololol ip:"+ip);
 	    loginForm.setIp(ip);
-	    /*(if(loginForm.getType().equals("Internal"))
-	    {
-	    	boolean x = d.autheticate(loginForm);
-	    }*/
+	    LoginDB db = new LoginDB();
+	   	boolean x = db.authenticate(loginForm, b);
+	 
 	    
 		ModelAndView modelandview = new ModelAndView("loginform");
-		if(result.hasErrors())
+		if(result.hasErrors()||x==false)
 		{		
 				return modelandview;
 		}

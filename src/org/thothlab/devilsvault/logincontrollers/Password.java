@@ -75,22 +75,17 @@ public class Password {
 		//DB.put(username, hashedPassword);
 	}
 	
-	public Boolean login(String username, String password) {
-		Boolean isAuthenticated = false;
-		String SALT=""; // fetch the salt from the DB
+	public String login(String salt, String password) {
+		//Boolean isAuthenticated = false;
+		//String SALT=""; // fetch the salt from the DB
 		// remember to use the same SALT value use used while storing password
 		// for the first time.
-		String storedPasswordHash ="";//fetch stored hashpassword from db
-		String saltedPassword = SALT + password;
+		//String storedPasswordHash ="";//fetch stored hashpassword from db
+		String saltedPassword = salt + password;
 		String hashedPassword = generateHash(saltedPassword);
+		return hashedPassword;
 
-		/*String storedPasswordHash = DB.get(username);
-		if(hashedPassword.equals(storedPasswordHash)){
-			isAuthenticated = true;
-		}else{
-			isAuthenticated = false;
-		}*/
-		return isAuthenticated;
+		
 	}
 	
 }

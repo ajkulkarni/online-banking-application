@@ -11,13 +11,13 @@ public class LoginForm {
 	private String password;
 	private String captcha;
 	private String ip;
-	private String type;
-	public String getType() {
-		return type;
+	private String usertype;
+	public String getUserType() {
+		return usertype;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setUserType(String usertype) {
+		this.usertype = usertype;
 	}
 	public String getIp() {
 		return ip;
