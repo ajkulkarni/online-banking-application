@@ -21,4 +21,4 @@
 			<property name="password" value="cse545ss_admin" />
 		</bean>
 </beans>
-		
+

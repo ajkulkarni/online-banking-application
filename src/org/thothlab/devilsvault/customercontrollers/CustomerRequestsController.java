@@ -3,9 +3,9 @@ package org.thothlab.devilsvault.customercontrollers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.thothlab.devilsvault.ExternalUserModel.CreditAccount;
-import org.thothlab.devilsvault.ExternalUserModel.DebitAccount;
-import org.thothlab.devilsvault.ExternalUserModel.BankAccount.AccountType;
+import org.thothlab.devilsvault.CustomerModel.CreditAccount;
+import org.thothlab.devilsvault.CustomerModel.DebitAccount;
+import org.thothlab.devilsvault.CustomerModel.BankAccount.AccountType;
 
 @Controller
 public class CustomerRequestsController {

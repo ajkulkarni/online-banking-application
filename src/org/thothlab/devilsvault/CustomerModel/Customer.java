@@ -1,6 +1,6 @@
-package org.thothlab.devilsvault.ExternalUserModel;
+package org.thothlab.devilsvault.CustomerModel;
 
-public class ExtUser {
+public class Customer {
     private int ID;
     private String name;
     private String designation;
@@ -13,9 +13,9 @@ public class ExtUser {
     private String phone;
     
 
-    public ExtUser()
+    public Customer()
     {}
-    public ExtUser(String name,String designation, String email, String address, String telephone,
+    public Customer(String name,String designation, String email, String address, String telephone,
     		String city,String state,String country, String pin) {
         this.name = name;
         this.designation = designation;

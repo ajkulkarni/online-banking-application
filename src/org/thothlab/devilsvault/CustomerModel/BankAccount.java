@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.ExternalUserModel;
+package org.thothlab.devilsvault.CustomerModel;
 
 import java.util.List;
 
@@ -8,16 +8,16 @@ public class BankAccount {
 		SAVINGS, CHECKING, CREDIT
 	}
 	
-	private ExtUser owner;
+	private Customer owner;
 	private int accountNumber;
 	private AccountType accountType;
 	private List<TransactionModel> transactionList;
 
-	public ExtUser getOwner() {
+	public Customer getOwner() {
 		return owner;
 	}
 
-	public void setOwner(ExtUser owner) {
+	public void setOwner(Customer owner) {
 		this.owner = owner;
 	}
 

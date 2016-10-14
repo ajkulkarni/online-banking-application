@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.ExternalUserModel;
+package org.thothlab.devilsvault.CustomerModel;
 
 
 
