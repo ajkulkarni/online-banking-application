@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.dao;
+package org.thothlab.devilsvault.dao.transaction;
 
 import java.util.List;
 

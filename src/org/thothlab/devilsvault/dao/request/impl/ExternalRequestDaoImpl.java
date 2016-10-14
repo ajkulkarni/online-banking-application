@@ -1,11 +1,14 @@
 package org.thothlab.devilsvault.dao.request.impl;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDao;
+import org.thothlab.devilsvault.db.model.Request;
 
 @Repository ("externalRequestDao")
 public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRequestDao {
@@ -32,5 +35,10 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 		int rowsAffected = jdbcTemplate.update(query, "1", "phone change", "12345", "54321", "pending", "Chnage phone number","2016-10-10","2016-10-10","deepesh");
 	    return rowsAffected;
 	}
-
+	
+	@Override
+	public List<Request> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
