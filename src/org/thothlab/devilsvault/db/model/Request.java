@@ -2,7 +2,7 @@ package org.thothlab.devilsvault.db.model;
 
 import java.sql.Date;
 
-public class InternalRequest {
+public class Request {
 	private int id;
 	private int requesterid;
 	private String request_type;
@@ -17,6 +17,11 @@ public class InternalRequest {
 	public int getId() {
 		return id;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int getRequesterid() {
 		return requesterid;
 	}
