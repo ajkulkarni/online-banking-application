@@ -33,4 +33,18 @@ public class TestDao {
 		List<Request> requestList = externalRequest.getAllCompleted();
 		System.out.println(requestList.size());
 	}
+	
+	@Test
+	public void testSave() {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDao.class);
+		List<Request> requestList = externalRequest.getAllPending();
+		Boolean check = false;
+		for(Request req : requestList) {
+			if(req.getApprover().equals("ajay"))
+				check = externalRequest.save(req, "external");
+		}
+		System.out.println(check);
+	}
+	
 }

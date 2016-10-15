@@ -3,7 +3,6 @@ package org.thothlab.devilsvault.dao.request.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -14,7 +13,6 @@ import org.thothlab.devilsvault.db.model.Request;
 
 public class RequestDaoImpl implements RequestDao{
 	private DataSource dataSource;
-	@SuppressWarnings("unused")
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
@@ -24,10 +22,12 @@ public class RequestDaoImpl implements RequestDao{
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
+	
 	@Override
 	public Boolean save(Request request, String type) {
 		// TODO Auto-generated method stub
-		String query = "insert into "+type+" (requesterid, request_type, current_value, requested_value, status, description, timestamp_created, timestamp_updated) values (?,?,?,?,?,?,?,?)";
+		String query = "insert into "+type+"_request_completed (requesterid, request_type, current_value, requested_value, status, approver, description, timestamp_created, timestamp_updated) values (?,?,?,?,?,?,?,?,?)";
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		try{
@@ -38,9 +38,11 @@ public class RequestDaoImpl implements RequestDao{
 			ps.setString(3, request.getCurrent_value());
 			ps.setString(4, request.getRequested_value());
 			ps.setString(5, request.getStatus());
-			ps.setString(6, request.getDescription());
-			ps.setDate(7, request.getTimestamp_created());
-			ps.setDate(8, request.getTimestamp_updated());
+			ps.setString(6, request.getApprover());
+			ps.setString(7, request.getDescription());
+			ps.setDate(8, request.getTimestamp_created());
+			ps.setDate(9, request.getTimestamp_updated());
+			System.out.println(ps);
 			int out = ps.executeUpdate();
 			if(out !=0){
 				return true;
@@ -57,6 +59,7 @@ public class RequestDaoImpl implements RequestDao{
 		}
 		return false;
 	}
+	
 	@Override
 	public Request getById(int id) {
 		// TODO Auto-generated method stub
@@ -71,15 +74,5 @@ public class RequestDaoImpl implements RequestDao{
 	public void deleteById(int id) {
 		// TODO Auto-generated method stub
 		
-	}
-	@Override
-	public List<Request> getAllPending() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public List<Request> getAllCompleted() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

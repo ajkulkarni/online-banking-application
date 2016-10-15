@@ -18,8 +18,4 @@ public interface RequestDao {
 	
 	public void deleteById(int id);
 	
-	public List<Request> getAllPending();
-	
-	public List<Request> getAllCompleted();
-	
 }
