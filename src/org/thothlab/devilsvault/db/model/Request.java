@@ -25,6 +25,12 @@ public class Request {
 	public int getRequesterid() {
 		return requesterid;
 	}
+	
+	
+	public void setRequesterid(int requesterid) {
+		this.requesterid = requesterid;
+	}
+
 	public String getRequest_type() {
 		return request_type;
 	}

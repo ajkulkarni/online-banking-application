@@ -1,6 +1,7 @@
 package org.thothlab.devilsvault.db.model;
 
 public class InternalUser {
+
 	private int id;
 	private String name;
 	private String designation;
@@ -13,6 +14,9 @@ public class InternalUser {
 	
 	public int getId() {
 		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
