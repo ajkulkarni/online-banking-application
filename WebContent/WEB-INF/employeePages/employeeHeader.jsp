@@ -34,9 +34,8 @@
 						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>UserID</a>
 					<ul>
 
-						<li><a href="#0">My Account</a></li>
-						<li><a href="#0">Edit Account</a></li>
-						<li><a href="#0">Logout</a></li>
+						<li><a href="userdetails">My Account</a></li>
+						<li><a href="<c:url value="/logout" />">Logout</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -51,7 +50,9 @@
 				<li>
 					<a href="#0">Request<span class="count">3</span></a>
 				</li>
-
+				<li>
+					<a href="transaction">Transaction<span class="count">3</span></a>
+				</li>
 				<li>
 					<a href="#0">Admin Options</a>
 				</li>

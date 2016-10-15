@@ -1,12 +1,13 @@
-package org.thothlab.devilsvault.dao.request.impl;
+package org.thothlab.devilsvault.dao.log;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.thothlab.devilsvault.dao.request.InternalRequestDao;
+import org.springframework.stereotype.Repository;
 
-public class InternalRequestDaoImpl extends RequestDaoImpl implements InternalRequestDao{
+@Repository ("internalRequestDao")
+public class InternalLogDaoImpl extends LogDaoImpl {
 	
 	@SuppressWarnings("unused")
 	private DataSource dataSource;

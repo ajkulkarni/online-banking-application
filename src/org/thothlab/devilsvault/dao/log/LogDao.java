@@ -1,10 +1,10 @@
-package org.thothlab.devilsvault.dao.request;
+package org.thothlab.devilsvault.dao.log;
 
 import javax.sql.DataSource;
 
 import org.thothlab.devilsvault.db.model.Request;
 
-public interface RequestDao {
+public interface LogDao {
 	
 	public void setDataSource(DataSource dataSource);
 	

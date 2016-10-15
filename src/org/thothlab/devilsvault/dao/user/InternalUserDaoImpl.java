@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.dao.user.impl;
+package org.thothlab.devilsvault.dao.user;
 
 import org.thothlab.devilsvault.dao.user.InternalUserDao;
 

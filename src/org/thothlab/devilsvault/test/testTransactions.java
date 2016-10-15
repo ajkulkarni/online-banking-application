@@ -14,8 +14,8 @@ public class testTransactions {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
 		TransactionDao transactionDAO = ctx.getBean("TransactionDao", TransactionDao.class);
 		transactionDAO.createTransaction();
+		ctx.close();
 	}
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testSave()
 	{
@@ -37,6 +37,7 @@ public class testTransactions {
 		transaction.setTimestamp_created(sqlDate);
 		transaction.setTimestamp_updated(sqlDate);
 		transactionDAO.save(transaction, type);
+		ctx.close();
 
 	}
 	@Test
@@ -47,5 +48,7 @@ public class testTransactions {
 		Transaction transaction;
 		transaction = transactionDAO.getById(1, "transaction_pending");
 		System.out.println(transaction);
+		ctx.close();
+
 	}
 }

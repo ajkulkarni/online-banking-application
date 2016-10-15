@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.dao.request.impl;
+package org.thothlab.devilsvault.dao.log;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,10 +8,9 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.thothlab.devilsvault.dao.request.RequestDao;
 import org.thothlab.devilsvault.db.model.Request;
 
-public class RequestDaoImpl implements RequestDao{
+public class LogDaoImpl implements LogDao{
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 	

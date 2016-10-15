@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.dao.request.impl;
+package org.thothlab.devilsvault.dao.request;
 
 import java.util.List;
 
@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.thothlab.devilsvault.dao.request.ExternalRequestDao;
 import org.thothlab.devilsvault.db.model.Request;
 
 @Repository ("externalRequestDao")
-public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRequestDao {
+public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	
 	@SuppressWarnings("unused")
 	private DataSource dataSource;
@@ -28,7 +27,6 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 		this.jdbcTemplate = new JdbcTemplate(dataSource);	
 	}
 
-	@Override
 	public int createRequest() {
 		// TODO Auto-generated method stub
 		String query = "insert into external_request_pending (requesterid, request_type, current_value, requested_value, status, approver, description, timestamp_created, timestamp_updated) values (?,?,?,?,?,?,?,?,?)";
@@ -36,7 +34,6 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 	    return rowsAffected;
 	}
 	
-	@Override
 	public List<Request> getAllPending() {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM external_request_pending";
@@ -44,7 +41,6 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 		return requestList;
 	}
 	
-	@Override
 	public List<Request> getAllCompleted() {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM external_request_completed";
