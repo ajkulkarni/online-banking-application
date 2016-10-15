@@ -28,7 +28,7 @@
 						<td>${trans.description}</td>
 						<td>${trans.payee}</td>
 						<td>${trans.amount}</td>
-						<td>${trans.date}</td>
+						<td>${trans.timeStamp}</td>
 					</tr>
 				</c:forEach>
 
