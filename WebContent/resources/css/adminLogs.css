@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+input.text-input
+{
+	width: 500px;
+}
+.btn
+{
+	padding: 3px 10px;
+}
+.panel-primary {
+    border-color: #FFFFFF;
+}

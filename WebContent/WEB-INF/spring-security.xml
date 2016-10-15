@@ -1,0 +1,30 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+		 xmlns:b="http://www.springframework.org/schema/beans"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+ 	<http use-expressions="true" auto-config="false">
+        <intercept-url pattern="/employee/**" access="hasRole('ROLE_USER')"></intercept-url>
+
+        <form-login 
+	        login-page="/login" 
+	        login-processing-url="/j_spring_security_check"
+	        authentication-failure-url="/login?error="
+	        username-parameter="username"
+            password-parameter="password"
+            authentication-success-handler-ref="customAuthenticationSuccessHandler"></form-login>
+        <logout 
+        	invalidate-session="true" ></logout>
+    	<csrf />
+    </http>
+    
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="securitydataSource"
+		  		users-by-username-query="select username,password, enabled from users where username=?"
+		  		authorities-by-username-query="select username, role from user_roles where username =?  " />
+        </authentication-provider>
+    </authentication-manager>
+ 
+</b:beans>
