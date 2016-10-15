@@ -22,11 +22,11 @@ public class LoginDB {
 				//System.out.println(email);
 				if(email.equals(s))
 				{
-					ResetPassword g = new ResetPassword();
-					String new_password = g.generaterandompassword();
+					//ResetPassword g = new ResetPassword();
+					//String new_password = g.generaterandompassword();
 					
 					Email E = new Email();
-					E.send("Your new password is ", s,new_password, 0);
+					//E.send("Your new password is ", s,new_password, 0);
 					System.out.println("Reached email");
 					return "password reset";
 				}

@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="C:/Users/Aditya/Downloads/recaptcha4j-0.0.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Aditya/Downloads/javax.mail.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Aditya/Downloads/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Aditya/Desktop/org.springframework.security.web-3.0.0.RELEASE.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -21,6 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import java.sql.*;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 //import net.roseindia.form.LoginForm;
 
 //import delegate.*;
@@ -29,7 +38,7 @@ import java.sql.*;
 
 public class LoginController {
 	
-	@RequestMapping(value ="loginform.html", method = RequestMethod.GET)
+	/*@RequestMapping(value ="loginform.html", method = RequestMethod.GET)
 	public ModelAndView getLoginForm() {
  
 		ModelAndView modelandview = new ModelAndView("loginform");
@@ -186,7 +195,7 @@ public class LoginController {
 		System.out.println("Forgotpassword email " + loginForm.getUserName());
 	
 		/*if(result.hasErrors())
-			return modelandview;*/
+			return modelandview;
 		
 		LoginDB db = new LoginDB();
 		String result_email = db.query(loginForm.getUserName());
@@ -195,6 +204,43 @@ public class LoginController {
 		modelandview = new ModelAndView("loginform");
 		return modelandview;
 		
+	}*/
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout) {
+
+		ModelAndView model = new ModelAndView();
+		if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
+		model.setViewName("login");
+		System.out.println("ModelView");
+		return model;
+
 	}
+	@RequestMapping(value = "/403", method = RequestMethod.GET)
+	public ModelAndView accesssDenied() {
+
+		ModelAndView model = new ModelAndView();
+		
+		//check if user is login
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			System.out.println(userDetail);
+		
+			model.addObject("username", userDetail.getUsername());
+			
+		}
+		
+		model.setViewName("403");
+		return model;
+
+	}
+		
 }
 
