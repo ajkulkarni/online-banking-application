@@ -9,5 +9,7 @@ import org.thothlab.devilsvault.db.model.Request;
 public interface ExternalRequestDao {
 	public void setDataSource(DataSource dataSource);
 	public int createRequest();
-	public List<Request> getAll();
+	public List<Request> getAllPending();
+	public List<Request> getAllCompleted();
+	public Boolean save(Request request, String type);
 }

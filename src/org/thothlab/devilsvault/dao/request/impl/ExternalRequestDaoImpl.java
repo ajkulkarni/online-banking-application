@@ -5,6 +5,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDao;
@@ -24,8 +25,7 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 		// TODO Auto-generated method stub
 		super.setDataSource(dataSource);
 		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		
+		this.jdbcTemplate = new JdbcTemplate(dataSource);	
 	}
 
 	@Override
@@ -37,8 +37,23 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 	}
 	
 	@Override
-	public List<Request> getAll() {
+	public List<Request> getAllPending() {
 		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM external_request_pending";
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		return requestList;
+	}
+	
+	@Override
+	public List<Request> getAllCompleted() {
+		// TODO Auto-generated method stub
+		String query = "SELECT * FROM external_request_completed";
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		return requestList;
+	}
+	
+	@Override
+	public Boolean save(Request request, String type) {
+		return super.save(request, type);
 	}
 }

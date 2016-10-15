@@ -19,14 +19,38 @@ public class EmployeeDashboardController {
 		return model;
 	}
 	
-	@RequestMapping("/requestview")
-	public ModelAndView RequestContoller(){
+	@RequestMapping("/viewopenextrequest")
+	public ModelAndView OpenRequestContoller(){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
 		ExternalRequestDao requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDao.class);
-		List<Request> reqList = requestDAO.getAll();
-		//requestDAO.createRequest();
+		List<Request> requestList = requestDAO.getAllPending();
 		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
-		model.addObject("request_list",reqList);
+		model.addObject("request_list",requestList);
+		ctx.close();
+		return model;
+	}
+	
+	@RequestMapping("/viewcompletedextrequest")
+	public ModelAndView CompletedRequestContoller(){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ExternalRequestDao requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDao.class);
+		List<Request> requestList = requestDAO.getAllCompleted();
+		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
+		model.addObject("request_list",requestList);
+		ctx.close();
+		return model;
+	}
+	
+	@RequestMapping("/createinternalrequest")
+	public ModelAndView CreateRequestContoller(Request request){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ExternalRequestDao requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDao.class);
+		boolean result = requestDAO.save(request, "external");
+		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
+		if (result)
+			model.addObject("msg","Request Created");
+		else
+			model.addObject("msg","Request Failed");
 		ctx.close();
 		return model;
 	}

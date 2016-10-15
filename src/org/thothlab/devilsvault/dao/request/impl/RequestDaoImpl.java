@@ -25,9 +25,9 @@ public class RequestDaoImpl implements RequestDao{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	@Override
-	public Boolean save(Request request) {
+	public Boolean save(Request request, String type) {
 		// TODO Auto-generated method stub
-		String query = "insert into Request (requesterid, request_type, current_value, requested_value, status, description, timestamp_created, timestamp_updated) values (?,?,?,?,?,?,?,?)";
+		String query = "insert into "+type+" (requesterid, request_type, current_value, requested_value, status, description, timestamp_created, timestamp_updated) values (?,?,?,?,?,?,?,?)";
 		Connection con = null;
 		PreparedStatement ps = null;
 		try{
@@ -73,7 +73,12 @@ public class RequestDaoImpl implements RequestDao{
 		
 	}
 	@Override
-	public List<Request> getAll() {
+	public List<Request> getAllPending() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Request> getAllCompleted() {
 		// TODO Auto-generated method stub
 		return null;
 	}

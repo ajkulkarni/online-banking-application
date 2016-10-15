@@ -10,7 +10,7 @@ public interface RequestDao {
 	
 	public void setDataSource(DataSource dataSource);
 	
-	public Boolean save(Request request);
+	public Boolean save(Request request, String type);
 	
 	public Request getById(int id);
 	
@@ -18,6 +18,8 @@ public interface RequestDao {
 	
 	public void deleteById(int id);
 	
-	public List<Request> getAll();
+	public List<Request> getAllPending();
+	
+	public List<Request> getAllCompleted();
 	
 }
