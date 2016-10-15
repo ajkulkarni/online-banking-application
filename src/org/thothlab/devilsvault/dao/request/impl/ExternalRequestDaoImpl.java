@@ -31,7 +31,7 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl implements ExternalRe
 	@Override
 	public int createRequest() {
 		// TODO Auto-generated method stub
-		String query = "insert into internal_request (requesterid, request_type, current_value, requested_value, status, description, timestamp_created, timestamp_updated, approver) values (?,?,?,?,?,?,?,?,?)";
+		String query = "insert into external_request_completed (requesterid, request_type, current_value, requested_value, status, description, timestamp_created, timestamp_updated, approver) values (?,?,?,?,?,?,?,?,?)";
 		int rowsAffected = jdbcTemplate.update(query, "1", "phone change", "12345", "54321", "pending", "Chnage phone number","2016-10-10","2016-10-10","deepesh");
 	    return rowsAffected;
 	}
