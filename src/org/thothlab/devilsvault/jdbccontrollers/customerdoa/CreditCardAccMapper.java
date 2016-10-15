@@ -2,18 +2,20 @@ package org.thothlab.devilsvault.jdbccontrollers.customerdoa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.springframework.jdbc.core.RowMapper;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
-import org.thothlab.devilsvault.jdbccontrollers.model.Request;
+import org.thothlab.devilsvault.CustomerModel.Customer;
 
 public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 
 	@Override
-	public CreditAccount mapRow(ResultSet arg0, int arg1) throws SQLException {
+	public CreditAccount mapRow(ResultSet rs, int arg1) throws SQLException {
 		CreditAccount obj = new CreditAccount();
-		//obj.setOwner(rs.get);
-		
+		int external_users_id = rs.getInt("external_users_id");
+
+		CustomerDAO dao = CustomerDAOHelper.customerDAO();
+		Customer user = dao.getCustomer(external_users_id);
+		obj.setOwner(user);
 		
 		
 		return obj;

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestDAOExternal;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
 import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 
 @Controller
@@ -16,9 +17,8 @@ public class CreditCardDashboardController {
 	@RequestMapping("/credithome")
 	public ModelAndView helloworld(){
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
-		
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
-		CreditCardDOA doa = ctx.getBean("creditCardDOA", CreditCardDOA.class);
+	
+		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CreditAccount account = doa.getCreditAccount(null);
 		model.addObject("creditAccount",account);
 		return model;
