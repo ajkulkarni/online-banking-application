@@ -12,7 +12,8 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 		
 		<context:component-scan base-package="org.thothlab.devilsvault.jdbccontrollers.RequestDOA" />
-		
+		<context:component-scan base-package="org.thothlab.devilsvault.CustomerDAO"/>
+		<!--
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -20,5 +21,13 @@
 			<property name="username" value="cse545ss_admin" />
 			<property name="password" value="cse545ss_admin" />
 		</bean>
+		-->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+            <property name="url" value="jdbc:mysql://localhost:3306/secureBanking" />
+            <property name="username" value="root" />
+            <property name="password" value="vsdnpryt" />
+        </bean>
+        
 </beans>
 
