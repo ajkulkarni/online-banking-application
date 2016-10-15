@@ -1,72 +1,72 @@
 package org.thothlab.devilsvault.CustomerModel;
 
 public class TransactionModel {
-	
-	private String ID;
-	private String owner;
-	private String payee;
-	
-	private double amount;
-	private int timeStamp;
-	
-	private int paymentType;
-	private String description;
 
-	public String getID() {
-		return ID;
-	}
+private int ID;
+private int owner;
+private int payee;
 
-	public void setID(String iD) {
-		ID = iD;
-	}
+private int amount;
+private int timeStamp;
 
-	public String getOwner() {
-		return owner;
-	}
+private int paymentType;
+private String description;
 
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
+public int getID() {
+return ID;
+}
 
-	public String getPayee() {
-		return payee;
-	}
+public void setID(int iD) {
+ID = iD;
+}
 
-	public void setPayee(String payee) {
-		this.payee = payee;
-	}
+public int getOwner() {
+return owner;
+}
 
-	public double getAmount() {
-		return amount;
-	}
+public void setOwner(int owner) {
+this.owner = owner;
+}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
+public int getPayee() {
+return payee;
+}
 
-	public int getTimeStamp() {
-		return timeStamp;
-	}
+public void setPayee(int payee) {
+this.payee = payee;
+}
 
-	public void setTimeStamp(int timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+public int getAmount() {
+return amount;
+}
 
-	public int getPaymentType() {
-		return paymentType;
-	}
+public void setAmount(int amount) {
+this.amount = amount;
+}
 
-	public void setPaymentType(int paymentType) {
-		this.paymentType = paymentType;
-	}
+public int getTimeStamp() {
+return timeStamp;
+}
 
-	public String getDescription() {
-		return description;
-	}
+public void setTimeStamp(int timeStamp) {
+this.timeStamp = timeStamp;
+}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
+public int getPaymentType() {
+return paymentType;
+}
+
+public void setPaymentType(int paymentType) {
+this.paymentType = paymentType;
+}
+
+public String getDescription() {
+return description;
+}
+
+public void setDescription(String description) {
+this.description = description;
+}
+
 
 }

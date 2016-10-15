@@ -16,7 +16,7 @@ public class CustomerDAOHelper {
 	
 	public static CustomerDAO customerDAO () {
 		
-		return getApplicationContext().getBean("customerDAO", CustomerDAO.class);;
+		return getApplicationContext().getBean("customerDAO", CustomerDAO.class);
 	}
 
 }
