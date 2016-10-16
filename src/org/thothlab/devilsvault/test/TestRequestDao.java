@@ -29,6 +29,22 @@ public class TestRequestDao {
 	}
 	
 	@Test
+	public void testApproveRequest() {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+		externalRequest.approveRequest(1, "external");
+		ctx.close();
+	}
+	
+	@Test
+	public void testRejectRequest() {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+		externalRequest.rejectRequest(4, "external");
+		ctx.close();
+	}
+	
+	@Test
 	public void testGetAllCompleted() {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);

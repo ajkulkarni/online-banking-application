@@ -51,6 +51,40 @@ public class EmployeeController {
         return model;
 	}
 	
+	@RequestMapping("/employee/pendingrequest/approve")
+	public ModelAndView PendingRequestApproveContoller(@RequestParam("requestID") String requestID, @RequestParam("requestType") String requestType){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		ModelAndView model = new ModelAndView("employeePages/PendingRequest");
+		if(requestType.equals("internal")) {
+	        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+	        internalRequestDao.approveRequest(Integer.parseInt(requestID), requestType);
+		}
+		else {
+			ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+			externalRequestDao.approveRequest(Integer.parseInt(requestID), requestType);
+		} 
+        model.addObject("error_msg","Request Approved!");
+        ctx.close();
+        return model;
+	}
+	
+	@RequestMapping("/employee/pendingrequest/reject")
+	public ModelAndView PendingRequestRejectContoller(@RequestParam("requestID") String requestID, @RequestParam("requestType") String requestType){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		ModelAndView model = new ModelAndView("employeePages/PendingRequest");
+		if(requestType.equals("internal")) {
+	        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+	        internalRequestDao.rejectRequest(Integer.parseInt(requestID), requestType);
+		}
+		else {
+			ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+			externalRequestDao.rejectRequest(Integer.parseInt(requestID), requestType);
+		} 
+        model.addObject("error_msg","Request Rejected!");
+        ctx.close();
+        return model;
+	}
+	
 	@RequestMapping("/employee/completedrequest")
 	public ModelAndView CompletedRequestContoller(){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -89,6 +123,8 @@ public class EmployeeController {
         ctx.close();
         return model;
 	}
+	
+	
 	
 	@RequestMapping(value="/employee/completedrequestsearch", method = RequestMethod.POST)
 	public ModelAndView CompletedRequestSearch(@RequestParam("requestID") String requestID, @RequestParam("userID") String userID) {

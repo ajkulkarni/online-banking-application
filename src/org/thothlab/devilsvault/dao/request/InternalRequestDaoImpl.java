@@ -65,6 +65,18 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 		String query = "SELECT * FROM internal_request_"+status+" WHERE requesterid = "+requesterid;
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
 		return requestList;
-	}	
+	}
+	
+	@Override
+	public void approveRequest(int id, String type) {
+		// TODO Auto-generated method stub
+		super.approveRequest(id, type);
+	}
+
+	@Override
+	public void rejectRequest(int id, String type) {
+		// TODO Auto-generated method stub
+		super.rejectRequest(id, type);
+	}
 
 }
