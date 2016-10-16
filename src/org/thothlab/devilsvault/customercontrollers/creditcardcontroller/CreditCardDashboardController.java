@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
+import org.thothlab.devilsvault.CustomerModel.Customer;
+import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestDAOExternal;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
@@ -21,8 +23,16 @@ public class CreditCardDashboardController {
 	
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
-		CreditAccount account = doa.getCreditAccount(cust_dao.getCustomer(100));
+		Customer cust = cust_dao.getCustomer(100);
+		
+		CreditAccount account = doa.getCreditAccount(cust);
+		System.out.println(account.getAccountNumber());
 		model.addObject("creditAccount",account);
+		
+		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
+		List<TransactionModel> transactions = transdao.getAllTransactions(account);
+		model.addObject("transations", transactions );
+		
 		return model;
 	}
 }
