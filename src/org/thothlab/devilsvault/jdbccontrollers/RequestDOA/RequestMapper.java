@@ -12,11 +12,7 @@ public class RequestMapper implements RowMapper<Request> {
 		Request req = new Request();
 		req.setId(rs.getInt("id"));
 		req.setRequest_type(rs.getString("request_type"));
-		req.setCurrent_value(rs.getString("current_value"));
-		req.setRequested_value(rs.getString("requested_value"));
-		req.setStatus(rs.getString("status"));
-		req.setTimestamp_created(rs.getDate("timestamp_created"));
-		req.setApprover(rs.getString("approver"));
+		
 		return req;
 	}
 }
