@@ -73,6 +73,21 @@
 		JotForm.onSubmissionError="jumpToFirstError";
 	   });
 	</script>
+	<link href="resources/css/jquery-ui.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+
+	<!-- keyboard widget css & script (required) -->
+	<link href="resources/css/keyboard.css" rel="stylesheet">
+	<script src="resources/js/jquery.keyboard.js"></script>
+
+	<!-- keyboard extensions (optional) -->
+	<script src="resources/js/jquery.mousewheel.js"></script>
+	<script>
+		$(function(){
+			$('#password').keyboard();
+		});
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -549,7 +564,7 @@
 			          </span>
 			        </label>
 			        <div id="cid_11" class="form-input jf-required">
-			          <input type="password" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="input_11" name="userPassword" size="20" value="" />
+			          <input type="password" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="password" name="userPassword" size="20" value="" />
 			        </div>
 			      </li>
 			      <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
@@ -580,6 +595,9 @@
 			  <script type="text/javascript">
 			  document.getElementById("si" + "mple" + "_spc").value = "62818724164157-62818724164157";
 			  </script>
+			  <input type="hidden" name="${_csrf.parameterName}"
+									value="${_csrf.token}" />
+					
 			  
 			</form>
 			

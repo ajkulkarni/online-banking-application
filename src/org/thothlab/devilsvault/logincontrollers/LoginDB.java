@@ -58,12 +58,12 @@ public class LoginDB {
 		    }
 		    String ph = register.getUserPhonecode()+register.getUserPhonecode()+register.getUserPhonenumber();
 		    String add = register.getStreet()+" "+register.getHouse();
-		    Password P = new Password();
+		    /*Password P = new Password();
 		    String salt = P.generatesalt();
 		    String hashpassword = P.signup(register.getUserPassword(), salt);
 		    String so="INSERT INTO `user_pending`(`name`,`address`,`city`,`state`,`country`,`email`,"+
-		    "`pincode`,`phone`,`salt`, `passhash`)VALUES('"+register.getFirstName()+" "+register.getLastName()+"','"+add+"','"+register.getCity()+"','"+register.getState()+"','"+register.getCountry()+"','"+register.getUserEmail()+"',"+register.getPincode()+","+ph+",'"+salt+"','"+hashpassword+"');";
-		    myStmt.executeUpdate(so);
+		    "`pincode`,`phone`,`salt`, `passhash`)VALUES('"+register.getFirstName()+" "+register.getLastName()+"','"+add+"','"+register.getCity()+"','"+register.getState()+"','"+register.getCountry()+"','"+register.getUserEmail()+"',"+register.getPincode()+","+ph+",'"+salt+"','"+hashpassword+"');";*/
+		   // myStmt.executeUpdate(so);
 		    //add count = 0 and locked = 0 to external_authenicate table
 		    //Internal user will create the external_user and external_authenticate tables.
 		   /* so="select * from external_user where email='"+register.getUserEmail()+"'";
@@ -141,10 +141,10 @@ public class LoginDB {
 				return false;
 			}
 			
-			Password P = new Password();
+			//Password P = new Password();
 			
-			String hashpass = P.login(salt, L.getPassword());
-			if(hashpass.equals(pass))
+			//String hashpass = P.login(salt, L.getPassword());
+			/*if(hashpass.equals(pass))
 			{
 				System.out.println("Authenticated");
 				//String email = L.getUserName();
@@ -176,7 +176,7 @@ public class LoginDB {
 				  
 				 
 					  
-			}
+			}*/
 			
 			
 		}catch(Exception e){

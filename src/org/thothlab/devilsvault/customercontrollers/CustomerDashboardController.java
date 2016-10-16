@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CustomerDashboardController {
 	
-	@RequestMapping("/customerhome")
+	@RequestMapping("/customer/home")
 	public ModelAndView helloworld(){
 		ModelAndView model = new ModelAndView("customerPages/customerDashboard");
 		model.addObject("msg","Hello Deepesh");

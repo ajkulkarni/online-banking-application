@@ -16,7 +16,22 @@
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
 	<title>Home</title>
-				
+	<link href="resources/css/jquery-ui.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+
+	<!-- keyboard widget css & script (required) -->
+	<link href="resources/css/keyboard.css" rel="stylesheet">
+	<script src="resources/js/jquery.keyboard.js"></script>
+
+	<!-- keyboard extensions (optional) -->
+	<script src="resources/js/jquery.mousewheel.js"></script>
+	<script>
+		$(function(){
+			$('#password').keyboard();
+		});
+	</script>
+</head>
 <body onload='document.loginForm.username.focus();'>
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
@@ -35,8 +50,7 @@
 				
 						<div id="login-box">
 
-							<h3>Login with Username and Password</h3>
-					
+											
 							<c:if test="${not empty error}">
 								<div class="error">${error}</div>
 							</c:if>
@@ -45,27 +59,44 @@
 							</c:if>
 					
 							<form name='loginForm'
-								action="<c:url value='/login' />" method='POST'>
+								action="login" method='POST'>
 					
 								<table>
+								
+									
+									<input path="username" type="email" name="username" value=""  class="email" required />
+									  
+									<input id = "password" path="password" type="password" name="password" value="*****" required/>
+									<br>
+									<br>
+									<input type="radio" name="usertype" value="External User" required>External User<br>
+									<input type="radio" name="usertype" value="Internal User" required>Internal User<br>
+				
+				    				
+									
+									
+									<br>
+									<div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+									
+									
 									<tr>
-										<td>User:</td>
-										<td><input type='text' name='username'></td>
+										<td><input type="submit" value="Login"  class = "btn"/></td>
 									</tr>
-									<tr>
-										<td>Password:</td>
-										<td><input type='password' name='password' /></td>
-									</tr>
-									<tr>
-										<td colspan='2'><input name="submit" type="submit"
-											value="submit" /></td>
-									</tr>
+									
+									<br>
+									<br>
+									
 								</table>
 					
 								<input type="hidden" name="${_csrf.parameterName}"
 									value="${_csrf.token}" />
 					
 							</form>
+							<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
+				
+							<script src='https://www.google.com/recaptcha/api.js'></script>
+							<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>
+				
 						</div>
 			</div>
 							

@@ -29,11 +29,15 @@
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
 			<div class="col-md-12" id="page-content">
-				<h1>Login Page</h1>
+				<h3>Login Page</h3>
+				<form action="<c:url value='j_spring_security_check' />" method='POST'>
+				    Username: <input type="text" name="username" /><br />
+				    Password: <input type="password" name="password" />
+				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+				    <input type="submit" value="Login" />
+				</form>
 			</div>
-							
-					
-		
+	
 		</div> <!-- .content-wrapper -->
 	
 	</main> <!-- .cd-main-content -->
