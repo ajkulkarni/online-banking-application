@@ -64,7 +64,7 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
-					<div class="col-sm-3">${min_payment_due}</div>
+					<div class="col-sm-3">${SavingsAccBal}</div>
 				</div>
 				
 				<table class="table table-striped">

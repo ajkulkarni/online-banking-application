@@ -22,7 +22,7 @@ public class ExtUserDaoImpl{
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql ="SELECT balance FROM  savings_accounts WHERE id="+user.getID();
+		String sql ="SELECT balance FROM  bank_accounts WHERE external_users_id="+user.getID()+" and account_type='SAVINGS'";
 		Double balance = 0.0d;
 		try{
 			con = dataSource.getConnection();
@@ -50,7 +50,7 @@ public class ExtUserDaoImpl{
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String sql ="SELECT balance FROM  checkings_accounts WHERE id="+user.getID();
+		String sql ="SELECT balance FROM  bank_accounts WHERE external_users_id="+user.getID()+" and account_type='CHECKINGS'";
 		Double balance = 0.0d;
 		try{
 			con = dataSource.getConnection();
