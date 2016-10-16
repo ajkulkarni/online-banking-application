@@ -10,17 +10,25 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Filters</h3>
 				</div>
-				<div class="panel-body no-padding">
-					<form class="form-horizontal" action="pendingrequestsearch />" method='POST'>
-					<label for="requestID" class="col-lg-2 control-label">Request ID : </label>
-					<div class="col-lg-10">
-       					<input type="text" class="form-control" id="inputEmail" placeholder="Email">
-      				</div>
-				    <input type="text" name="username" /><br />
-				    Password: <input type="password" name="password" />
-				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-				    <input type="submit" value="Login" />
-				</form>
+				<div class="panel-body">
+					<div class="col-lg-7">
+						<form class="form-horizontal" action="completedrequestsearch" method='POST' onSubmit="return checkInputOr()">
+							<label for="requestID" class="col-lg-2 control-label">Request ID : </label>
+							<div class="col-lg-10">
+		       					<input type="text" class="form-control" name="requestID" placeholder="Request ID">
+		      				</div>
+		      				<br><br>
+		      				<label class="col-lg-2 control-label">OR</label>
+		      				<br><br>
+		      				<label for="userID" class="col-lg-2 control-label">User ID : </label>
+							<div class="col-lg-10">
+		       					<input type="text" class="form-control" name="userID" placeholder="User ID">
+		      				</div>
+		      				<br><br>
+		      				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+						    <button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
 				</div>
 			</div>
 			<div class="panel panel-primary">

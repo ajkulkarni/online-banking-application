@@ -76,17 +76,13 @@ public class EmployeeController {
         InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
         List<Request> externalRequestList = null;
         List<Request> internalRequestList = null;
-        if(requestID.length() != 0) {
-        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(requestID),"pending");
-        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(requestID),"pending");
+        if(requestID.length() == 0) {
+        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(userID),"pending");
+        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(userID),"pending");
         } else {
-        	externalRequestList = externalRequestDao.getById(Integer.parseInt(userID),"pending");
-        	internalRequestList = internalRequestDao.getById(Integer.parseInt(userID),"pending");
+        	externalRequestList = externalRequestDao.getById(Integer.parseInt(requestID),"pending");
+        	internalRequestList = internalRequestDao.getById(Integer.parseInt(requestID),"pending");
         }
-        if(externalRequestList.size() > 10)
-            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
-        if(internalRequestList.size() > 10)
-            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
         ModelAndView model = new ModelAndView("employeePages/PendingRequest");
         model.addObject("internal_list",internalRequestList);
         model.addObject("external_list",externalRequestList);
@@ -101,17 +97,13 @@ public class EmployeeController {
         InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
         List<Request> externalRequestList = null;
         List<Request> internalRequestList = null;
-        if(requestID.length() != 0) {
-        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(requestID),"completed");
-        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(requestID),"completed");
+        if(requestID.length() == 0) {
+        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(userID),"completed");
+        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(userID),"completed");
         } else {
-        	externalRequestList = externalRequestDao.getById(Integer.parseInt(userID),"completed");
-        	internalRequestList = internalRequestDao.getById(Integer.parseInt(userID),"completed");
+        	externalRequestList = externalRequestDao.getById(Integer.parseInt(requestID),"completed");
+        	internalRequestList = internalRequestDao.getById(Integer.parseInt(requestID),"completed");
         }
-        if(externalRequestList.size() > 10)
-            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
-        if(internalRequestList.size() > 10)
-            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
         ModelAndView model = new ModelAndView("employeePages/CompleteRequest");
         model.addObject("internal_list",internalRequestList);
         model.addObject("external_list",externalRequestList);
