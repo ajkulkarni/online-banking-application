@@ -37,23 +37,23 @@ public class TestRequestDao {
 		ctx.close();
 	}
 	
-	@Test
-	public void testGetById() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-		Request request = externalRequest.getById(1);
-		System.out.println(request.getStatus());
-		ctx.close();
-	}
-	
-	@Test
-	public void testGetByUserId() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-		Request request = externalRequest.getByUserId(1);
-		System.out.println(request.getStatus());
-		ctx.close();
-	}
+//	@Test
+//	public void testGetById() {
+//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+//		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+//		Request request = externalRequest.getById(1);
+//		System.out.println(request.getStatus());
+//		ctx.close();
+//	}
+//	
+//	@Test
+//	public void testGetByUserId() {
+//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+//		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+//		Request request = externalRequest.getByUserId(1);
+//		System.out.println(request.getStatus());
+//		ctx.close();
+//	}
 	
 	@Test
 	public void testSave() {

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
@@ -58,6 +60,56 @@ public class EmployeeController {
         if(externalRequestList.size() > 10)
             externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
         List<Request> internalRequestList = internalRequestDao.getAllCompleted();
+        if(internalRequestList.size() > 10)
+            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        ModelAndView model = new ModelAndView("employeePages/CompleteRequest");
+        model.addObject("internal_list",internalRequestList);
+        model.addObject("external_list",externalRequestList);
+        ctx.close();
+        return model;
+	}
+	
+	@RequestMapping(value="/employee/pendingrequestsearch", method = RequestMethod.POST)
+	public ModelAndView PendingRequestSearch(@RequestParam("requestID") String requestID, @RequestParam("userID") String userID) {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+        List<Request> externalRequestList = null;
+        List<Request> internalRequestList = null;
+        if(requestID.length() != 0) {
+        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(requestID),"pending");
+        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(requestID),"pending");
+        } else {
+        	externalRequestList = externalRequestDao.getById(Integer.parseInt(userID),"pending");
+        	internalRequestList = internalRequestDao.getById(Integer.parseInt(userID),"pending");
+        }
+        if(externalRequestList.size() > 10)
+            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
+        if(internalRequestList.size() > 10)
+            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        ModelAndView model = new ModelAndView("employeePages/PendingRequest");
+        model.addObject("internal_list",internalRequestList);
+        model.addObject("external_list",externalRequestList);
+        ctx.close();
+        return model;
+	}
+	
+	@RequestMapping(value="/employee/completedrequestsearch", method = RequestMethod.POST)
+	public ModelAndView CompletedRequestSearch(@RequestParam("requestID") String requestID, @RequestParam("userID") String userID) {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+        List<Request> externalRequestList = null;
+        List<Request> internalRequestList = null;
+        if(requestID.length() != 0) {
+        	externalRequestList = externalRequestDao.getByUserId(Integer.parseInt(requestID),"completed");
+        	internalRequestList = internalRequestDao.getByUserId(Integer.parseInt(requestID),"completed");
+        } else {
+        	externalRequestList = externalRequestDao.getById(Integer.parseInt(userID),"completed");
+        	internalRequestList = internalRequestDao.getById(Integer.parseInt(userID),"completed");
+        }
+        if(externalRequestList.size() > 10)
+            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
         if(internalRequestList.size() > 10)
             internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
         ModelAndView model = new ModelAndView("employeePages/CompleteRequest");

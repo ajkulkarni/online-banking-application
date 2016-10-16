@@ -3,6 +3,7 @@ package org.thothlab.devilsvault.dao.request;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -60,7 +61,7 @@ public class RequestDaoImpl implements RequestDao{
 	}
 	
 	@Override
-	public Request getById(int id) {
+	public List<Request> getById(int id, String status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -76,7 +77,7 @@ public class RequestDaoImpl implements RequestDao{
 	}
 
 	@Override
-	public Request getByUserId(int requesterid) {
+	public List<Request> getByUserId(int requesterid, String status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
