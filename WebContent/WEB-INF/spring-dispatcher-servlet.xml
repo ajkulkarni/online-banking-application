@@ -13,7 +13,18 @@
 		<context:component-scan base-package="org.thothlab.devilsvault.logincontrollers"/>
 		<context:component-scan base-package="org.thothlab.devilsvault.customercontrollers"/>
 		<context:component-scan base-package="org.thothlab.devilsvault.employeecontrollers"/>
-
+		
+		<bean id="customAuthenticationSuccessHandler" class="org.thothlab.devilsvault.logincontrollers.CustomAuthenticationSuccessHandler"></bean>
+		
+		<context:property-placeholder location="classpath:jdbc/config/database.properties"/>
+		
+		<bean id="securitydataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="${database.driver}" />
+			<property name="url" value="${database.url}" />
+			<property name="username" value="${database.user}" />
+			<property name="password" value="${database.password}" />
+		</bean>
+		 
 		<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 			<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 			<property name="prefix" value="/WEB-INF/" />
