@@ -22,7 +22,6 @@ public class CreditCardStatementController {
 		CreditCardDOA dao = CustomerDAOHelper.creditCardDAO();
 		List<TransactionModel> transactions = dao.getAllTransactions(null);
 		model.addObject("transations", transactions );
-		
 		return model;
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestDAOExternal;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
 import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 
@@ -19,7 +20,8 @@ public class CreditCardDashboardController {
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 	
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
-		CreditAccount account = doa.getCreditAccount(null);
+		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
+		CreditAccount account = doa.getCreditAccount(cust_dao.getCustomer(100));
 		model.addObject("creditAccount",account);
 		return model;
 	}
