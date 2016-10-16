@@ -17,9 +17,9 @@
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-			<property name="url" value="jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS" />
-			<property name="username" value="cse545ss_admin" />
-			<property name="password" value="cse545ss_admin" />
+			<property name="url" value="jdbc:mysql://localhost:3306/ssg4db" />
+			<property name="username" value="root" />
+			<property name="password" value="ssg4" />
 		</bean>
 		-->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

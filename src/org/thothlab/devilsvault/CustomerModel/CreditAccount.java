@@ -8,6 +8,7 @@ public class CreditAccount extends BankAccount {
 	private double lastBillAmount;
 	private int dueDateTimestamp;
 	private float apr;
+	private double minPaymentAmount;
 	
 	public CreditAccount() {
 		this.setAccountType(AccountType.CREDIT);
