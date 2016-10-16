@@ -56,14 +56,13 @@ public class LoginDB {
 		    {
 		    	return "email already exists";
 		    }
-		    String ph = register.getUserPhonecode()+register.getUserPhonecode()+register.getUserPhonenumber();
-		    String add = register.getStreet()+" "+register.getHouse();
+		   // String so="INSERT INTO `user_pending`(`firstName`,`lastName`,`userEmail`,'userSsn','userPassword','country',`city`,`street`,`house`,'userPhonecode','userAreacode','addresslinetwo','state','pincode','userPhonenumber',"+")VALUES('"+register.getUserPhonenumber()+" "+register.getUserAreacode()+"','"+register.getUserPhonecode()+"','"+register.getState()+"','"+register.getHouse()+"','"+register.getAddresslineTwo()+"',"+register.getCountry()+","+register.getCity()+","+register.getStreet()+","+register.getPincode()+","+register.getFirstName()+","+register.getLastName()+","+register.+getUserEmail()","+register.getUserSsn()+","+register.getUserPassword()+");";
 		    /*Password P = new Password();
 		    String salt = P.generatesalt();
 		    String hashpassword = P.signup(register.getUserPassword(), salt);
 		    String so="INSERT INTO `user_pending`(`name`,`address`,`city`,`state`,`country`,`email`,"+
 		    "`pincode`,`phone`,`salt`, `passhash`)VALUES('"+register.getFirstName()+" "+register.getLastName()+"','"+add+"','"+register.getCity()+"','"+register.getState()+"','"+register.getCountry()+"','"+register.getUserEmail()+"',"+register.getPincode()+","+ph+",'"+salt+"','"+hashpassword+"');";*/
-		   // myStmt.executeUpdate(so);
+		    myStmt.executeUpdate(so);
 		    //add count = 0 and locked = 0 to external_authenicate table
 		    //Internal user will create the external_user and external_authenticate tables.
 		   /* so="select * from external_user where email='"+register.getUserEmail()+"'";

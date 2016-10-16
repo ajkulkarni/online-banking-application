@@ -14,6 +14,21 @@
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
 	<title>Home</title>
+	<link href="resources/css/jquery-ui.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+
+	<!-- keyboard widget css & script (required) -->
+	<link href="resources/css/keyboard.css" rel="stylesheet">
+	<script src="resources/js/jquery.keyboard.js"></script>
+
+	<!-- keyboard extensions (optional) -->
+	<script src="resources/js/jquery.mousewheel.js"></script>
+	<script>
+		$(function(){
+			$('#password').keyboard();
+		});
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -31,11 +46,24 @@
 			<div class="col-md-12" id="page-content">
 				<h3>Login Page</h3>
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
-				    Username: <input type="text" name="username" /><br />
-				    Password: <input type="password" name="password" />
+				   Username: <input path="username" type="email" name="username" value=""  class="email" required />
+									  
+				   Password: <input id = "password" path="password" type="password" name="password" value="*****" required/>
 				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-				    <input type="submit" value="Login" />
+				    <br>
+				    <br>
+				    
+				    <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+				    <br>
+				    <br>
+				    <input type="submit" value="Login" class="btn"/>
+				    <br>
+				    <br>
 				</form>
+				<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
+				
+				<script src='https://www.google.com/recaptcha/api.js'></script>
+				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>
 			</div>
 	
 		</div> <!-- .content-wrapper -->

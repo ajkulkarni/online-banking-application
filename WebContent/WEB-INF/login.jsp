@@ -58,15 +58,14 @@
 								<div class="msg">${msg}</div>
 							</c:if>
 					
-							<form name='loginForm'
-								action="login" method='POST'>
+							<form action="<c:url value='j_spring_security_check' />" method='POST'>
 					
 								<table>
 								
 									
-									<input path="username" type="email" name="username" value=""  class="email" required />
+									Username: <input path="username" type="email" name="username" value=""  class="email" required />
 									  
-									<input id = "password" path="password" type="password" name="password" value="*****" required/>
+									Password: <input id = "password" path="password" type="password" name="password" value="*****" required/>
 									<br>
 									<br>
 									<input type="radio" name="usertype" value="External User" required>External User<br>

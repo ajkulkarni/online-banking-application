@@ -15,6 +15,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest arg0, HttpServletResponse arg1, Authentication arg2)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub 
+		
+		
 		arg1.setStatus(HttpServletResponse.SC_OK);
 		arg1.sendRedirect("/CSE545-SS/employee/home");
 		
