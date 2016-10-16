@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
+import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
@@ -16,14 +17,8 @@ import org.thothlab.devilsvault.db.model.Transaction;
 @Controller
 public class EmployeeController {
 	
-	@RequestMapping("/employee/home/old")
-	public ModelAndView helloworld(){
-		ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
-		return model;
-	}
-	
 	@RequestMapping("/employee/userdetails")
-	public ModelAndView RequestContoller(){
+	public ModelAndView UserDetailsContoller(){
 		ModelAndView model = new ModelAndView("employeePages/employeeUserDetails");
 		model.addObject("request_list","test message");
 		return model;
@@ -34,6 +29,42 @@ public class EmployeeController {
 		ModelAndView model = new ModelAndView("employeePages/employeeTransaction");
 		model.addObject("request_list","test message");
 		return model;
+	}
+	
+	@RequestMapping("/employee/pendingrequest")
+	public ModelAndView PendingRequestContoller(){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+        List<Request> externalRequestList = externalRequestDao.getAllPending();
+        if(externalRequestList.size() > 10)
+            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
+        List<Request> internalRequestList = internalRequestDao.getAllPending();
+        if(internalRequestList.size() > 10)
+            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        ModelAndView model = new ModelAndView("employeePages/PendingRequest");
+        model.addObject("internal_list",internalRequestList);
+        model.addObject("external_list",externalRequestList);
+        ctx.close();
+        return model;
+	}
+	
+	@RequestMapping("/employee/completedrequest")
+	public ModelAndView CompletedRequestContoller(){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+        List<Request> externalRequestList = externalRequestDao.getAllCompleted();
+        if(externalRequestList.size() > 10)
+            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
+        List<Request> internalRequestList = internalRequestDao.getAllCompleted();
+        if(internalRequestList.size() > 10)
+            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        ModelAndView model = new ModelAndView("employeePages/CompleteRequest");
+        model.addObject("internal_list",internalRequestList);
+        model.addObject("external_list",externalRequestList);
+        ctx.close();
+        return model;
 	}
 	
 	@RequestMapping("/employee/home")
@@ -75,16 +106,16 @@ public class EmployeeController {
 		return model;
 	}
 	
-	@RequestMapping("/employee/completedrequests")
-	public ModelAndView CompletedRequestContoller(){
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		ExternalRequestDaoImpl requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-		List<Request> requestList = requestDAO.getAllCompleted();
-		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
-		model.addObject("request_list",requestList);
-		ctx.close();
-		return model;
-	}
+//	@RequestMapping("/employee/completedrequests")
+//	public ModelAndView CompletedRequestContoller(){
+//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+//		ExternalRequestDaoImpl requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+//		List<Request> requestList = requestDAO.getAllCompleted();
+//		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
+//		model.addObject("request_list",requestList);
+//		ctx.close();
+//		return model;
+//	}
 	
 	@RequestMapping("/employee/createrequest")
 	public ModelAndView CreateRequestContoller(Request request){

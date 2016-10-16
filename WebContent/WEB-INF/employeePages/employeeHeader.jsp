@@ -47,11 +47,15 @@
 				<li>
 					<a href="#0">User Management</a>
 				</li>
-				<li>
-					<a href="#0">Request<span class="count">3</span></a>
+				<li class="has-children">
+					<a href="#0">Request</a>
+					<ul>
+						<li><a href="pendingrequest">Pending</a></li>
+						<li><a href="completedrequest">Completed</a></li>
+					</ul>
 				</li>
 				<li>
-					<a href="transaction">Transaction<span class="count">3</span></a>
+					<a href="transaction">Transaction<span class="count">${stats['transaction']}</span></a>
 				</li>
 				<li>
 					<a href="#0">Admin Options</a>
