@@ -74,4 +74,10 @@ public class RequestDaoImpl implements RequestDao{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Request getByUserId(int requesterid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
