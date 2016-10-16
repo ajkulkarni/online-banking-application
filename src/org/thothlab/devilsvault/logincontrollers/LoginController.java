@@ -4,8 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
+	
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
+	}
 	
 	@RequestMapping("/login")
 	public ModelAndView helloworld(){
@@ -41,6 +50,9 @@ public class LoginController {
 	@RequestMapping(value ="next.html", method = RequestMethod.POST)
 	public ModelAndView submitRegistrationForm(@Valid RegistrationForm register, BindingResult result, HttpServletRequest request) {
  	
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		register.setUserPassword(passwordEncoder.encode(register.getUserPassword()));
+		System.out.println(register.getUserPassword()); 
 		System.out.println(register.getFirstName());
 		System.out.println(register.getLastName());
 		System.out.println(register.getUserEmail());
@@ -60,6 +72,7 @@ public class LoginController {
 		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		String email1 = register.getUserEmail();
 		Boolean b = email1.matches(EMAIL_REGEX);
+		
 		//System.out.println("is e-mail: "+email1+" :Valid = " + b);
 		
 		if(b==false||result.hasErrors())
@@ -77,6 +90,7 @@ public class LoginController {
 					LoginDB d = new LoginDB();
 					if(d.store(register).equals("email already exists"))
 					{
+						System.out.println("Email exits");
 						ModelAndView modelandview1 = new ModelAndView("loginform");
 						modelandview.addObject("error","Email already registered");
 						return modelandview1;
