@@ -1,19 +1,18 @@
 package org.thothlab.devilsvault.dao.log;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
-import org.thothlab.devilsvault.db.model.Request;
+import org.thothlab.devilsvault.db.model.DatabaseLog;
 
 public interface LogDao {
 	
 	public void setDataSource(DataSource dataSource);
 	
-	public Boolean save(Request request, String type);
+	public Boolean save(DatabaseLog log, String tablename);
 	
-	public Request getById(int id);
+	public List<DatabaseLog> getByUserId(int id, String tablename);
 	
-	public void update(Request employee);
-	
-	public void deleteById(int id);
 	
 }

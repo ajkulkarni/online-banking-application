@@ -6,12 +6,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.thothlab.devilsvault.dao.transaction.TransactionDao;
 import org.thothlab.devilsvault.db.model.Transaction;
 
-public class testTransactions {
+public class TestTransactions {
 
 	@Test
 	public void testCreate()
 	{
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		TransactionDao transactionDAO = ctx.getBean("TransactionDao", TransactionDao.class);
 		transactionDAO.createTransaction();
 		ctx.close();
@@ -19,7 +19,7 @@ public class testTransactions {
 	@Test
 	public void testSave()
 	{
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		TransactionDao transactionDAO = ctx.getBean("TransactionDao", TransactionDao.class);
 		String type = "transaction_pending";
 		java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
@@ -43,7 +43,7 @@ public class testTransactions {
 	@Test
 	public void testgetById()
 	{
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		TransactionDao transactionDAO = ctx.getBean("TransactionDao", TransactionDao.class);
 		Transaction transaction;
 		transaction = transactionDAO.getById(1, "transaction_pending");

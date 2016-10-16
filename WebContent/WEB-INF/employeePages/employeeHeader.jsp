@@ -44,14 +44,22 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
-				<li>
+				<li class="has-children">
 					<a href="#0">User Management</a>
+					<ul>
+						<li><a href="pendingregistration">Pending Registration</a></li>
+						<li><a href="#">User Details</a></li>
+					</ul>
+				</li>
+				<li class="has-children">
+					<a href="#0">Request</a>
+					<ul>
+						<li><a href="pendingrequest">Pending</a></li>
+						<li><a href="completedrequest">Completed</a></li>
+					</ul>
 				</li>
 				<li>
-					<a href="#0">Request<span class="count">3</span></a>
-				</li>
-				<li>
-					<a href="transaction">Transaction<span class="count">3</span></a>
+					<a href="transaction">Transaction<span class="count">${stats['transaction']}</span></a>
 				</li>
 				<li>
 					<a href="#0">Admin Options</a>

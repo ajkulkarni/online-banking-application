@@ -52,5 +52,31 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	public Boolean save(Request request, String type) {
 		return super.save(request, type);
 	}
+	
+	@Override
+	public List<Request> getById(int id, String status) {
+		String query = "SELECT * FROM external_request_"+status+" WHERE id = "+id;
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		return requestList;
+	}
+	
+	@Override
+	public List<Request> getByUserId(int requesterid, String status) {
+		String query = "SELECT * FROM external_request_"+status+" WHERE requesterid = "+requesterid;
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		return requestList;
+	}
+	
+	@Override
+	public void approveRequest(int id, String type) {
+		// TODO Auto-generated method stub
+		super.approveRequest(id, type);		
+	}
+
+	@Override
+	public void rejectRequest(int id, String type) {
+		// TODO Auto-generated method stub
+		super.rejectRequest(id, type);
+	}
 
 }
