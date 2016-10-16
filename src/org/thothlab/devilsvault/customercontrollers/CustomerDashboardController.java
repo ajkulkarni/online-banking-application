@@ -13,7 +13,7 @@ import org.thothlab.devilsvault.CustomerModel.BankAccount.AccountType;
 @Controller
 public class CustomerDashboardController {
 	
-	@RequestMapping("/customerhome")
+	@RequestMapping("/customer/home")
 	public ModelAndView helloworld(){
 		DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
 		checkingAccount.setAccountNumber(123);
