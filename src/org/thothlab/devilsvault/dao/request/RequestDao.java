@@ -16,4 +16,6 @@ public interface RequestDao {
 	
 	public void deleteById(int id);
 	
+	public Request getByUserId(int requesterid);
+	
 }
