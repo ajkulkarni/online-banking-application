@@ -12,8 +12,11 @@
 				</div>
 				<div class="panel-body no-padding">
 					<form class="form-horizontal" action="pendingrequestsearch />" method='POST'>
-					<label for="requestID" class="col-lg-1 control-label">Request ID : </label>
-				    Username: <input type="text" name="username" /><br />
+					<label for="requestID" class="col-lg-2 control-label">Request ID : </label>
+					<div class="col-lg-10">
+       					<input type="text" class="form-control" id="inputEmail" placeholder="Email">
+      				</div>
+				    <input type="text" name="username" /><br />
 				    Password: <input type="password" name="password" />
 				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 				    <input type="submit" value="Login" />
