@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.db.model.Request;
 
-@Repository ("externalRequestDao")
+@Repository ("externalLogDao")
 public class ExternalLogDaoImpl extends LogDaoImpl {
 	
 	@SuppressWarnings("unused")

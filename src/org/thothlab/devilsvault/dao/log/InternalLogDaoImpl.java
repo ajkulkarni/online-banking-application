@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository ("internalRequestDao")
+@Repository ("internalLogDao")
 public class InternalLogDaoImpl extends LogDaoImpl {
 	
 	@SuppressWarnings("unused")

@@ -7,13 +7,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.db.model.Request;
 
-public class TestDao {
+public class TestRequestDao {
 	
 	private ExternalRequestDaoImpl externalRequest;
 	
 	@Test
 	public void testCreateRequest() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
 		System.out.println(externalRequest.createRequest());
 		ctx.close();
@@ -21,7 +21,7 @@ public class TestDao {
 	
 	@Test
 	public void testGetAllPending() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
 		List<Request> requestList = externalRequest.getAllPending();
 		System.out.println(requestList.size());
@@ -30,7 +30,7 @@ public class TestDao {
 	
 	@Test
 	public void testGetAllCompleted() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
 		List<Request> requestList = externalRequest.getAllCompleted();
 		System.out.println(requestList.size());
@@ -39,7 +39,7 @@ public class TestDao {
 	
 	@Test
 	public void testSave() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
 		List<Request> requestList = externalRequest.getAllPending();
 		Boolean check = false;
