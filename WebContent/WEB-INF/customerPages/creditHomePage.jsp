@@ -12,12 +12,8 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Payment Info</h3>
 				</div>
-				<div class="panel-body">
-					<div class="row">
-					<div class="col-sm-3">Min Payment Due:</div>
-					<div class="col-sm-3">${creditAccount.minPaymentAmount}</div>
-				</div>
 				
+			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-3">Next Payment Date:</div>
 					<div class="col-sm-3">${creditAccount.dueDateTimestamp}</div>
@@ -44,27 +40,27 @@
 				
 				<div class="row">
 					<div class="col-sm-3">Out Standing Balance:</div>
-					<div class="col-sm-3">${creditAccount.}</div>
+					<div class="col-sm-3">${creditAccount.availBalance}</div>
 				</div>
 				
 				<div class="row">
 					<div class="col-sm-3">Pending Charges:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">NA</div>
 				</div>
 				
 				<div class="row">
 					<div class="col-sm-3">Total Credit Limit:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">NA</div>
 				</div>
 				
 				<div class="row">
 					<div class="col-sm-3">Available Credit:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">${creditAccount.availBalance}</div>
 				</div>
 				
 				<div class="row">
 					<div class="col-sm-3">Billing Cycle Date:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">NA</div>
 				</div>
 				
 			</div>
@@ -77,13 +73,13 @@
 				<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-3">Cash Advance Balance:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">NA</div>
 				</div>
 				
 				
 				<div class="row">
 					<div class="col-sm-3">Cash Advance Limit:</div>
-					<div class="col-sm-3">${creditAccount}</div>
+					<div class="col-sm-3">NA</div>
 				</div>
 				
 				</div>
@@ -104,7 +100,35 @@
 				</div>
 				</div>
 			</div>
-			
+			<h1>Credit Card Statement</h1>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Description</th>
+					<th>Payee</th>
+					<th>Amount</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				<c:forEach var="trans" items="${transations}" varStatus="loop">
+
+					<tr>
+						<th scope="row">${loop.index + 1}</th>
+						<td>${trans.description}</td>
+						<td>${trans.payee}</td>
+						<td>${trans.amount}</td>
+						<td>${trans.timeStamp}</td>
+					</tr>
+				</c:forEach>
+
+
+			</tbody>
+		</table>
 		</div>
 	</div> <!-- .content-wrapper -->
 	

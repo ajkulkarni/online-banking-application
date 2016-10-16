@@ -10,34 +10,38 @@ import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
-import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestMapper;
-import org.thothlab.devilsvault.jdbccontrollers.model.Request;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardAccMapper;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardTransMapper;
 
 @Repository ("creditCardDOA")
-public class CreditCardDOA  {
-	
-	@SuppressWarnings("unused")
-	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate;
-	
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
+public class CreditCardDOA extends CustomerDOAImpl {
 		
-		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-	}
+		@SuppressWarnings("unused")
+		private DataSource dataSource;
+		private JdbcTemplate jdbcTemplate;
+		
+		@Autowired
+		public void setDataSource(DataSource dataSource) {
+			
+			this.dataSource = dataSource;
+			this.jdbcTemplate = new JdbcTemplate(dataSource);
+		}
 	
 	/**
 	 * Get the credit account details for the user.
 	 * @param customer
 	 * @return
 	 */
-	public CreditAccount getCreditAccount(Customer customer) {
+		public CreditAccount getCreditAccount(Customer customer) {
+		String query = "select cc.id id, cc.credit_card_no credit_card_no, cc.available_balance available_balance,"
+				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.bank_accounts_id bank_accounts_id "
+				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.id = cc.bank_accounts_id  "
+				+ "AND bk.external_users_id= "+customer.getID();
 		
-		String query = "select * from credit_card_account_details WHERE id = "+
-				customer.getID();
-				
-		return null;
+		System.out.println(query);
+		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
+		return creditcard_details.get(0);
+		/*return null;*/
 	}
 	
 	/**
@@ -46,12 +50,12 @@ public class CreditCardDOA  {
 	 */
 	public List<TransactionModel> getAllTransactions(CreditAccount account) {
 		
-		String query = "select * from completed_transactions WHERE payee_account_number = "+
-		account.getAccountNumber()
-		+" OR payer_account_number = "+account.getAccountNumber();
-		List<TransactionModel> transactionList = jdbcTemplate.query(query, 
-                new TransactionMapper());
-		return transactionList;
+		String query = "select * from pending_transactions WHERE payee_account_number = 100"
+				+" OR payer_account_number = 100";
+		System.out.println("Query - " + query);
+		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
+				return transactionList;		
+		//return null;
 	}
 	
 	

@@ -9,11 +9,13 @@ import org.thothlab.devilsvault.CustomerModel.Customer;
 
 public class CustomerMapper implements RowMapper<Customer>  {
 
-	public Customer mapRow(ResultSet arg0, int arg1) throws SQLException {
+	public Customer mapRow(ResultSet rs, int arg1) throws SQLException {
 		
+		Customer cust = new Customer();
+		cust.setID(rs.getInt("ID"));
+		cust.setName(rs.getString("full_name"));
 		
-		
-		return null;
+		return cust;
 	}
 
 }
