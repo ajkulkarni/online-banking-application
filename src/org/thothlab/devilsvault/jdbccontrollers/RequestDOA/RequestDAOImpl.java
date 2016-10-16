@@ -133,7 +133,7 @@ public class RequestDAOImpl {
 	}
 
 	public List<Request> getAll() {
-		String query = "select * from internal_request";
+		String query = "select * from request";
 		List<Request> requestList = jdbcTemplate.query(query, 
                 new RequestMapper());
 //		Connection con = null;
