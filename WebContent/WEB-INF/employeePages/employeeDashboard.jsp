@@ -22,31 +22,20 @@
 						<tbody>
 							<tr>
 								<td>Account Status Requests</td>
-								<td>5</td>
+								<td>${stats['user']}</td>
 							</tr>
 							<tr>
 								<td>Internal User Requests</td>
-								<td>6</td>
+								<td>${stats['internal']}</td>
 							</tr>
 							<tr>
 								<td>External User Requests</td>
-								<td>7</td>
+								<td>${stats['external']}</td>
 							</tr>
 							<tr>
 								<td>Transaction Requests</td>
-								<td>8</td>
+								<td>${stats['transaction']}</td>
 							</tr>
-							<c:forEach items="${request_list}" var="request">
-								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.status}</td>
-									<td>${request.timestamp_created}</td>
-									<td>${request.approver}</td>
-							</tr>
-							</c:forEach>
 						</tbody>
 					</table>
 				</div>
@@ -66,17 +55,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%-- <c:forEach items="${request_list}" var="request">
+							<c:forEach items="${user_list}" var="user">
 								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.status}</td>
-									<td>${request.timestamp_created}</td>
-									<td>${request.approver}</td>
+									<td>${user.id}</td>
+									<td>${user.name}</td>
+									<td>${user.address}</td>
+									<td>${user.email}</td>
 							</tr>
-							</c:forEach> --%>	
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
@@ -97,7 +83,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${request_list}" var="request">
+							<c:forEach items="${internal_list}" var="request">
 								<tr>
 									<td>${request.id}</td>
 									<td>${request.request_type}</td>
@@ -127,7 +113,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${request_list}" var="request">
+							<c:forEach items="${external_list}" var="request">
 								<tr>
 									<td>${request.id}</td>
 									<td>${request.request_type}</td>

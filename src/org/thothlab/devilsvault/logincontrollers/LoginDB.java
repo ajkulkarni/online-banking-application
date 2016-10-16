@@ -56,6 +56,7 @@ public class LoginDB {
 		    {
 		    	return "email already exists";
 		    }
+		    String so="INSERT INTO `user_pending`(`firstName`,`lastName`,`userEmail`,`userSsn`,`userPassword`,`country`,`city`,`street`,`house`,`userPhonecode`,`userAreacode`,`addresslinetwo`,`state`,`pincode`,`userPhonenumber`,"+")VALUES('"+register.getFirstName()+"','"+register.getLastName()+"','"+register.getUserEmail()+"','"+register.getUserSsn()+"','"+register.getUserPassword()+"','"+register.getCountry()+"','"+register.getCity()+"','"+register.getStreet()+"','"+register.getHouse()+"','"+register.getUserPhonecode()+"','"+register.getUserAreacode()+"','"+register.getAddresslineTwo()+"','"+register.getState()+"','"+register.getPincode()+"','"+register.getUserPhonenumber()+"');";
 		   // String so="INSERT INTO `user_pending`(`firstName`,`lastName`,`userEmail`,'userSsn','userPassword','country',`city`,`street`,`house`,'userPhonecode','userAreacode','addresslinetwo','state','pincode','userPhonenumber',"+")VALUES('"+register.getUserPhonenumber()+" "+register.getUserAreacode()+"','"+register.getUserPhonecode()+"','"+register.getState()+"','"+register.getHouse()+"','"+register.getAddresslineTwo()+"',"+register.getCountry()+","+register.getCity()+","+register.getStreet()+","+register.getPincode()+","+register.getFirstName()+","+register.getLastName()+","+register.+getUserEmail()","+register.getUserSsn()+","+register.getUserPassword()+");";
 		    /*Password P = new Password();
 		    String salt = P.generatesalt();

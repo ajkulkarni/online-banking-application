@@ -1,5 +1,7 @@
 package org.thothlab.devilsvault.logincontrollers;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -30,7 +32,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) {
+			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) throws IOException {
 
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
@@ -40,6 +42,13 @@ public class LoginController {
 		if (logout != null) {
 			model.addObject("msg", "You've been logged out successfully.");
 		}
+		String gRecaptchaResponse = request
+				.getParameter("g-recaptcha-response");
+		System.out.println(gRecaptchaResponse);
+		boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+		System.out.println(verify);	
+		if (verify==false)
+			model.addObject("error", getErrorMessage(request, "Captcha Error"));
 		model.setViewName("LoginPage");
 
 		return model;
@@ -54,13 +63,7 @@ public class LoginController {
 	    }
 	    return "redirect:/login";
 	}
-	@RequestMapping(value ="register.html", method = RequestMethod.GET)
-	public ModelAndView getRegistrationForm() {
- 
-		ModelAndView modelandview = new ModelAndView("registration");
-		
-		return modelandview;
-	}
+	
 	
 	private String getErrorMessage(HttpServletRequest request, String key) {
 
@@ -78,61 +81,49 @@ public class LoginController {
 		return error;
 	}
 	
-	@RequestMapping(value ="next.html", method = RequestMethod.POST)
-	public ModelAndView submitRegistrationForm(@Valid RegistrationForm register, BindingResult result, HttpServletRequest request) {
- 	
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		register.setUserPassword(passwordEncoder.encode(register.getUserPassword()));
-		System.out.println(register.getUserPassword()); 
-		System.out.println(register.getFirstName());
-		System.out.println(register.getLastName());
-		System.out.println(register.getUserEmail());
-		System.out.println(register.getUserPassword());
-		System.out.println(register.getUserSsn());
-		System.out.println(register.getState());
-		System.out.println(register.getCountry());
-		System.out.println(register.getPincode());
-		System.out.println(register.getStreet());
-		System.out.println(register.getHouse());
-		System.out.println(register.getUserAreacode());
-		System.out.println(register.getUserPhonecode());
-		System.out.println(register.getUserPhonenumber());
-		
-		
+	@RequestMapping(value ="register.html", method = RequestMethod.GET)
+	public ModelAndView getRegistrationForm() {
+ 
 		ModelAndView modelandview = new ModelAndView("registration");
-		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-		String email1 = register.getUserEmail();
-		Boolean b = email1.matches(EMAIL_REGEX);
 		
-		//System.out.println("is e-mail: "+email1+" :Valid = " + b);
-		
-		if(b==false||result.hasErrors())
-				return modelandview;
-			
-		if(request.getParameterMap().containsKey("g-recaptcha-response"))
-		{
-			if(request.getParameter("g-recaptcha-response") == "")
-			{
-				return modelandview;
-			}
-			else{
-				
-					System.out.println("here");
-					LoginDB d = new LoginDB();
-					if(d.store(register).equals("email already exists"))
-					{
-						System.out.println("Email exits");
-						ModelAndView modelandview1 = new ModelAndView("loginform");
-						modelandview.addObject("error","Email already registered");
-						return modelandview1;
-					}
-					
-				}
-			
-		}
-		modelandview = new ModelAndView("loginform");
-		System.out.println("Code reaching here");
 		return modelandview;
-
 	}
+	
+	@RequestMapping(value ="/newreg", method = RequestMethod.POST)
+    public ModelAndView submitRegistrationForm(@Valid RegistrationForm register, BindingResult result, HttpServletRequest request) throws IOException {
+		
+     	    	//	System.out.println(s1.getstudentDOB());
+			String gRecaptchaResponse = request
+				.getParameter("g-recaptcha-response");
+			System.out.println(gRecaptchaResponse);
+			boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+			System.out.println(verify);	
+    		if(result.hasErrors()||verify==false)
+    		{
+    				ModelAndView modelandview = new ModelAndView("registration");
+    				return modelandview;
+    		}
+    		System.out.println(register.getFirstName());
+    		System.out.println(register.getLastName());
+    		System.out.println(register.getUserEmail());
+    		System.out.println(register.getUserPassword());
+    		System.out.println(register.getUserSsn());
+
+    		System.out.println(register.getCity());
+    		System.out.println(register.getCountry());
+    		System.out.println(register.getStreet());
+    		System.out.println(register.getPincode());
+    		
+    		
+    		LoginDB dd=new LoginDB();
+    		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    		register.setUserPassword(passwordEncoder.encode(register.getUserPassword()));
+    		System.out.println(register.getUserPassword()); 
+    		dd.store(register);
+    		
+    		ModelAndView modelandview = new ModelAndView("LoginPage");
+    	
+    		return modelandview;
+    		
+    	}
 }

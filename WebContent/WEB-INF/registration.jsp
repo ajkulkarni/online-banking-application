@@ -105,7 +105,7 @@
 			<div class="col-md-12" id="page-content">
 				
 			</div>
-								<form class="jotform-form" action="next.html" method="post" name="form_62818724164157" id="62818724164157" accept-charset="utf-8">
+								<form class="jotform-form" action="newreg" method="post" name="form_62818724164157" id="62818724164157" accept-charset="utf-8">
 			  <input type="hidden" name="formID" value="62818724164157" />
 			  <div class="form-all">
 			    <ul class="form-section page-section">
