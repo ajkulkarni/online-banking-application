@@ -147,6 +147,24 @@ public class EmployeeController {
         return model;
 	}
 	
+	@RequestMapping("/employee/pendingregistration")
+	public ModelAndView PendingRegistrationContoller(){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		List<Request> externalRequestList = null;
+//        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+//        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+//        List<Request> externalRequestList = externalRequestDao.getAllCompleted();
+//        if(externalRequestList.size() > 10)
+//            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
+//        List<Request> internalRequestList = internalRequestDao.getAllCompleted();
+//        if(internalRequestList.size() > 10)
+//            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        ModelAndView model = new ModelAndView("employeePages/PendingRegistration");
+        model.addObject("registration_list",externalRequestList);
+        ctx.close();
+        return model;
+	}
+	
 	@RequestMapping("/employee/home")
 	public ModelAndView PendingDashboardContoller(){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -185,18 +203,7 @@ public class EmployeeController {
 		ctx.close();
 		return model;
 	}
-	
-//	@RequestMapping("/employee/completedrequests")
-//	public ModelAndView CompletedRequestContoller(){
-//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-//		ExternalRequestDaoImpl requestDAO = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-//		List<Request> requestList = requestDAO.getAllCompleted();
-//		ModelAndView model = new ModelAndView("employeePages/employeeRequest");
-//		model.addObject("request_list",requestList);
-//		ctx.close();
-//		return model;
-//	}
-	
+		
 	@RequestMapping("/employee/createrequest")
 	public ModelAndView CreateRequestContoller(Request request){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");

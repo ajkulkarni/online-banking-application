@@ -44,8 +44,12 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
-				<li>
+				<li class="has-children">
 					<a href="#0">User Management</a>
+					<ul>
+						<li><a href="pendingregistration">Pending Registration</a></li>
+						<li><a href="#">User Details</a></li>
+					</ul>
 				</li>
 				<li class="has-children">
 					<a href="#0">Request</a>

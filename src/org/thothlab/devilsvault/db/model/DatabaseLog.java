@@ -2,7 +2,7 @@ package org.thothlab.devilsvault.db.model;
 
 import java.sql.Date;
 
-public class InternalLog {
+public class DatabaseLog {
 	private String activity;
 	private int userid;
 	private String details;
