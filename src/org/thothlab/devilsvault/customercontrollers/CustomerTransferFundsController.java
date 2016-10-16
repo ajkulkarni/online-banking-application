@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CustomerTransferFundsController {
 
-	@RequestMapping("/transferfunds")
+	@RequestMapping("/customer/transferfunds")
 	public ModelAndView helloworld(){
 		ModelAndView model = new ModelAndView("customerPages/transferFunds");
 		model.addObject("msg","Hello Gaurav");
