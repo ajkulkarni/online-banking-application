@@ -30,8 +30,8 @@ public class CustomerAccountsDAO{
 		TransactionModel2 TransactionLine = new TransactionModel2();
 		List<TransactionModel2> TransactionLines = new ArrayList<TransactionModel2>(); 
 		String sql ="SELECT * FROM  transaction_completed WHERE payer_id="+user.getID()
-				+"OR payee_id = "+user.getID()
-				+"AND "+TransactionLine.getTimestamp_updated()+" between DATE_SUB(NOW(), INTERVAL "+interval+" MONTH) AND NOW()";
+				+"OR payee_id = "+user.getID();
+				//+"AND "+TransactionLine.getTimestamp_updated()+" between DATE_SUB(NOW(), INTERVAL "+interval+" MONTH) AND NOW()";
 		try{
 			con = dataSource.getConnection();
 			ps = con.prepareStatement(sql);
