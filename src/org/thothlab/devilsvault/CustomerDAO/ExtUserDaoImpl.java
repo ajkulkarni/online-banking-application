@@ -1,33 +1,76 @@
 package org.thothlab.devilsvault.CustomerDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.Customer;
-
-
-public class ExtUserDaoImpl implements ExtUserDao{
+@Repository ("ExtUserDaoImpl")
+public class ExtUserDaoImpl{
 	private JdbcTemplate jdbcTemplate;
-	public ExtUserDaoImpl(){}
-	public ExtUserDaoImpl(DataSource dataSource) {
+	private DataSource dataSource;
+	@Autowired
+	public void setdataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
-	public ArrayList<Float> ViewBalance(Customer user)
-	{	
-		System.out.println("in viewBalance");
-		String sql ="SELECT * FROM  savings_accounts WHERE id=101";//+user.getID();
-		ArrayList<Float> balances= new ArrayList<Float>();
-		List accounts = jdbcTemplate.queryForList(sql);
-		System.out.println("saving account query executed");
-		balances.add((Float)accounts.get(0));
-		sql ="SELECT * FROM  checkings_accounts WHERE id="+user.getID();
-		accounts = jdbcTemplate.queryForList(sql);
-		balances.add((Float)accounts.get(0));
-		return balances;
+	public Double getSavingsBalance(Customer user)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql ="SELECT balance FROM  savings_accounts WHERE id="+user.getID();
+		Double balance = 0.0d;
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next())
+			{
+				balance = rs.getDouble("balance");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return balance;
+     }
+	public Double getCheckingBalance(Customer user)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql ="SELECT balance FROM  checkings_accounts WHERE id="+user.getID();
+		Double balance = 0.0d;
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next())
+			{
+				balance = rs.getDouble("balance");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return balance;
      }
 }

@@ -21,8 +21,11 @@
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
 					<div class="col-sm-3">${min_payment_due}</div>
+					<hr>
+					<center><b>Last 5 transactions</b></center>
+					<hr>
 				</div>
-				
+				<br>
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -65,6 +68,9 @@
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
 					<div class="col-sm-3">${min_payment_due}</div>
+										<hr>
+					<center><b>Last 5 transactions</b></center>
+					<hr>
 				</div>
 				
 				<table class="table table-striped">
@@ -112,6 +118,9 @@
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
 					<div class="col-sm-3">${min_payment_due}</div>
+										<hr>
+					<center><b>Last 5 transactions</b></center>
+					<hr>
 				</div>
 
 				<table class="table table-striped">
