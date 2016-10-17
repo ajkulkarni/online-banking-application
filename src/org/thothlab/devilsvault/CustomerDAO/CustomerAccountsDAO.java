@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
-import org.thothlab.devilsvault.CustomerModel.TransactionModel2;
+import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 @Repository ("CustomerAccountsDAO")
 public class CustomerAccountsDAO{
 	private JdbcTemplate jdbcTemplate;
@@ -22,13 +22,13 @@ public class CustomerAccountsDAO{
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	public List<TransactionModel2> getTransactionLines(Customer user,int interval)
+	public List<TransactionModel> getTransactionLines(Customer user,int interval)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		TransactionModel2 TransactionLine = new TransactionModel2();
-		List<TransactionModel2> TransactionLines = new ArrayList<TransactionModel2>(); 
+		TransactionModel TransactionLine = new TransactionModel();
+		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>(); 
 		String sql ="SELECT * FROM  transaction_completed WHERE payer_id="+user.getID()+" OR payee_id = "+user.getID();
 				//+"AND "+TransactionLine.getTimestamp_updated()+" between DATE_SUB(NOW(), INTERVAL "+interval+" MONTH) AND NOW()";
 		try{
@@ -37,7 +37,7 @@ public class CustomerAccountsDAO{
 			rs = ps.executeQuery();
 			while(rs.next())
 			{
-				TransactionLine = new TransactionModel2();
+				TransactionLine = new TransactionModel();
 				
 				TransactionLine.setDescription(rs.getString("description"));
 				TransactionLine.setStatus(rs.getString("status"));

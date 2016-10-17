@@ -12,7 +12,7 @@ import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.DebitAccount;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
-import org.thothlab.devilsvault.CustomerModel.TransactionModel2;
+import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 import org.thothlab.devilsvault.CustomerModel.BankAccount.AccountType;
 
 @Controller
@@ -32,7 +32,7 @@ public class CustomerAccountsController {
 		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
 		Double SavingsAccBal = CustomerDAO.getSavingsBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
-		List<TransactionModel2> TransactionLines = new ArrayList<TransactionModel2>();
+		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
 		TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
 		ctx.close();
 		ModelAndView model = new ModelAndView("customerPages/accountsSavingsPage");
@@ -58,7 +58,7 @@ public class CustomerAccountsController {
 		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
 		Double CheckingAcctBal = CustomerDAO.getCheckingBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
-		List<TransactionModel2> TransactionLines = new ArrayList<TransactionModel2>();
+		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
 		TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
 		ctx.close();
 		ModelAndView model = new ModelAndView("customerPages/accountsCheckingPage");

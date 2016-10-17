@@ -11,11 +11,11 @@ public class CreditCardTransMapper implements RowMapper<TransactionModel> {
 	@Override
 	public TransactionModel mapRow(ResultSet rs, int arg1) throws SQLException {
 		TransactionModel obj = new TransactionModel();
-		obj.setID(rs.getInt("id"));
+		obj.setId(rs.getInt("id"));
 		
 		obj.setAmount(rs.getInt("amount"));
 		
-		obj.setTimeStamp(rs.getInt("timeStamp"));
+		obj.setTimestamp_updated(rs.getDate("timeStamp"));
 		
 		obj.setDescription(rs.getString("Description"));
 		// obj.setOwner(rs.get);
