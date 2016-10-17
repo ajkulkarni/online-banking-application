@@ -1,12 +1,13 @@
 package org.thothlab.devilsvault.db.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Transaction {
 	private int id;
 	private int payer_id;
 	private int payee_id;
-	private double amount;
+	private BigDecimal amount;
 	private String hashvalue;
 	private String transaction_type;
 	private String description;
@@ -34,10 +35,10 @@ public class Transaction {
 	public void setPayee_id(int payee_id) {
 		this.payee_id = payee_id;
 	}
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 	public String getHashvalue() {

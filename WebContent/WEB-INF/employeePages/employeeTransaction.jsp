@@ -7,6 +7,33 @@
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
 			<h4>Transactions</h4>
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Filters</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-lg-7">
+						<form class="form-horizontal" action="transactionreject" method='POST' onSubmit="return checkInputOr()">
+							<label for="requestID" class="col-lg-2 control-label">Transaction ID : </label>
+							<div class="col-lg-10">
+		       					<input type="text" class="form-control" name="transactionID" placeholder="Transaction ID">
+		      				</div>
+		      				<br><br>
+		      				<label class="col-lg-2 control-label">OR</label>
+		      				<br><br>
+		      				<label for="userID" class="col-lg-2 control-label">Account No : </label>
+							<div class="col-lg-10">
+		       					<input type="text" class="form-control" name="accNo" placeholder="Account Number">
+		      				</div>
+		      				<br><br>
+		      				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+						    <button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending Transaction Requests</h3>
@@ -22,17 +49,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%-- <c:forEach items="${request_list}" var="request">
+							<c:forEach items="${pending_list}" var="transaction">
 								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.status}</td>
-									<td>${request.timestamp_created}</td>
-									<td>${request.approver}</td>
+									<td>${transaction.id}</td>
+									<td>${transaction.payer_id}</td>
+									<td>${transaction.payee_id}</td>
+									<td>${transaction.amount}</td>
 							</tr>
-							</c:forEach> --%>	
+							</c:forEach>	
 						</tbody>
 					</table>
 				</div>
@@ -54,17 +78,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<%-- <c:forEach items="${request_list}" var="request">
+							<c:forEach items="${complete_list}" var="transaction">
 								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.status}</td>
-									<td>${request.timestamp_created}</td>
-									<td>${request.approver}</td>
-							</tr>
-							</c:forEach> --%>	
+									<td>${transaction.id}</td>
+									<td>${transaction.payer_id}</td>
+									<td>${transaction.payee_id}</td>
+									<td>${transaction.amount}</td>
+									<td>${transaction.status}</td>
+									<td>${transaction.approver}</td>
+								</tr>
+							</c:forEach>	
 						</tbody>
 					</table>
 				</div>
