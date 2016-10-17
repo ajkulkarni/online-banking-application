@@ -15,10 +15,10 @@ import javax.mail.internet.MimeMessage;
 
 public class Email {
 
-	public void send(String Subject,String email,String new_password, int check) {
+	public String send(String Subject,String email, int check) {
 		
 		OneTimePassword otp = new OneTimePassword();
-		
+		String OTP="";
 		
 		final String username = "securebanking.ss4@gmail.com";
 		final String password = "ss@12345";
@@ -42,11 +42,13 @@ public class Email {
 			message.setFrom(new InternetAddress("securebanking.ss4@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
 			message.setSubject("Please do not share this with anyone");
-			if(check == 0)
-				message.setText(Subject + new_password);
-			else
-				message.setText(Subject + otp.getotp());
-
+			//if(check == 0)
+				//message.setText(Subject + new_password);
+			//else
+			{
+				OTP = otp.getotp();
+				message.setText(Subject + OTP);
+			}
 			Transport.send(message);
 
 			System.out.println("Done");
@@ -55,5 +57,7 @@ public class Email {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
+		return OTP;
 	}
+	
 }

@@ -1,5 +1,8 @@
 package org.thothlab.devilsvault.logincontrollers;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 public class LoginDB {
 
 	
@@ -8,13 +11,14 @@ public class LoginDB {
 		String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
 		String user = "cse545ss_admin";
 		String pass = "cse545ss_admin";
+		System.out.println("fff");
 		
 		try {
 			Connection myConn = DriverManager.getConnection(dbURL,user,pass);
 			//System.out.println(myConn);
 			Statement myStmt = myConn.createStatement();
 			
-			ResultSet myRs = myStmt.executeQuery("select * from external_user");
+			ResultSet myRs = myStmt.executeQuery("select * from external_users");
 			while(myRs.next())
 			{
 				//System.out.println("Stored email:" +myRs.getString("email"));
@@ -22,17 +26,45 @@ public class LoginDB {
 				//System.out.println(email);
 				if(email.equals(s))
 				{
-					//ResetPassword g = new ResetPassword();
-					//String new_password = g.generaterandompassword();
 					
-					Email E = new Email();
-					//E.send("Your new password is ", s,new_password, 0);
-					System.out.println("Reached email");
-					return "password reset";
+					
+					
+				    ResultSet myRs1 = myStmt.executeQuery("select * from otp_table");
+				    while(myRs1.next())
+				    {
+				    	String s1 = myRs1.getString("userEmail");
+				    	if(email.equals(s1))
+				    	{
+				    		long stored_time = myRs1.getLong("timestamp");
+				    		long currentTime    = (System.currentTimeMillis());
+				    		long diff = currentTime - stored_time;
+				    		if (diff>30)
+				    		{
+				    			int k =0;
+								String delete_entry = "delete from otp_table where userEmail = '"+s1+"';";
+								myStmt.executeUpdate(delete_entry);
+								Email E = new Email();
+								String otp = E.send("Your One Time Password is ", s, 1);
+								long currentTime1    = (System.currentTimeMillis());
+								String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime1+"')";
+								myStmt.executeUpdate(so);
+								myConn.close();
+								return "OTP resent";
+				    		}
+				    	}
+				    }
+				    long currentTime    = (System.currentTimeMillis());
+				    Email E = new Email();
+					String otp = E.send("Your One Time Password is", s, 1);
+					System.out.println(currentTime);
+				    String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime+"')";
+				    myStmt.executeUpdate(so);
+					myConn.close();
+					return "OTP sent";
 				}
-				//return "Invalid email";
+				
 			}
-			myConn.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,7 +81,7 @@ public class LoginDB {
 			Connection myConn = DriverManager.getConnection(dbURL,user,pass);
 			//System.out.println(myConn);
 			Statement myStmt = myConn.createStatement();
-			String se="select * from external_user where email='"+register.getUserEmail()+"'";
+			String se="select * from external_users where email='"+register.getUserEmail()+"'";
 		    ResultSet r=myStmt.executeQuery(se);
 		    
 		    while(r.next())

@@ -42,13 +42,7 @@ public class LoginController {
 		if (logout != null) {
 			model.addObject("msg", "You've been logged out successfully.");
 		}
-		String gRecaptchaResponse = request
-				.getParameter("g-recaptcha-response");
-		System.out.println(gRecaptchaResponse);
-		boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-		System.out.println(verify);	
-		if (verify==false)
-			model.addObject("error", getErrorMessage(request, "Captcha Error"));
+		
 		model.setViewName("LoginPage");
 
 		return model;
@@ -126,4 +120,40 @@ public class LoginController {
     		return modelandview;
     		
     	}
+	
+	
+	
+	@RequestMapping(value ="forgot.html", method = RequestMethod.GET)
+	public ModelAndView getForgotPasswordForm() {
+ 
+		ModelAndView modelandview = new ModelAndView("forgotpassword");
+		
+		return modelandview;
+	}
+	@RequestMapping(value ="backtologin.html", method = RequestMethod.POST)
+	public ModelAndView sendEmail(@Valid LoginForm loginForm, BindingResult result, HttpServletRequest request) {
+ 	
+		ModelAndView modelandview = new ModelAndView("forgotpassword");
+		System.out.println("Forgotpassword email " + loginForm.getUserName());
+	
+		/*if(result.hasErrors())
+		{
+			System.out.println("dddd"+result.hasErrors());
+			return modelandview;
+		}*/
+			
+		
+		LoginDB db = new LoginDB();
+		
+		String result_email = db.query(loginForm.getUserName());
+		if(result_email.equals("invalid email/email not present"))
+		{
+			System.out.println("invalid email/email not present");
+			modelandview = new ModelAndView("LoginPage");
+			return modelandview;
+		}
+		System.out.println(result_email);
+		modelandview = new ModelAndView("VerifyOTP");
+		return modelandview;
+	}
 }

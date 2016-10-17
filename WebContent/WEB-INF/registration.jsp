@@ -568,7 +568,7 @@
 			        </div>
 			      </li>
 			      <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
-			      <li class="form-line" data-type="control_button" id="id_2">
+			      
 			        <div id="cid_2" class="form-input-wide">
 			          <div style="text-align:center" class="form-buttons-wrapper">
 			            <button id="input_2" type="submit" class="form-submit-button form-submit-button-simple_green_apple">
@@ -580,14 +580,11 @@
 			            </button>
 			          </div>
 			        </div>
-			      </li>
-			      <li style="display:none">
-			        Should be Empty:
-			        <input type="text" name="website" value="" />
-			      </li>
-			      <li>
+			      
+			     
+			      
 			      	<script src='https://www.google.com/recaptcha/api.js'></script>	
-			      	</li>
+			     
 			    </ul>
 			  </div>
 			  	

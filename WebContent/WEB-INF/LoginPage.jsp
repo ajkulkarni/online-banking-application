@@ -48,7 +48,7 @@
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
 				   Username: <input path="username" type="email" name="username" value=""  class="email" required />
 									  
-				   Password: <input id = "password" path="password" type="password" name="password" value="*****" required/>
+				   Password: <input id = "password" path="password" type="password" name="password" value="" required/>
 				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 				    <br>
 				    <br>

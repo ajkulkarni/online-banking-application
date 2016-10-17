@@ -18,13 +18,7 @@
 	<script src="https://cdn.jotfor.ms/static/prototype.forms.js" type="text/javascript"></script>
 	<script src="https://cdn.jotfor.ms/static/jotform.forms.js?3.3.15179" type="text/javascript"></script>
 	<script type="text/javascript">
-	   JotForm.init(function(){
-	      setTimeout(function() {
-	          $('input_16').hint('ex: myname@asu.edu');
-	       }, 20);
-		JotForm.clearFieldOnHide="disable";
-		JotForm.onSubmissionError="jumpToSubmit";
-	   });
+	   
 	   $(document).ready(function(){
 		   
 		   $('#input_19').click(function(){
@@ -59,21 +53,21 @@
 		    <ul class="form-section page-section">
 		      <li class="form-line jf-required" data-type="control_email" id="id_16">
 		        <label class="form-label form-label-top form-label-auto" id="label_16" for="input_16">
-		          Enter your Email address
+		          Enter OTP
 		          <span class="form-required">
 		            *
 		          </span>
 		        </label>
 		        <div id="cid_16" class="form-input-wide jf-required">
-		          <input type="email" class=" form-textbox validate[required, Email]" id="input_16" name="userName" size="32" value="" />
+		          <input type="number" id="input_16" name="otp" size="6" value="" required/>
 		        </div>
 		      </li>
 		      <br>
 		     
 		        <div id="cid_19" class="form-input-wide">
 		          <div style="margin-left:156px" class="form-buttons-wrapper">
-		            <button id="input_19" type="submit" class="form-submit-button form-submit-button-simple_orange">
-		              Send OTP
+		            <button id="input_19" type="submit">
+		              Verify OTP
 		            </button>
 		          </div>
 		        </div>
