@@ -60,28 +60,25 @@
 				<h3 class="panel-title">Transfer Money - Someone's Account</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal">
+				<form class="form-horizontal" action="extTfrSubmit" method='POST'>
 					<fieldset>
 						<div class="form-group">
 							<label for="etpselectPayee" class="col-lg-2 control-label">Transfer
 								To : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="etpselectPayeeAccount">
+								<select class="form-control" id="etpselectPayeeAccount" name="etpselectPayeeAccount">
 								<option>Select payee</option>
 								<c:forEach items="${payeeAccounts}" var="item">
     							<option value="${item}">${item}</option>
 								</c:forEach>
 								</select>	
-									
-							
-
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="etpselectPayerAccount" class="col-lg-2 control-label">Transfer
 								From : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="etpselectPayerAccount">
+								<select class="form-control" id="etpselectPayerAccount" name="etpselectPayerAccount">
 									<option>Select Account</option>
 									<c:forEach items="${userAccounts}" var="item">
     								<option value="${item}">${item}</option>
@@ -93,7 +90,7 @@
 							<label for="etpinputAmount" class="col-lg-2 control-label">Amount
 								: </label>
 							<div class="col-lg-5 input-group">
-								<input type="text" class="form-control" id="etpinputAmount"
+								<input type="text" class="form-control" id="etpinputAmount" name="etpinputAmount"
 									placeholder="Enter Amount">
 							</div>
 						</div>
@@ -102,7 +99,7 @@
 								: </label>
 							<div id="etpdatetimepicker" class="col-lg-5 input-group date">
 								<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"
-									id="etpdatetimepicker_result" class="form-control"></input> <span
+									id="etpdatetimepicker_result" class="form-control" name="etpdatetimepicker_result"></input> <span
 									class="input-group-addon"> <span
 									class="glyphicon glyphicon-calendar"></span>
 								</span>
@@ -125,7 +122,7 @@
 				<h3 class="panel-title">Transfer Money - Within Account</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal">
+				<form class="form-horizontal" method="POST">
 					<fieldset>
 						<div class="form-group">
 							<label for="itpselectPayee" class="col-lg-2 control-label">Transfer
