@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.customercontrollers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,17 @@ public class CustomerTransferFundsController {
 		ExternalUser user = new ExternalUser(3,"JAY","TEMPE","TEMPE","USA",852,91231288.00);
 		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		
-		List<String> populatedPayeeAccounts = transferDAO.getRelatedAccounts(1);
-		List<String> userAccounts = transferDAO.getPayerAccounts(1);
+		int payerId=8;
+		List<Integer> currentUserAccounts  = transferDAO.getMultipleAccounts(payerId);
+		List<String> populatedPayeeAccounts=new ArrayList<>();
+		List<String> userAccounts=new ArrayList<>();		
+		for(Integer currentElements: currentUserAccounts){
+			 transferDAO.getRelatedAccounts(currentElements,populatedPayeeAccounts);
+			 transferDAO.getPayerAccounts(currentElements,userAccounts);	
+		}
+		
+		 
+
 	//	System.out.println(account.size());
 	
 		for(String elem: populatedPayeeAccounts){

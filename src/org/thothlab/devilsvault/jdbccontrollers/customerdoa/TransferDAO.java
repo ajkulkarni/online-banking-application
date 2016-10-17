@@ -48,28 +48,39 @@ public class TransferDAO {
 	}
 	
 	
-	public List<String> getPayerAccounts(int payerID){
-	
-		String query = "select account_number from bank_accounts where external_users_id="+payerID;
-		List<Integer> payerAccounts = jdbcTemplate.query(query, new AccountsMapper());
+	public void getPayerAccounts(int accountNumber,List<String> userAccounts){
+		
+	//	String query = "select account_number from bank_accounts where external_users_id="+payerID;
+		//List<Integer> payerAccounts = jdbcTemplate.query(query, new AccountsMapper());
 	
 		
-		List<String> accountNumberType = new ArrayList<>();
-		for(Integer element: payerAccounts){
-		String fetchAccountType = "select account_type from bank_accounts where account_number="+element;
+		/*List<String> accountNumberType = new ArrayList<>();
+		for(String element: userAccounts){
+		*/String fetchAccountType = "select account_type from bank_accounts where account_number="+accountNumber;
 		String accountType = jdbcTemplate.query(fetchAccountType, new AccountUserName()).get(0);
 		
-			accountNumberType.add(element+":"+accountType);
-			System.out.println("payer:"+element);
-		}		
-		return accountNumberType;
+		//	accountNumberType.add(element+":"+accountType);
+			userAccounts.add(accountNumber+":"+accountType);
+	//		System.out.println("payer:"+element);
+		/*}		*/
+
 	}
+	
+	public List<Integer> getMultipleAccounts(Integer payerID){
+	
+		String query = "Select account_number from bank_accounts where external_users_id="+payerID;
+		List<Integer> userMultipleAccounts = jdbcTemplate.query(query, new AccountsMapper());
+		
+		return userMultipleAccounts;
+	}
+	
+	
 	
 	
 	/*
 	 * Returns payee account (Transfer to)
 	 * */
-	public List<String> getRelatedAccounts(int payerID) {
+	public void getRelatedAccounts(int payerID,List<String> populatedPayeeAccounts) {
 		
 		String query = "select payee_id from transaction_pending WHERE payer_id =" +payerID  ;
 
@@ -84,11 +95,18 @@ public class TransferDAO {
 		List<String> userNameAccountNumber = new ArrayList<>();
 		
 		for(Integer listAccountElement: relatedAccounts){
+			System.out.println(listAccountElement);
+		}
+		
+		
+		for(Integer listAccountElement: relatedAccounts){
 			
 			String userName=getUserNames(listAccountElement);
-
 			System.out.println("-<<"+listAccountElement);
 			String fetchAccountName = "Select external_users_id from bank_accounts where account_number="+listAccountElement;	
+			
+			System.out.println(fetchAccountName);
+			
 			int external_user_id = jdbcTemplate.query(fetchAccountName, new AccountsMapper()).get(0);
 			
 			String selectAccountNumbers = "select account_number from bank_accounts where external_users_id="+external_user_id;
@@ -97,9 +115,12 @@ public class TransferDAO {
 			for(Integer bankAccountElements: userBankAccounts){
 				System.out.println("+"+bankAccountElements);
 				userNameAccountNumber.add(userName+":"+bankAccountElements);			
-				}
+				populatedPayeeAccounts.add(userName+":"+bankAccountElements);
+			
+			}
 			System.out.println("--\n");
 		}
-		return userNameAccountNumber;	
+		
+		
 	}
 }
