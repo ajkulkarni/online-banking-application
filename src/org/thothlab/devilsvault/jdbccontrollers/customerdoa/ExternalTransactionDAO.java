@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,32 @@ public class ExternalTransactionDAO extends TransactionDaoImpl{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	public Transaction createExternalTransaction(HttpServletRequest request, String fundTfrTransType){
+		Transaction extTransfer = new Transaction();
+		
+		if(fundTfrTransType.equalsIgnoreCase("external")){
+			float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
+			int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]);
+			int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
+			extTransfer.setPayer_id(payerAccountNumber);
+		    extTransfer.setPayee_id(payeeAccountNumber);
+		    extTransfer.setAmount(amount);
+		}
+		
+	    extTransfer.setHashvalue("");
+	    extTransfer.setTransaction_type("");
+	    extTransfer.setDescription("");
+	    extTransfer.setStatus("pending");
+		extTransfer.setApprover("");
+		extTransfer.setCritical(true);
+		extTransfer.setTimestamp_created(null);
+		extTransfer.setTimestamp_updated(null);
+		
+		return extTransfer;
+	}
+	
     public Boolean save(Transaction transaction, String type) {
-        String query = "insert into "+type+"(payer_id,payee_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "insert into "+type+"(payer_id,payee_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,NOW(),NOW())";
         Connection con = null;
         PreparedStatement ps = null;
         System.out.println("in trans save");
@@ -46,8 +71,8 @@ public class ExternalTransactionDAO extends TransactionDaoImpl{
             ps.setString(7, transaction.getStatus());
             ps.setString(8, transaction.getApprover());
             ps.setBoolean(9, transaction.isCritical());
-            ps.setDate(10, transaction.getTimestamp_created());
-            ps.setDate(11, transaction.getTimestamp_updated());
+            //ps.setDate(10, transaction.getTimestamp_created());
+            //ps.setDate(11, transaction.getTimestamp_updated());
             int out = ps.executeUpdate();
             if(out !=0){
                 return true;

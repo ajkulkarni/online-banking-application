@@ -14,6 +14,7 @@ import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
 import org.thothlab.devilsvault.db.model.ExternalUser;
 import org.thothlab.devilsvault.db.model.Transaction;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExternalTransactionDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 
 @Controller
@@ -55,29 +56,19 @@ public class CustomerTransferFundsController {
 	@RequestMapping(value="/customer/extTfrSubmit", method = RequestMethod.POST)
 	public ModelAndView ExtTfrSubmit(HttpServletRequest request){
 		System.out.println("------------");
-		System.out.println();
-		double amount = Double.parseDouble(request.getParameter("etpinputAmount"));
+		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		
 		System.out.println(request.getParameter("etpdatetimepicker_result"));
-		
-		System.out.println(request.getParameter("etpselectPayerAccount"));
-		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]);
-		System.out.println(request.getParameter("etpselectPayeeAccount"));
-		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
-		Transaction extTransfer = new Transaction();
-	    extTransfer.setPayer_id(payerAccountNumber);
-	    extTransfer.setPayee_id(payeeAccountNumber);
-	    extTransfer.setHashvalue("");
-	    extTransfer.setTransaction_type("");
-	    extTransfer.setDescription("");
-	    extTransfer.setStatus("");
-		extTransfer.setApprover("");
-		extTransfer.setAmount(amount);
-		extTransfer.setCritical(true);
-		extTransfer.setTimestamp_created(null);
-		extTransfer.setTimestamp_updated(null);
-		TransactionDaoImpl extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
-		extTransactionDAO.save(extTransfer, "transaction_pending");
+		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
+		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
+		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
+		if(!amountValid){
+			System.out.println("Inadequate balance!");
+			return null;
+		}
+		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(request, "external");
+		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		
 		return null;
 	}

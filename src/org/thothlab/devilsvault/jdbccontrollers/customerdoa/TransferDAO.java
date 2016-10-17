@@ -9,10 +9,8 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.thothlab.devilsvault.CustomerModel.CreditAccount;
-import org.thothlab.devilsvault.CustomerModel.TransactionModel;
+import org.thothlab.devilsvault.CustomerModel.BankAccountExternal;
 
 @Repository ("transferDAO")
 public class TransferDAO {
@@ -122,5 +120,20 @@ public class TransferDAO {
 		}
 		
 		
+	}
+	
+	public boolean validateAmount(int payerAccountNumber,double amount){
+		//String fetchAccountBalance = "Select balance from bank_accounts where account_number="+payerAccountNumber;
+		String sql = "Select balance,hold from bank_accounts where account_number = ?";
+
+		BankAccountExternal ba = (BankAccountExternal)jdbcTemplate.queryForObject(
+				sql, new Object[] { payerAccountNumber }, new BankAccountMapper());
+
+		if(amount > (ba.getBalance() - ba.getHold())){
+			
+		
+			return false;
+		}
+		return true;
 	}
 }
