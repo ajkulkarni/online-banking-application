@@ -22,12 +22,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${register_list}" var="register">
+							<c:forEach items="${registration_list}" var="register">
 								<tr>
 									<td>${register.userEmail}</td>
 									<td>${register.firstName} ${register.lastName}</td>
 									<td>${register.street} ${register.house} ${register.city} ${register.state} ${register.country}</td>
-									<td>${register.userPhoneNumber}</td>
+									<td>${register.userPhonenumber}</td>
 									<td>${register.timestamp_created}</td>
 							</tr>
 							</c:forEach>	

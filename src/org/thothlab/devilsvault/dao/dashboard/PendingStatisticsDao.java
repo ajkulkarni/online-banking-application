@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.db.model.InternalUser;
+import org.thothlab.devilsvault.db.model.PendingRegistration;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
 
@@ -27,9 +28,9 @@ public class PendingStatisticsDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);	
 	}
 	
-	public List<InternalUser> getPendingUserRegistrations() {
+	public List<PendingRegistration> getPendingUserRegistrations() {
 		String query = "SELECT * FROM user_pending";
-		List<InternalUser> user_list = jdbcTemplate.query(query, new BeanPropertyRowMapper(InternalUser.class));
+		List<PendingRegistration> user_list = jdbcTemplate.query(query, new BeanPropertyRowMapper(PendingRegistration.class));
 		//int  pendingUserRegistrations = userlist.size();
 		return user_list;
 	}

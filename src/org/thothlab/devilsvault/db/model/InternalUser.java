@@ -10,6 +10,7 @@ public class InternalUser {
 	private String state;
 	private String country;
 	private int pincode;
+	private String email;
 	private int phone;
 	
 	public int getId() {

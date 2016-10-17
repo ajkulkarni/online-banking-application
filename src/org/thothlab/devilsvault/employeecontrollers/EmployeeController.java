@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
+import org.thothlab.devilsvault.dao.pendingregistration.PendingRegistrationDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
-import org.thothlab.devilsvault.db.model.InternalUser;
+import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
+import org.thothlab.devilsvault.db.model.PendingRegistration;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
 
@@ -28,10 +30,64 @@ public class EmployeeController {
 	
 	@RequestMapping("/employee/transaction")
 	public ModelAndView TransactionContoller(){
-		ModelAndView model = new ModelAndView("employeePages/employeeTransaction");
-		model.addObject("request_list","test message");
-		return model;
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+        List <Transaction> complete_list = transactionDAO.getAllCompleted();
+        List <Transaction> pending_list = transactionDAO.getAllPending();
+        if(complete_list.size() > 10)
+            complete_list = complete_list.subList(complete_list.size() - 10, complete_list.size());
+        if(pending_list.size() > 10)
+            pending_list = pending_list.subList(pending_list.size() - 10, pending_list.size());
+        ModelAndView model = new ModelAndView("employeePages/employeeTransaction");
+        model.addObject("complete_list",complete_list);
+        model.addObject("pending_list",pending_list);
+        ctx.close();
+        return model;
 	}
+	
+	@RequestMapping(value="/employee/transactionsearch", method = RequestMethod.POST)
+    public ModelAndView TransactionSearch(@RequestParam("transactionID") String transactionID, @RequestParam("accNo") String accNo) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+       List<Transaction> transactionCompleteList = null;
+       List <Transaction> transactionPendingList = null;
+       if(transactionID.length() == 0) {
+           transactionPendingList = transactionDAO.getByUserId(Integer.parseInt(accNo), "transaction_pending");
+           transactionCompleteList = transactionDAO.getByUserId(Integer.parseInt(accNo), "transaction_completed");
+
+       } else {
+           transactionPendingList = transactionDAO.getById(Integer.parseInt(transactionID), "transaction_pending");
+           transactionCompleteList = transactionDAO.getByUserId(Integer.parseInt(transactionID), "transaction_completed");
+
+       }
+       ModelAndView model = new ModelAndView("employeePages/employeeTransaction");
+       model.addObject("complete_list",transactionCompleteList);
+       model.addObject("pending_list",transactionPendingList);
+       ctx.close();
+       return model;
+    }
+	
+	@RequestMapping(value="/employee/transactionapprove", method = RequestMethod.POST)
+    public ModelAndView TransactionApproveContoller(@RequestParam("transactionID") String transactionID){
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+        transactionDAO.approveTransaction(Integer.parseInt(transactionID), "transaction_pending");
+        ModelAndView model = new ModelAndView("redirect:" + "/employee/transaction");
+        model.addObject("error_msg","Transaction Approved!");
+       ctx.close();
+       return model;
+    }
+    
+    @RequestMapping(value="/employee/transactionreject", method = RequestMethod.POST)
+    public ModelAndView TransactionRejectContoller(@RequestParam("transactionID") String transactionID){
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+        transactionDAO.rejectTransaction(Integer.parseInt(transactionID), "transaction_pending");
+        ModelAndView model = new ModelAndView("redirect:" + "/employee/transaction");
+        model.addObject("error_msg","Transaction Rejected!");
+       ctx.close();
+       return model;
+    }
 	
 	@RequestMapping("/employee/pendingrequest")
 	public ModelAndView PendingRequestContoller(){
@@ -150,20 +206,14 @@ public class EmployeeController {
 	@RequestMapping("/employee/pendingregistration")
 	public ModelAndView PendingRegistrationContoller(){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		List<Request> externalRequestList = null;
-//        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-//        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
-//        List<Request> externalRequestList = externalRequestDao.getAllCompleted();
-//        if(externalRequestList.size() > 10)
-//            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
-//        List<Request> internalRequestList = internalRequestDao.getAllCompleted();
-//        if(internalRequestList.size() > 10)
-//            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+		PendingRegistrationDaoImpl pendingRegistrationDao = ctx.getBean("PendingRegistrationDao", PendingRegistrationDaoImpl.class);
+		List<PendingRegistration> PendingRegistrationList = pendingRegistrationDao.getAllPending();
         ModelAndView model = new ModelAndView("employeePages/PendingRegistration");
-        model.addObject("registration_list",externalRequestList);
+        model.addObject("registration_list",PendingRegistrationList);
         ctx.close();
         return model;
 	}
+	
 	
 	@RequestMapping("/employee/home")
 	public ModelAndView PendingDashboardContoller(){
@@ -177,7 +227,7 @@ public class EmployeeController {
 		List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
 		if(external_list.size() > 5)
 			external_list = external_list.subList(external_list.size()-5, external_list.size());
-		List<InternalUser> user_list = pendingStatisticsDao.getPendingUserRegistrations();
+		List<PendingRegistration> user_list = pendingStatisticsDao.getPendingUserRegistrations();
 		if(user_list.size() > 5)
 			user_list = user_list.subList(user_list.size()-5, user_list.size());
 		List<Transaction> transaction_list = pendingStatisticsDao.getPendingTransactions();

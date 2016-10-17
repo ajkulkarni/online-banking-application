@@ -48,19 +48,21 @@
 					<table id="content-table">
 						<thead>
 							<tr>
-								<th class="active">ID</th>
+								<th class="active">Email</th>
 								<th class="active">Name</th>
 								<th class="active">Address</th>
-								<th class="active">Email</th>
+								<th class="active">Phone Number</th>
+								<th class="active">Date</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach items="${user_list}" var="user">
 								<tr>
-									<td>${user.id}</td>
-									<td>${user.name}</td>
-									<td>${user.address}</td>
-									<td>${user.email}</td>
+									<td>${user.userEmail}</td>
+									<td>${user.firstName} ${user.lastName}</td>
+									<td>${user.street} ${user.house} ${user.city} ${user.state} ${user.country}</td>
+									<td>${user.userPhonenumber}</td>
+									<td>${user.timestamp_created}</td>
 							</tr>
 							</c:forEach>
 						</tbody>

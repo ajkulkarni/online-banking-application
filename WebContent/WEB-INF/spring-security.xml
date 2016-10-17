@@ -21,6 +21,7 @@
     
     <authentication-manager>
         <authentication-provider>
+        	<password-encoder ref="bcryptEncoder"/>
             <jdbc-user-service data-source-ref="securitydataSource"
 		  		users-by-username-query="select username,password, enabled from users where username=?"
 		  		authorities-by-username-query="select username, role from users where username =?  " />
