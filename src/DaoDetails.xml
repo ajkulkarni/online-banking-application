@@ -17,6 +17,7 @@
 		<context:component-scan base-package="org.thothlab.devilsvault.CustomerDAO"/>
 		<context:component-scan base-package="org.thothlab.devilsvault.jdbccontrollers.customerdoa" />
 		<context:component-scan base-package="org.thothlab.devilsvault.jdbccontrollers.transferDAO" />
+		<context:component-scan base-package="org.thothlab.devilsvault.jdbccontrollers.extTransactionDAO" />
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
