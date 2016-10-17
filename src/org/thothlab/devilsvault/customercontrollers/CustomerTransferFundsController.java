@@ -20,11 +20,17 @@ public class CustomerTransferFundsController {
 		ExternalUser user = new ExternalUser(3,"JAY","TEMPE","TEMPE","USA",852,91231288.00);
 		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		
-		List<Integer> account = transferDAO.getRelatedAccounts(1);
-		List<Integer> userAccounts = transferDAO.getPayerAccounts(1);
+		List<String> populatedPayeeAccounts = transferDAO.getRelatedAccounts(1);
+		List<String> userAccounts = transferDAO.getPayerAccounts(1);
 	//	System.out.println(account.size());
+	
+		for(String elem: populatedPayeeAccounts){
+			System.out.println(elem);
+		}
 		
-		model.addObject("msg","Hello Gaurav");
+		model.addObject("payeeAccounts",populatedPayeeAccounts);
+		model.addObject("userAccounts",userAccounts);
+	//	model.addObject("msg","Hello Gaurav");
 		return model;
 	}
 

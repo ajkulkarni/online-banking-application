@@ -6,17 +6,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class AccountsMapper implements RowMapper<Integer>{
+public class AccountUserName implements RowMapper<String>{
 
 	@Override
-	public Integer mapRow(ResultSet arg0, int arg1) throws SQLException {
+	public String mapRow(ResultSet arg0, int arg1) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		
-		   return Integer.parseInt(arg0.getString(1));
+		   return arg0.getString(1);
 }
-	
-	
-	
-	
 }
