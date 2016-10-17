@@ -8,8 +8,22 @@ public class ExternalUser {
     private String state;
     private String country;
     private int pincode;
-    private int phone;
+    private Double phone;
 
+    
+    public ExternalUser(int id,String name,String address,String city,String country,int pincode,Double phone){
+    	
+    	this.id = id;
+    	this.name = name;
+    	this.address =address;
+    	this.city = city;
+    	this.state = state;
+    	this.country = country;
+    	this.pincode = pincode;
+    	this.phone = phone;
+    	
+    }
+    
     public int getId() {
         return id;
     }
@@ -52,10 +66,10 @@ public class ExternalUser {
     public void setPincode(int pincode) {
         this.pincode = pincode;
     }
-    public int getPhone() {
+    public Double getPhone() {
         return phone;
     }
-    public void setPhone(int phone) {
+    public void setPhone(Double phone) {
         this.phone = phone;
     }
 }
