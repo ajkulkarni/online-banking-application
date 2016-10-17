@@ -36,7 +36,7 @@ public class CreditCardDOA extends CustomerDOAImpl {
 		String query = "select cc.id id, cc.credit_card_no credit_card_no, cc.available_balance available_balance,"
 				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.bank_accounts_id bank_accounts_id "
 				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.id = cc.bank_accounts_id  "
-				+ "AND bk.external_users_id= "+customer.getID();
+				+ "AND bk.external_users_id= 100";//+customer.getID();
 		
 		System.out.println(query);
 		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
@@ -50,8 +50,8 @@ public class CreditCardDOA extends CustomerDOAImpl {
 	 */
 	public List<TransactionModel> getAllTransactions(CreditAccount account) {
 		
-		String query = "select * from pending_transactions WHERE payee_account_number = 100"
-				+" OR payer_account_number = 100";
+		String query = "select * from transaction_completed WHERE payee_id = 100"
+				+" OR payer_id = 101";
 		System.out.println("Query - " + query);
 		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
 				return transactionList;		

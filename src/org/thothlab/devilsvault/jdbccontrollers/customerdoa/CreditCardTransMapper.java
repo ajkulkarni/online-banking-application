@@ -15,7 +15,7 @@ public class CreditCardTransMapper implements RowMapper<TransactionModel> {
 		
 		obj.setAmount(rs.getInt("amount"));
 		
-		obj.setTimestamp_updated(rs.getDate("timeStamp"));
+		obj.setTimestamp_updated(rs.getDate("timestamp_created"));
 		
 		obj.setDescription(rs.getString("Description"));
 		// obj.setOwner(rs.get);

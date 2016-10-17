@@ -13,7 +13,7 @@ public class CustomerMapper implements RowMapper<Customer>  {
 		
 		Customer cust = new Customer();
 		cust.setID(rs.getInt("ID"));
-		cust.setName(rs.getString("full_name"));
+		cust.setName(rs.getString("name"));
 		
 		return cust;
 	}
