@@ -45,8 +45,16 @@
 		<div class="content-wrapper" id="login-container">
 			<div class="col-md-12" id="page-content">
 				<h3>Login Page</h3>
+				  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+      				<font color="red">
+        				Your login attempt was not successful due to <br/><br/>
+        			<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+        			
+      				</font>
+    			  </c:if>
 				
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
+				<br/>
 				   Username: <input path="username" type="email" name="username" value=""  class="email" required />
 									  
 				   Password: <input id = "password" path="password" type="password" name="password" value="" required/>
