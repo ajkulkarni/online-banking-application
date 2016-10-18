@@ -20,11 +20,11 @@ public class Encryption {
 	
 	
 	
- public static String Encode(String data) {
+ public  static String Encode(String data) {
 	 String encryptedData = "";
   try {
    KeyStore keyStore = KeyStore.getInstance("JCEKS");
-   FileInputStream stream = new FileInputStream("mykeystore.jks");
+   FileInputStream stream = new FileInputStream("C:/Users/Aditya/Desktop/Spring_Aditya/mykeystore.jks");
    keyStore.load(stream, "password".toCharArray());
    Key key = keyStore.getKey("mykey", "password".toCharArray());
    
@@ -41,10 +41,10 @@ public class Encryption {
  }
 
  
- public static String Decode(String encryptedData) {
+ public  static String Decode(String encryptedData) {
 	  try {
 	   KeyStore keyStore = KeyStore.getInstance("JCEKS");
-	   FileInputStream stream = new FileInputStream("mykeystore.jks");
+	   FileInputStream stream = new FileInputStream("C:/Users/Aditya/Desktop/Spring_Aditya/mykeystore.jks");
 	   keyStore.load(stream, "password".toCharArray());
 	   Key key = keyStore.getKey("mykey", "password".toCharArray());
 	   
@@ -81,6 +81,11 @@ public class Encryption {
 		  byte[] newData = cipher.doFinal(Base64.decodeBase64(inputData.getBytes()));
 		  return new String(newData);
 
+ }
+ 
+ public static String E(String e)
+ {
+	 return Encode(e);
  }
 public static void main(String args[])
 	{

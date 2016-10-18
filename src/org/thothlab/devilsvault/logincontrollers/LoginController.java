@@ -102,7 +102,10 @@ public class LoginController {
     		System.out.println(register.getUserEmail());
     		System.out.println(register.getUserPassword());
     		System.out.println(register.getUserSsn());
-
+    		
+    		String ssn = Encryption.Encode(register.getUserSsn());
+    		System.out.println("Encrypted SSN: "+ssn);
+    		System.out.println("Decryped SSN: "+Encryption.Decode(ssn));
     		System.out.println(register.getCity());
     		System.out.println(register.getCountry());
     		System.out.println(register.getStreet());

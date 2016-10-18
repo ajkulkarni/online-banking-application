@@ -93,30 +93,10 @@ public class LoginDB {
 		    {
 		    	return "email already exists";
 		    }
-		    String so="INSERT INTO `user_pending`(`firstName`,`lastName`,`userEmail`,`userSsn`,`userPassword`,`country`,`city`,`street`,`house`,`userPhonecode`,`userAreacode`,`addresslinetwo`,`state`,`pincode`,`userPhonenumber`)"
-		    		+ "VALUES('"+register.getFirstName()+"','"+register.getLastName()+"','"+register.getUserEmail()+"','"+register.getUserSsn()+"','"+register.getUserPassword()+"','"+register.getCountry()+"','"+register.getCity()+"','"+register.getStreet()+"','"+register.getHouse()+"','"+register.getUserPhonecode()+"','"+register.getUserAreacode()+"','"+register.getAddresslineTwo()+"','"+register.getState()+"','"+register.getPincode()+"','"+register.getUserPhonenumber()+"');";
-		   // String so="INSERT INTO `user_pending`(`firstName`,`lastName`,`userEmail`,'userSsn','userPassword','country',`city`,`street`,`house`,'userPhonecode','userAreacode','addresslinetwo','state','pincode','userPhonenumber',"+")VALUES('"+register.getUserPhonenumber()+" "+register.getUserAreacode()+"','"+register.getUserPhonecode()+"','"+register.getState()+"','"+register.getHouse()+"','"+register.getAddresslineTwo()+"',"+register.getCountry()+","+register.getCity()+","+register.getStreet()+","+register.getPincode()+","+register.getFirstName()+","+register.getLastName()+","+register.+getUserEmail()","+register.getUserSsn()+","+register.getUserPassword()+");";
-		    /*Password P = new Password();
-		    String salt = P.generatesalt();
-		    String hashpassword = P.signup(register.getUserPassword(), salt);
-		    String so="INSERT INTO `user_pending`(`name`,`address`,`city`,`state`,`country`,`email`,"+
-		    "`pincode`,`phone`,`salt`, `passhash`)VALUES('"+register.getFirstName()+" "+register.getLastName()+"','"+add+"','"+register.getCity()+"','"+register.getState()+"','"+register.getCountry()+"','"+register.getUserEmail()+"',"+register.getPincode()+","+ph+",'"+salt+"','"+hashpassword+"');";*/
-		    myStmt.executeUpdate(so);
-		    //add count = 0 and locked = 0 to external_authenicate table
-		    //Internal user will create the external_user and external_authenticate tables.
-		   /* so="select * from external_user where email='"+register.getUserEmail()+"'";
-		    int id=0;
-		    r=myStmt.executeQuery(so);
-		    while(r.next()){
-		     	System.out.println("here ???");
-		      	id=r.getInt("id");
-		    }
-		    Password P = new Password();
-		    String salt = P.generatesalt();
-		    String hashpassword = P.signup(register.getUserPassword(), salt);
-		    System.out.println(hashpassword);
-		    so="Insert into  authentic (`email`,`salt`,`passhash`,`count`,`TypeId`,`locked`)VALUES('"+register.getUserEmail()+"','"+salt+"','"+hashpassword+"'"+",0,'E"+id+"',0);";
-		     myStmt.executeUpdate(so);*/
+		    //String so="INSERT INTO `user_pending`(`name`,`address`,`city`,`state`,`country`,`pincode`,`phone`,`email`,`date_of_birth`,`ssn`,`userPassword`)VALUES('"+register.getName()+"','"+register.getAddress()+"','"+register.getCity()+"','"+register.getState()+"','"+register.getCountry()+"','"+register.getPincode()+"','"+register.getPhone()+"','"+register.getEmail()+"','"+register.getDate_of_birth()+"','"+register.getUserSsn()+"','"+register.getUserPassword()+"');";
+		    
+		    //myStmt.executeUpdate(so);
+		   
 		     myConn.close();	    
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
