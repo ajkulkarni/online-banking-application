@@ -98,7 +98,7 @@
 		var userEmail=$('#userEmail').val();
 		var city = $('#city').val(); 
 		var password = $('#password').val();
-		
+		var userSsn = $('#userSsn').val();
 		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		if(!filter.test(userEmail))
 		{
@@ -131,7 +131,7 @@
 		}	
 		
 		var strongRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-		console.log(password);
+		console.log(userSsn);
 		if(!strongRegex.test(password))
 		{
 			console.log(password);
@@ -139,6 +139,15 @@
 		    $("#errorBox").html("Please Enter a Valid Password");
 		return false;
 		}	
+		var filter1 =  /^[0-9]{3}\-?[0-9]{2}\-?[0-9]{4}$/; 
+		if(!filter1.test(userSsn))
+		{
+			console.log(userSsn);
+			$("#userSsn").focus();
+		    $("#errorBox").html("Please Enter a Valid SSN");
+		return false;
+		}	
+		
 		});
 	});
 	</script>
@@ -608,7 +617,7 @@
 			          </span>
 			        </label>
 			        <div id="cid_10" class="form-input jf-required">
-			          <input type="text" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="input_10" name="userSsn" size="20" value="" required/>
+			          <input type="text" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="userSsn" name="userSsn" size="20" value="" required/>
 			        </div>
 			      </li>
 			      <li class="form-line jf-required" data-type="control_textbox" id="id_11">
