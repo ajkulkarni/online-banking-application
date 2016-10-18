@@ -45,6 +45,7 @@
 		<div class="content-wrapper" id="login-container">
 			<div class="col-md-12" id="page-content">
 				<h3>Login Page</h3>
+				
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
 				   Username: <input path="username" type="email" name="username" value=""  class="email" required />
 									  

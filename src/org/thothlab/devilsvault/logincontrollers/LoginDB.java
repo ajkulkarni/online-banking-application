@@ -38,7 +38,8 @@ public class LoginDB {
 				    		long stored_time = myRs1.getLong("timestamp");
 				    		long currentTime    = (System.currentTimeMillis());
 				    		long diff = currentTime - stored_time;
-				    		if (diff>30)
+				    		System.out.println(diff/1000);
+				    		if (diff/1000>30)
 				    		{
 				    			int k =0;
 								String delete_entry = "delete from otp_table where userEmail = '"+s1+"';";
@@ -50,6 +51,10 @@ public class LoginDB {
 								myStmt.executeUpdate(so);
 								myConn.close();
 								return "OTP resent";
+				    		}
+				    		else
+				    		{
+				    			return "OTP within 30s";
 				    		}
 				    	}
 				    }

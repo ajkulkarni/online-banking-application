@@ -69,15 +69,15 @@
 		        </div>
 		      </li>
 		      <br>
-		     
+		      <li class="form-line" data-type="control_button" id="id_19">
 		        <div id="cid_19" class="form-input-wide">
 		          <div style="margin-left:156px" class="form-buttons-wrapper">
 		            <button id="input_19" type="submit" class="form-submit-button form-submit-button-simple_orange">
-		              Send OTP
+		              Send Email
 		            </button>
 		          </div>
 		        </div>
-		      
+		      </li>
 		      
 		    </ul>
 		  </div>
@@ -86,11 +86,9 @@
 		  <script type="text/javascript">
 		  document.getElementById("si" + "mple" + "_spc").value = "62831368525157-62831368525157";
 		  </script>
-		  <input type="hidden" name="${_csrf.parameterName}"
-									value="${_csrf.token}" />
 		</form>
 							
-					
+		
 		
 		</div> <!-- .content-wrapper -->
 	

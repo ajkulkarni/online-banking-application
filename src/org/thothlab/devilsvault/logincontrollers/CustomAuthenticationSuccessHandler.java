@@ -5,10 +5,13 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
 
@@ -17,17 +20,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub 
 		
-		String gRecaptchaResponse = arg0.getParameter("g-recaptcha-response");
-		System.out.println(gRecaptchaResponse);
-		boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-		System.out.println(verify);	
-		/*if (verify==false)
-		{
-			arg1.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			arg1.sendRedirect("/CSE545-SS/login");
-			return;
-		}*/
-			
+		HttpSession session = arg0.getSession();
+        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        session.setAttribute("username", authUser.getUsername());
+        String s =  arg2.getAuthorities().toString();
+        s = s.substring(1, s.length()-1);
+        System.out.println(s);
+        session.setAttribute("role", s);
+       
 		arg1.setStatus(HttpServletResponse.SC_OK);
 		arg1.sendRedirect("/CSE545-SS/employee/home");
 		

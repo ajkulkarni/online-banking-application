@@ -9,10 +9,10 @@ import javax.validation.constraints.Size;
 
 public class RegistrationForm {
 
-	@Pattern(regexp="[^0-9]*")
+	
 	private String firstName;
 	
-	@Pattern(regexp="[^0-9]*")
+	
 	private String lastName;
 	
 	private String userEmail;

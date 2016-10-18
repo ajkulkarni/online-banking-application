@@ -88,6 +88,60 @@
 			$('#password').keyboard();
 		});
 	</script>
+	
+	<script>
+		
+		$(document).ready(function(){
+		$('#submit').click(function(){
+		var firstName=$('#firstName').val();
+		var lastName=$('#lastName').val();
+		var userEmail=$('#userEmail').val();
+		var city = $('#city').val(); 
+		var password = $('#password').val();
+		
+		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		if(!filter.test(userEmail))
+		{
+			$("#userEmail").focus();
+		    $("#errorBox").html("Please Enter a Valid Email Address");
+		return false;
+		}
+		filter = /^[A-z]+$/;
+		
+		if(!filter.test(firstName))
+		{
+			$("#firstName").focus();
+		    $("#errorBox").html("Name can contain only alphabets");
+		return false;
+		}
+		else if(!filter.test(lastName))
+		{
+			$("#lastName").focus();
+		    $("#errorBox").html("Name can contain only alphabets");
+		return false;
+		}
+		console.log(password);
+		filter = /^[A-z]+$/;
+		if(!filter.test(city))
+		{
+			console.log("hahah");
+			$("#city").focus();
+		    $("#errorBox").html("Please Enter a Valid City");
+		return false;
+		}	
+		
+		var strongRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+		console.log(password);
+		if(!strongRegex.test(password))
+		{
+			console.log(password);
+			$("#password").focus();
+		    $("#errorBox").html("Please Enter a Valid Password");
+		return false;
+		}	
+		});
+	});
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -118,6 +172,7 @@
 			          </div>
 			        </div>
 			      </li>
+			      <div id="errorBox"></div>
 			      <li class="form-line jf-required" data-type="control_fullname" id="id_3">
 			        <label class="form-label form-label-left" id="label_3" for="input_3">
 			          Full Name
@@ -127,11 +182,11 @@
 			        </label>
 			        <div id="cid_3" class="form-input jf-required">
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required]" type="text" size="10" name="firstName" id="first_3" />
+			            <input class="form-textbox validate[required]" type="text" size="10" name="firstName" id="firstName" required/>
 			            <label class="form-sub-label" for="first_3" id="sublabel_first" style="min-height: 13px;"> First Name </label>
 			          </span>
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required]" type="text" size="15" name="lastName" id="last_3" />
+			            <input class="form-textbox validate[required]" type="text" size="15" name="lastName" id="lastName" required/>
 			            <label class="form-sub-label" for="last_3" id="sublabel_last" style="min-height: 13px;"> Last Name </label>
 			          </span>
 			        </div>
@@ -148,7 +203,7 @@
 			            <tr>
 			              <td colspan="2">
 			                <span class="form-sub-label-container" style="vertical-align: top">
-			                  <input class="form-textbox validate[required] form-address-line" type="text" name="street" id="input_4_addr_line1" />
+			                  <input class="form-textbox validate[required] form-address-line" type="text" name="street" id="input_4_addr_line1" required/>
 			                  <label class="form-sub-label" for="input_4_addr_line1" id="sublabel_4_addr_line1" style="min-height: 13px;"> Street Address </label>
 			                </span>
 			              </td>
@@ -164,13 +219,13 @@
 			            <tr>
 			              <td width="50%">
 			                <span class="form-sub-label-container" style="vertical-align: top">
-			                  <input class="form-textbox validate[required] form-address-city" type="text" name="city" id="input_4_city" size="21" />
+			                  <input class="form-textbox validate[required] form-address-city" type="text" name="city" id="city" size="21" required/>
 			                  <label class="form-sub-label" for="input_4_city" id="sublabel_4_city" style="min-height: 13px;"> City </label>
 			                </span>
 			              </td>
 			              <td>
 			                <span class="form-sub-label-container" style="vertical-align: top">
-			                  <select class="form-dropdown validate[required] form-address-state" name="state" id="input_4_state">
+			                  <select class="form-dropdown validate[required] form-address-state" name="state" id="state">
 			                    <option value="" selected> Please Select </option>
 			                    <option value="Alabama"> Alabama </option>
 			                    <option value="Alaska"> Alaska </option>
@@ -231,7 +286,7 @@
 			            <tr>
 			              <td width="50%">
 			                <span class="form-sub-label-container" style="vertical-align: top">
-			                  <input class="form-textbox validate[required] form-address-postal" type="text" name="pincode" id="input_4_postal" size="10" />
+			                  <input class="form-textbox validate[required] form-address-postal" type="text" name="pincode" id="input_4_postal" size="10" required/>
 			                  <label class="form-sub-label" for="input_4_postal" id="sublabel_4_postal" style="min-height: 13px;"> Zip Code </label>
 			                </span>
 			              </td>
@@ -502,34 +557,34 @@
 			        </label>
 			        <div id="cid_7" class="form-input jf-required">
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			          	<input type="date">
+			          	<input type="date" required>
 			           
 			        </div>
 			      </li>
 			      <li class="form-line jf-required" data-type="control_phone" id="id_5">
 			        <label class="form-label form-label-left" id="label_5" for="input_5">
 			          Phone Number
-			          <span class="form-required">
+			          <span class="form-required" required>
 			            *
 			          </span>
 			        </label>
 			        <div id="cid_5" class="form-input jf-required">
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required]" type="tel" name="userPhonecode" id="input_5_country" size="6">
+			            <input class="form-textbox validate[required]" type="tel" name="userPhonecode" id="input_5_country" size="6" required>
 			            <span class="phone-separate">
 			              &nbsp;-
 			            </span>
 			            <label class="form-sub-label" for="input_5_country" id="sublabel_country" style="min-height: 13px;"> Country Code </label>
 			          </span>
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required]" type="tel" name="userAreacode" id="input_5_area" size="3">
+			            <input class="form-textbox validate[required]" type="tel" name="userAreacode" id="input_5_area" size="3" required>
 			            <span class="phone-separate">
 			              &nbsp;-
 			            </span>
 			            <label class="form-sub-label" for="input_5_area" id="sublabel_area" style="min-height: 13px;"> Area Code </label>
 			          </span>
 			          <span class="form-sub-label-container" style="vertical-align: top">
-			            <input class="form-textbox validate[required]" type="tel" name="userPhonenumber" id="input_5_phone" size="8">
+			            <input class="form-textbox validate[required]" type="tel" name="userPhonenumber" id="input_5_phone" size="8" required>
 			            <label class="form-sub-label" for="input_5_phone" id="sublabel_phone" style="min-height: 13px;"> Phone Number </label>
 			          </span>
 			        </div>
@@ -542,7 +597,7 @@
 			          </span>
 			        </label>
 			        <div id="cid_6" class="form-input jf-required">
-			          <input type="email" class=" form-textbox validate[required, Email]" id="input_6" name="userEmail" size="20" value="" />
+			          <input type="email" class=" form-textbox validate[required, Email]" id="userEmail" name="userEmail" size="20" value="" required/>
 			        </div>
 			      </li>
 			      <li class="form-line jf-required" data-type="control_textbox" id="id_10">
@@ -553,7 +608,7 @@
 			          </span>
 			        </label>
 			        <div id="cid_10" class="form-input jf-required">
-			          <input type="text" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="input_10" name="userSsn" size="20" value="" />
+			          <input type="text" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="input_10" name="userSsn" size="20" value="" required/>
 			        </div>
 			      </li>
 			      <li class="form-line jf-required" data-type="control_textbox" id="id_11">
@@ -564,14 +619,14 @@
 			          </span>
 			        </label>
 			        <div id="cid_11" class="form-input jf-required">
-			          <input type="password" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="password" name="userPassword" size="20" value="" />
+			          <input type="password" class=" form-textbox validate[required, AlphaNumeric]" data-type="input-textbox" id="password" name="userPassword" size="20" value="" required/>
 			        </div>
 			      </li>
 			      <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
 			      
 			        <div id="cid_2" class="form-input-wide">
 			          <div style="text-align:center" class="form-buttons-wrapper">
-			            <button id="input_2" type="submit" class="form-submit-button form-submit-button-simple_green_apple">
+			            <button id="submit" type="submit" class="form-submit-button form-submit-button-simple_green_apple">
 			              Submit
 			            </button>
 			            &nbsp;

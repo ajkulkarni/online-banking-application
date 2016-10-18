@@ -87,12 +87,12 @@ public class LoginController {
     public ModelAndView submitRegistrationForm(@Valid RegistrationForm register, BindingResult result, HttpServletRequest request) throws IOException {
 		
      	    	//	System.out.println(s1.getstudentDOB());
-			String gRecaptchaResponse = request
+			/*String gRecaptchaResponse = request
 				.getParameter("g-recaptcha-response");
 			System.out.println(gRecaptchaResponse);
 			boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-			System.out.println(verify);	
-    		if(result.hasErrors()||verify==false)
+			System.out.println(verify);	*/
+    		if(result.hasErrors())//||verify==false)
     		{
     				ModelAndView modelandview = new ModelAndView("registration");
     				return modelandview;
