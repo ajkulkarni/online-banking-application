@@ -12,6 +12,7 @@ public class AccountsMapper implements RowMapper<Integer>{
 	public Integer mapRow(ResultSet arg0, int arg1) throws SQLException {
 		// TODO Auto-generated method stub
 		
+		System.out.println("abc:");
 		
 		   return Integer.parseInt(arg0.getString(1));
 }

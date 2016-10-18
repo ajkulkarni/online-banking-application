@@ -53,24 +53,89 @@ public class CustomerTransferFundsController {
 	
 	
 	
-	@RequestMapping(value="/customer/extTfrSubmit", method = RequestMethod.POST)
-	public ModelAndView ExtTfrSubmit(HttpServletRequest request){
+	@RequestMapping(value="/customer/ExternalTransfer", method = RequestMethod.POST)
+	public ModelAndView ExternalSubmit(HttpServletRequest request){
 		System.out.println("------------");
 		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		
 		System.out.println(request.getParameter("etpdatetimepicker_result"));
 		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
 		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
+		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
+		String description = request.getParameter("etpTextArea");
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 		if(!amountValid){
 			System.out.println("Inadequate balance!");
 			return null;
 		}
 		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
-		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(request, "external");
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "external");
+		extTransactionDAO.save(extTransferTrans, "transaction_pending");
+		
+		return null;
+	}
+	
+	@RequestMapping(value="/customer/InternalTransfer", method = RequestMethod.POST)
+	public ModelAndView InternalSubmit(HttpServletRequest request){
+		System.out.println("------------");
+		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
+		
+		System.out.println(request.getParameter("etpdatetimepicker_result"));
+		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
+		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
+		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
+		String description = request.getParameter("etpTextArea");
+		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
+		if(!amountValid){
+			System.out.println("Inadequate balance!");
+			return null;
+		}
+		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "external");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		
 		return null;
 	}
 
+	@RequestMapping(value="/customer/EmailPhoneTransfer", method = RequestMethod.POST)
+	public ModelAndView EmailPhoneSubmit(HttpServletRequest request){
+		
+	
+		String modeOfTransfer  =request.getParameter("eptpModeOfTransfer");
+		String inputMode = request.getParameter("eptpinputMode");
+		System.out.println(request.getParameter("eptpselectPayerAccount")+"here");
+		TransferDAO transferDao = CustomerDAOHelper.transferDAO();
+		int PayeeAccountNumber = transferDao.fetchAccountNumber(modeOfTransfer,inputMode);
+		
+		int payerAccountNumber = Integer.parseInt(request.getParameter("eptpselectPayerAccount").split(":")[0]);
+		
+		
+		float amount = Float.parseFloat(request.getParameter("eptpinputAmount")); 
+		String description = request.getParameter("etpTextArea");
+		
+		if(PayeeAccountNumber!=-1){
+			boolean amountValid = transferDao.validateAmount(payerAccountNumber,amount);
+			if(!amountValid){
+				System.out.println("Inadequate balance!");
+				return null;
+			}
+		
+			ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
+			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,PayeeAccountNumber, description, "EmailPhone");
+			extTransactionDAO.save(extTransferTrans, "transaction_pending");
+			
+			
+		}
+		
+		System.out.println(PayeeAccountNumber+"exists");
+		
+		
+/*		eptpModeOfTransfer
+		eptpinputMode
+		eptpselectPayerAccount
+		eptpinputAmount
+*/		
+		return null;
+	}
+	
 }

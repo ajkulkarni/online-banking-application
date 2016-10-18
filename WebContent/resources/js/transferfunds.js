@@ -10,6 +10,9 @@ $().ready(function(){
 		$("#etpinputAmount").val('');
 		$("#etpinputAmount").attr("placeholder","Enter Amount");
 		$("#etpdatetimepicker_result").val('');
+		$("#etpTextArea").val('');
+		$("#eptpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
+		
 	}
 	
 	function clearInternalTransferPanel(){
@@ -17,7 +20,9 @@ $().ready(function(){
 		$("#itpselectPayerAccount").val('Select Account');
 		$("#itpinputAmount").val('');
 		$("#itpinputAmount").attr("placeholder","Enter Amount");
-		$("#itpdatetimepicker_result").val('');		
+		$("#itpdatetimepicker_result").val('');
+		$("#itpTextArea").val('');
+		$("#itpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
 	}
 	
 	function clearEmailphoneTransferPanel(){
@@ -27,7 +32,9 @@ $().ready(function(){
 		$("#eptpinputMode").attr("placeholder","Enter Payee's Email/Phone");
 		$("#eptpinputAmount").val('');
 		$("#eptpinputAmount").attr("placeholder","Enter Amount");
-		$("#eptpdatetimepicker_result").val('');			
+		$("#eptpdatetimepicker_result").val('');
+		$("#eptpTextArea").val('');
+		$("#eptpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
 	}
 	
 	function displayExternalTransferPanel(){

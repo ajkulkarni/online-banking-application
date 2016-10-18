@@ -60,28 +60,31 @@
 				<h3 class="panel-title">Transfer Money - Someone's Account</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal" action="extTfrSubmit" method='POST'>
+				<form class="form-horizontal" action="ExternalTransfer"
+					method='POST'>
 					<fieldset>
 						<div class="form-group">
 							<label for="etpselectPayee" class="col-lg-2 control-label">Transfer
 								To : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="etpselectPayeeAccount" name="etpselectPayeeAccount">
-								<option>Select payee</option>
-								<c:forEach items="${payeeAccounts}" var="item">
-    							<option value="${item}">${item}</option>
-								</c:forEach>
-								</select>	
+								<select class="form-control" id="etpselectPayeeAccount"
+									name="etpselectPayeeAccount">
+									<option>Select payee</option>
+									<c:forEach items="${payeeAccounts}" var="item">
+										<option value="${item}">${item}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="etpselectPayerAccount" class="col-lg-2 control-label">Transfer
 								From : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="etpselectPayerAccount" name="etpselectPayerAccount">
+								<select class="form-control" id="etpselectPayerAccount"
+									name="etpselectPayerAccount">
 									<option>Select Account</option>
 									<c:forEach items="${userAccounts}" var="item">
-    								<option value="${item}">${item}</option>
+										<option value="${item}">${item}</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -90,8 +93,8 @@
 							<label for="etpinputAmount" class="col-lg-2 control-label">Amount
 								: </label>
 							<div class="col-lg-5 input-group">
-								<input type="text" class="form-control" id="etpinputAmount" name="etpinputAmount"
-									placeholder="Enter Amount">
+								<input type="text" class="form-control" id="etpinputAmount"
+									name="etpinputAmount" placeholder="Enter Amount">
 							</div>
 						</div>
 						<div class="form-group">
@@ -99,13 +102,25 @@
 								: </label>
 							<div id="etpdatetimepicker" class="col-lg-5 input-group date">
 								<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"
-									id="etpdatetimepicker_result" class="form-control" name="etpdatetimepicker_result"></input> <span
+									id="etpdatetimepicker_result" class="form-control"
+									name="etpdatetimepicker_result"></input> <span
 									class="input-group-addon"> <span
 									class="glyphicon glyphicon-calendar"></span>
 								</span>
 							</div>
 						</div>
-						
+
+						<div class="form-group">
+							<label for="textArea" class="col-lg-2 control-label">Description
+								: </label>
+							<div class="col-lg-5 input-group">
+								<textarea class="form-control" rows="3" id="etpTextArea"
+									name="etpTextArea"
+									placeholder="Enter a short desription for this transaction"></textarea>
+								<span class="help-block"> </span>
+							</div>
+						</div>
+
 						<div class="form-group">
 							<label class="col-lg-2 control-label"></label>
 							<div class="col-lg-5 input-group">
@@ -123,7 +138,8 @@
 				<h3 class="panel-title">Transfer Money - Within Account</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal" method="POST">
+				<form class="form-horizontal" action="InternalTransfer"
+					method='POST'>
 					<fieldset>
 						<div class="form-group">
 							<label for="itpselectPayee" class="col-lg-2 control-label">Transfer
@@ -131,9 +147,9 @@
 							<div class="col-lg-5 input-group">
 								<select class="form-control" id="itpselectPayee">
 									<option>Select Account</option>
-									<option>Checking Account - 12345678</option>
-									<option>Checking Account - 12346789</option>
-									<option>Savings Account - 23154743</option>
+									<c:forEach items="${userAccounts}" var="item">
+										<option value="${item}">${item}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
@@ -169,6 +185,16 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="textArea" class="col-lg-2 control-label">Description
+								: </label>
+							<div class="col-lg-5 input-group">
+								<textarea class="form-control" rows="3" id="itpTextArea"
+									name="itpTextArea"
+									placeholder="Enter a short desription for this transaction"></textarea>
+								<span class="help-block"> </span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-lg-2 control-label"></label>
 							<div class="col-lg-5 input-group">
 								<button type="submit" class="btn btn-primary">Submit</button>
@@ -185,13 +211,15 @@
 				<h3 class="panel-title">Email/Phone Transfer</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal">
+				<form class="form-horizontal" action="EmailPhoneTransfer"
+					method="POST">
 					<fieldset>
 						<div class="form-group">
 							<label for="eptpModeOfTransfer" class="col-lg-2 control-label">Transfer
 								Via : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="eptpModeOfTransfer">
+								<select class="form-control" id="eptpModeOfTransfer"
+									name="eptpModeOfTransfer">
 									<option>Select Mode of Transfer</option>
 									<option>Email</option>
 									<option>Phone</option>
@@ -203,18 +231,19 @@
 								To : </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="eptpinputMode"
-									placeholder="Enter Payee's Email/Phone">
+									name="eptpinputMode" placeholder="Enter Payee's Email/Phone">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="eptpselectPayerAccount"
 								class="col-lg-2 control-label">Transfer From : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="eptpselectPayerAccount">
+								<select class="form-control" id="eptpselectPayerAccount"
+									name="eptpselectPayerAccount">
 									<option>Select Account</option>
-									<option>Checking Account - 12345678</option>
-									<option>Checking Account - 12346789</option>
-									<option>Savings Account - 23154743</option>
+									<c:forEach items="${userAccounts}" var="item">
+										<option value="${item}">${item}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
@@ -223,10 +252,10 @@
 								: </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="eptpinputAmount"
-									placeholder="Enter Amount">
+									name="eptpinputAmount" placeholder="Enter Amount">
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="eptpdatetimepicker" class="col-lg-2 control-label">Date
 								: </label>
 							<div id="eptpdatetimepicker" class="col-lg-5 input-group date">
@@ -235,6 +264,16 @@
 									class="input-group-addon"> <span
 									class="glyphicon glyphicon-calendar"></span>
 								</span>
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label for="textArea" class="col-lg-2 control-label">Description
+								: </label>
+							<div class="col-lg-5 input-group">
+								<textarea class="form-control" rows="3" id="eptpTextArea"
+									name="eptpTextArea"
+									placeholder="Enter a short desription for this transaction"></textarea>
+								<span class="help-block"> </span>
 							</div>
 						</div>
 						<div class="form-group">
