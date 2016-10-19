@@ -29,6 +29,22 @@
 			$('#password').keyboard();
 		});
 	</script>
+	<script>
+			
+		$(document).ready(function(){
+		$('#submit').click(function(){
+		var userEmail=$('#userEmail').val();	
+		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		if(!filter.test(userEmail))
+		{
+			$("#userEmail").focus();
+	    	$("#errorBox").html("Please Enter a Valid Email Address");
+			return false;
+		}
+		
+		});
+	});
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -52,10 +68,11 @@
         			
       				</font>
     			  </c:if>
-				
+				 <div id="errorBox"></div>
+					
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
 				<br/>
-				   Username: <input path="username" type="email" name="username" value=""  class="email" required />
+				   Username: <input path="username" type="email" name="username" value=""  class="email" id="userEmail" required />
 									  
 				   Password: <input id = "password" path="password" type="password" name="password" value="" required/>
 				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
@@ -65,7 +82,7 @@
 				    <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
 				    <br>
 				    <br>
-				    <input type="submit" value="Login" class="btn"/>
+				    <input type="submit" value="Login" class="btn" id="submit"/>
 				    <br>
 				    <br>
 				</form>

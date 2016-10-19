@@ -11,7 +11,7 @@ public class LoginDB {
 		String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
 		String user = "cse545ss_admin";
 		String pass = "cse545ss_admin";
-		System.out.println("fff");
+		//System.out.println("fff");
 		
 		try {
 			Connection myConn = DriverManager.getConnection(dbURL,user,pass);

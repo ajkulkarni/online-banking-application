@@ -86,6 +86,7 @@
 		  <script type="text/javascript">
 		  document.getElementById("si" + "mple" + "_spc").value = "62831368525157-62831368525157";
 		  </script>
+		  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 							
 		

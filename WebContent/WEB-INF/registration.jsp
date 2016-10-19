@@ -19,9 +19,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<meta name="HandheldFriendly" content="true" />
 	<title>New Customer Registration Form</title>
-	<link href="resources/css/register.css" rel="stylesheet" type="text/css" />
-	<link type="text/css" rel="stylesheet" href="resources/css/mainregister.css" />
-	<link type="text/css" media="print" rel="stylesheet" href="resources/css/style1.css" />
+
 	<style type="text/css">
 	    .form-label-left{
 	        width:150px !important;
@@ -55,24 +53,8 @@
 	.form-matrix-row-headers +.form-matrix-values +.form-matrix-values +.form-matrix-values .form-textbox{width: 120px;}
 	    /* Injected CSS Code */
 	</style>
+
 	
-	<link type="text/css" rel="stylesheet" href="resources/css/apple.css"/>
-	<script src="resources/js/form.js" type="text/javascript"></script>
-	<script src="resources/js/form1.js" type="text/javascript"></script>
-	<script type="text/javascript">
-	   JotForm.setConditions([{"action":[{"field":"9","visibility":"Show"}],"link":"Any","terms":[{"field":"8","operator":"equals","value":"Other (Please specify...)"}],"type":"field"}]);
-	   JotForm.init(function(){
-	      JotForm.calendarMonths = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-	      JotForm.calendarDays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-	      JotForm.calendarOther = {"today":"Today"};
-	      JotForm.setCalendar("7", true, {"days":{"monday":true,"tuesday":true,"wednesday":true,"thursday":true,"friday":true,"saturday":true,"sunday":true},"future":true,"past":true,"custom":false,"ranges":false,"start":"January 01, 1898","end":"January 01, 1998"});
-	      setTimeout(function() {
-	          $('input_6').hint('ex: email@asu.edu');
-	       }, 20);
-		JotForm.clearFieldOnHide="disable";
-		JotForm.onSubmissionError="jumpToFirstError";
-	   });
-	</script>
 	<link href="resources/css/jquery-ui.css" rel="stylesheet">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
 	<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>

@@ -6,6 +6,7 @@
 
  	<http use-expressions="true" auto-config="true">
         <intercept-url pattern="/employee/**" access="hasRole('ROLE_USER')"></intercept-url>
+        
 
         <form-login 
 	        login-page="/login" 
@@ -15,7 +16,7 @@
             password-parameter="password"
             authentication-success-handler-ref="customAuthenticationSuccessHandler"></form-login>
         	<session-management invalid-session-url="/login" session-fixation-protection="newSession" >
-		   		<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+		   		<concurrency-control  max-sessions="1" error-if-maximum-exceeded="true" />
 			</session-management>
 			<logout logout-success-url="/login" delete-cookies="JSESSIONID" />
     	<csrf />
@@ -23,11 +24,18 @@
     
     <authentication-manager>
         <authentication-provider>
+        	<password-encoder ref="encoder" />
             <jdbc-user-service data-source-ref="securitydataSource"
 		  		users-by-username-query="select username,password, enabled from users where username=?"
 		  		authorities-by-username-query="select username, role from users where username =?  " />
         </authentication-provider>
     </authentication-manager>
+    
+    <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<b:constructor-arg name="strength" value="10" />
+	</b:bean>
+    
+    
  
  	
  	
