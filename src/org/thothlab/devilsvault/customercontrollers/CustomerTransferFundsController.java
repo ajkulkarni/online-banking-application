@@ -65,6 +65,7 @@ public class CustomerTransferFundsController {
 		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
 		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
 		String description = request.getParameter("etpTextArea");
+
 		
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 		if(!amountValid){

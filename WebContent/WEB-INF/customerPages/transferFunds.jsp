@@ -21,6 +21,78 @@
 	$(function() {
 		$('#itpdatetimepicker').datetimepicker();
 	});
+	
+function validateEmailPhone(){
+		
+		console.log("valdate");
+		
+		var amount = document.getElementById("eptpinputAmount").value;
+		console.log(amount);
+		
+		var mode = $("#eptpModeOfTransfer").val();
+		var modeValue = $("#eptpinputMode").val();
+		var payer = $("#eptpselectPayerAccount").val();
+		
+		var validInput = true;
+		//validate Amount
+		if (isNaN(amount) || amount < 0){  
+		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
+ */		  $("#etpinputAmount").val('');
+		  $("#etpinputAmount").attr("placeholder","Enter valid Amount");
+		  console.log("error");
+		  validInput = false;  
+		}
+		
+		if(mode == "Select Mode of Transfer"){
+			$("#eptpModeOfTransfer").val('Select Mode of Transfer');
+			validInput = false;
+		}
+		
+		if(modeValue == ""){
+			$("#eptpinputMode").val('');
+			$("#eptpinputMode").attr("placeholder","Enter valid Amount");
+			validInput = false;
+		}
+		
+		if(payer == "Select Account"){
+			$("#eptpselectPayerAccount").val('Select Account');
+			validInput = false;
+		}
+		
+		return validInput;
+		}
+
+	
+	function validate(){  
+		var num = document.getElementById("etpinputAmount").value;
+		
+		if (isNaN(num) || num < 0){  
+		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
+ */		  $("#etpinputAmount").val('');
+			$("#etpinputAmount").attr("placeholder","Enter valid Amount");
+		  console.log("error");
+		  return false;  
+		}else{  
+		  return true;  
+		  }  
+		}
+	
+	
+		
+	
+	function validateInternal(){  
+		var num = document.getElementById("itpinputAmount").value;
+		
+		if (isNaN(num) || num < 0){  
+		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
+ */		  $("#itpinputAmount").val('');
+			$("#itpinputAmount").attr("placeholder","Enter valid Amount");
+		  console.log("error");
+		  return false;  
+		}else{  
+		  return true;  
+		  }  
+		}
 </script>
 <script type="text/javascript">
 	$(function() {
@@ -36,7 +108,7 @@
 			style="display: none;">
 
 
-			<form class="form-horizontal">
+			<form class="form-horizontal" >
 
 				<fieldset>
 					<div class="form-group">
@@ -61,7 +133,7 @@
 			</div>
 			<div class="panel-body">
 				<form class="form-horizontal" action="ExternalTransfer"
-					method='POST'>
+					method='POST' onsubmit="return validate()">
 					<fieldset>
 						<div class="form-group">
 							<label for="etpselectPayee" class="col-lg-2 control-label">Transfer
@@ -124,7 +196,7 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label"></label>
 							<div class="col-lg-5 input-group">
-								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="submit" class="btn btn-primary" >Submit</button>
 							</div>
 						</div>
 					</fieldset>
@@ -139,7 +211,7 @@
 			</div>
 			<div class="panel-body">
 				<form class="form-horizontal" action="InternalTransfer"
-					method='POST'>
+					method='POST'onsubmit="return validateInternal()">
 					<fieldset>
 						<div class="form-group">
 							<label for="itpselectPayeeAccount" class="col-lg-2 control-label">Transfer
@@ -213,8 +285,8 @@
 				<h3 class="panel-title">Email/Phone Transfer</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal" action="EmailPhoneTransfer"
-					method="POST">
+				<form class="form-horizontal"  onsubmit="return validateEmailPhone()"   action="EmailPhoneTransfer" 
+					method="POST" >
 					<fieldset>
 						<div class="form-group">
 							<label for="eptpModeOfTransfer" class="col-lg-2 control-label">Transfer

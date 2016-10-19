@@ -1,4 +1,9 @@
 $().ready(function(){
+	
+  
+  
+
+	
 	$("#chooseTransferMethodContainer").show();
 	$("#externaltransferpanel").hide();
 	$("#internaltransferpanel").hide();

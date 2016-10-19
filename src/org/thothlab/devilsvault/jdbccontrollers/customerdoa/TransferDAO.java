@@ -125,7 +125,6 @@ public class TransferDAO {
 				new Object[] { payerAccountNumber }, new BankAccountMapper());
 
 		if (amount > (ba.getBalance() - ba.getHold()) || amount < 1) {
-
 			return false;
 		}
 		return true;
