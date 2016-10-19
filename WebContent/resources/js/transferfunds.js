@@ -18,6 +18,7 @@ $().ready(function(){
 	function clearInternalTransferPanel(){
 		$("#itpselectPayee").val('Select Account');
 		$("#itpselectPayerAccount").val('Select Account');
+		$('#itpAlert').hide();
 		$("#itpinputAmount").val('');
 		$("#itpinputAmount").attr("placeholder","Enter Amount");
 		$("#itpdatetimepicker_result").val('');

@@ -124,7 +124,7 @@ public class TransferDAO {
 		BankAccountExternal ba = (BankAccountExternal) jdbcTemplate.queryForObject(sql,
 				new Object[] { payerAccountNumber }, new BankAccountMapper());
 
-		if (amount > (ba.getBalance() - ba.getHold())) {
+		if (amount > (ba.getBalance() - ba.getHold()) || amount < 1) {
 
 			return false;
 		}
@@ -177,5 +177,11 @@ public class TransferDAO {
 		}
 		return account_number;
 
+	}
+	
+	public void updateHold(int payerAccountNumber, float amount){
+		String updateStmt = "Update bank_accounts set hold = hold + ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, payerAccountNumber});
 	}
 }

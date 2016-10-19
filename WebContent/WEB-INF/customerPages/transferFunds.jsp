@@ -97,7 +97,7 @@
 									name="etpinputAmount" placeholder="Enter Amount">
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="etpdatetimepicker" class="col-lg-2 control-label">Date
 								: </label>
 							<div id="etpdatetimepicker" class="col-lg-5 input-group date">
@@ -109,7 +109,7 @@
 								</span>
 							</div>
 						</div>
-
+ -->
 						<div class="form-group">
 							<label for="textArea" class="col-lg-2 control-label">Description
 								: </label>
@@ -142,10 +142,10 @@
 					method='POST'>
 					<fieldset>
 						<div class="form-group">
-							<label for="itpselectPayee" class="col-lg-2 control-label">Transfer
+							<label for="itpselectPayeeAccount" class="col-lg-2 control-label">Transfer
 								To : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="itpselectPayee">
+								<select class="form-control" id="itpselectPayeeAccount" name="itpselectPayeeAccount">
 									<option>Select Account</option>
 									<c:forEach items="${userAccounts}" var="item">
 										<option value="${item}">${item}</option>
@@ -157,23 +157,24 @@
 							<label for="itpselectPayerAccount" class="col-lg-2 control-label">Transfer
 								From : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="itpselectPayerAccount">
+								<select class="form-control" id="itpselectPayerAccount" name="itpselectPayerAccount">
 									<option>Select Account</option>
-									<option>Checking Account - 12345678</option>
-									<option>Checking Account - 12346789</option>
-									<option>Savings Account - 23154743</option>
+									<c:forEach items="${userAccounts}" var="item">
+										<option value="${item}">${item}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</div>
+						
 						<div class="form-group">
 							<label for="itpinputAmount" class="col-lg-2 control-label">Amount
 								: </label>
 							<div class="col-lg-5 input-group">
-								<input type="text" class="form-control" id="itpinputAmount"
+								<input type="text" class="form-control" id="itpinputAmount" name="itpinputAmount"
 									placeholder="Enter Amount">
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="itpdatetimepicker" class="col-lg-2 control-label">Date
 								: </label>
 							<div id="itpdatetimepicker" class="col-lg-5 input-group date">
@@ -183,7 +184,7 @@
 									class="glyphicon glyphicon-calendar"></span>
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<div class="form-group">
 							<label for="textArea" class="col-lg-2 control-label">Description
 								: </label>
@@ -194,6 +195,7 @@
 								<span class="help-block"> </span>
 							</div>
 						</div>
+						
 						<div class="form-group">
 							<label class="col-lg-2 control-label"></label>
 							<div class="col-lg-5 input-group">

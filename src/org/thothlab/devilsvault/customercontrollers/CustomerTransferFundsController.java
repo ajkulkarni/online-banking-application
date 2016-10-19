@@ -1,6 +1,8 @@
 package org.thothlab.devilsvault.customercontrollers;
 
 import java.sql.Date;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,44 +59,55 @@ public class CustomerTransferFundsController {
 	public ModelAndView ExternalSubmit(HttpServletRequest request){
 		System.out.println("------------");
 		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
-		
-		System.out.println(request.getParameter("etpdatetimepicker_result"));
+		ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
+		//System.out.println(request.getParameter("etpdatetimepicker_result"));
 		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
 		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
 		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
 		String description = request.getParameter("etpTextArea");
+		
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 		if(!amountValid){
-			System.out.println("Inadequate balance!");
-			return null;
+			model.addObject("success", false);
+			model.addObject("error_msg", "Insufficient balance!");
+			return model;
 		}
 		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "external");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
-		
-		return null;
+		transferDAO.updateHold(payerAccountNumber,amount);
+		model.addObject("success", true);
+		model.addObject("payee_info", payeeAccountNumber);
+		model.addObject("Amount", amount);
+		return model;
 	}
 	
 	@RequestMapping(value="/customer/InternalTransfer", method = RequestMethod.POST)
-	public ModelAndView InternalSubmit(HttpServletRequest request){
+	public ModelAndView InternalSubmit(HttpServletRequest request) throws ParseException{
 		System.out.println("------------");
 		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
+		ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
 		
-		System.out.println(request.getParameter("etpdatetimepicker_result"));
-		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
-		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
-		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
-		String description = request.getParameter("etpTextArea");
+		float amount = Float.parseFloat(request.getParameter("itpinputAmount"));
+		int payerAccountNumber = Integer.parseInt(request.getParameter("itpselectPayerAccount").split(":")[0]); 
+		int payeeAccountNumber = Integer.parseInt(request.getParameter("itpselectPayeeAccount").split(":")[0]);
+		String description = request.getParameter("itpTextArea");
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 		if(!amountValid){
+			
 			System.out.println("Inadequate balance!");
-			return null;
+			model.addObject("success", false);
+			model.addObject("error_msg", "Insufficient balance!");
+			return model;
 		}
 		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "external");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
-		
-		return null;
+		transferDAO.updateHold(payerAccountNumber,amount);
+		model.addObject("success", true);
+		model.addObject("payee_info", payeeAccountNumber);
+		model.addObject("Amount", amount);
+		return model;
 	}
 
 	@RequestMapping(value="/customer/EmailPhoneTransfer", method = RequestMethod.POST)
@@ -104,38 +117,41 @@ public class CustomerTransferFundsController {
 		String modeOfTransfer  =request.getParameter("eptpModeOfTransfer");
 		String inputMode = request.getParameter("eptpinputMode");
 		System.out.println(request.getParameter("eptpselectPayerAccount")+"here");
-		TransferDAO transferDao = CustomerDAOHelper.transferDAO();
-		int PayeeAccountNumber = transferDao.fetchAccountNumber(modeOfTransfer,inputMode);
+		TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
+		int PayeeAccountNumber = transferDAO.fetchAccountNumber(modeOfTransfer,inputMode);
 		
 		int payerAccountNumber = Integer.parseInt(request.getParameter("eptpselectPayerAccount").split(":")[0]);
 		
 		
 		float amount = Float.parseFloat(request.getParameter("eptpinputAmount")); 
-		String description = request.getParameter("etpTextArea");
-		
+		String description = request.getParameter("eptpTextArea");
+		ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
 		if(PayeeAccountNumber!=-1){
-			boolean amountValid = transferDao.validateAmount(payerAccountNumber,amount);
+			boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 			if(!amountValid){
 				System.out.println("Inadequate balance!");
-				return null;
+				model.addObject("success", false);
+				model.addObject("error_msg", "Insufficient balance!");
+				return model;
 			}
 		
 			ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
 			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,PayeeAccountNumber, description, "EmailPhone");
 			extTransactionDAO.save(extTransferTrans, "transaction_pending");
-			
-			
+			transferDAO.updateHold(payerAccountNumber,amount);
+			model.addObject("success", true);
+			model.addObject("payee_info", inputMode);
+			model.addObject("Amount", amount);
+			return model;
+		}
+		else{
+			model.addObject("success", false);
+			model.addObject("error_msg", "Payee account not found for given Email/Phone!");
+			return model;
 		}
 		
-		System.out.println(PayeeAccountNumber+"exists");
+		//System.out.println(PayeeAccountNumber+"exists");
 		
-		
-/*		eptpModeOfTransfer
-		eptpinputMode
-		eptpselectPayerAccount
-		eptpinputAmount
-*/		
-		return null;
 	}
 	
 }
