@@ -26,7 +26,7 @@ public class UserDetailsDaoImpl extends JdbcDaoSupport implements UserDetailsDao
 	private static final String SQL_USER_ATTEMPTS_INSERT = "INSERT INTO user_attempts (USERNAME, ATTEMPTS, LASTMODIFIED) VALUES(?,?,?)";
 
 	private static final String SQL_USER_ATTEMPTS_UPDATE_ATTEMPTS = "UPDATE user_attempts SET attempts = attempts + 1, lastmodified = ? WHERE username = ?";
-	private static final String SQL_USER_ATTEMPTS_RESET_ATTEMPTS = "UPDATE user_attempts SET attempts = 0, lastmodified = null WHERE username = ?";
+	private static final String SQL_USER_ATTEMPTS_RESET_ATTEMPTS = "UPDATE user_attempts SET attempts = 0, lastmodified = now() WHERE username = ?";
 
 	private static final int MAX_ATTEMPTS = 3;
 

@@ -45,6 +45,8 @@
 		});
 	});
 	</script>
+
+}
 </head>
 <body>
 	<header class="cd-main-header">
@@ -65,7 +67,7 @@
       				<font color="red">
         				Your login attempt was not successful due to <br/><br/>
         			<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
-        			
+        			<h2>${msg}</h2>
       				</font>
     			  </c:if>
 				 <div id="errorBox"></div>
