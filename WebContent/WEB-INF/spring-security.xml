@@ -22,21 +22,32 @@
     	<csrf />
     </http>
     
-    <authentication-manager>
-        <authentication-provider>
-        	<password-encoder ref="encoder" />
-            <jdbc-user-service data-source-ref="securitydataSource"
-		  		users-by-username-query="select username,password, enabled from users where username=?"
-		  		authorities-by-username-query="select username, role from users where username =?  " />
-        </authentication-provider>
-    </authentication-manager>
-    
-    <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    <b:bean id="customUserDetailsService"
+		class="org.thothlab.devilsvault.logincontrollers.CustomUserDetailsService">
+		<b:property name="usersByUsernameQuery" value="select * from users where username = ?"/>
+		<b:property name="authoritiesByUsernameQuery" value="select username, role from users where username =?" />
+		<b:property name="dataSource" ref="dataSource" />
+	</b:bean>
+ 	
+	<b:bean id="userDetailsDao" class="org.thothlab.devilsvault.logincontrollers.UserDetailsDaoImpl" >
+		<b:property name="dataSource" ref="dataSource" />
+	</b:bean>
+	
+	<b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
 		<b:constructor-arg name="strength" value="10" />
 	</b:bean>
-    
+	
+	<b:bean id="authenticationProvider"
+		class="org.thothlab.devilsvault.logincontrollers.LimitLoginAuthenticationProvider">
+		<b:property name="userDetailsService" ref="customUserDetailsService" />
+		<b:property name="userDetailsDao" ref="userDetailsDao" />
+		<b:property name="passwordEncoder" ref="encoder" />
+		
+	</b:bean>
+	
+    <authentication-manager>
+        <authentication-provider ref="authenticationProvider"/>
+    </authentication-manager>
     
  
- 	
- 	
-</b:beans>
+ </b:beans>
