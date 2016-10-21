@@ -30,56 +30,51 @@ public class CreditCardDashboardController {
 		Customer cust = cust_dao.getCustomer(100);
 		
 		CreditAccount account = doa.getCreditAccount(cust);
-		System.out.println(account.getAccountNumber());
+		
 		model.addObject("creditAccount",account);
 		
 		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
 		List<TransactionModel> transactions = transdao.getAllTransactions(account);
 		model.addObject("transations", transactions );
 		
-		CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
-		List<TransactionModel> transactions1 = transdao1.getLastOneMonTransactions(account);
-		model.addObject("transations_one", transactions1 );
 		
-		CreditCardDOA transdao3 = CustomerDAOHelper.creditCardDAO();
-		List<TransactionModel> transactions3 = transdao3.getLastThreeMonTransactions(account);
-		model.addObject("transations_three", transactions3 );
-		
-		CreditCardDOA transdao6 = CustomerDAOHelper.creditCardDAO();
-		List<TransactionModel> transactions6 = transdao6.getLastSixMonTransactions(account);
-		model.addObject("transations_six", transactions6 );
-		
+		System.out.println("Here");
 		
 		return model;
 	}
-	
-	public @ResponseBody String byParameter(@RequestParam("interval") String interval) {
-	    return "Mapped by path + method + presence of query parameter! (MappingController) - foo = "
-	           + interval;
-	}
-	
-	
-	
+
+
 	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
-	
 	public ModelAndView getSearchResultViaAjax(@RequestParam("monthPicker") String interval) {
 
-		System.out.println("HERE" + interval);
-		
-		ModelAndView model = new ModelAndView("redirect:"+"credithome");
+	
+		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 		
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
 		Customer cust = cust_dao.getCustomer(100);
 		
 		CreditAccount account = doa.getCreditAccount(cust);
-		System.out.println(account.getAccountNumber());
+		
 		model.addObject("creditAccount",account);
 		
-		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
-		List<TransactionModel> transactions = transdao.getAllTransactions(account);
-		transactions.remove(0);
-		model.addObject("transations", transactions );
+		CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
+		
+		if (interval.equals("Last one month")) {
+			System.out.println("One month");
+			List<TransactionModel> transactions1 = transdao1.getLastOneMonTransactions(account);
+			model.addObject("transations", transactions1 );
+			
+		} else if (interval.equals("Last 3 months")) {
+			System.out.println("3 month");
+			List<TransactionModel> transactions3 = transdao1.getLastThreeMonTransactions(account);
+			model.addObject("transations", transactions3 );
+			
+		} else if (interval.equals("Last 6 months")) {
+			System.out.println("6");
+			List<TransactionModel> transactions6 = transdao1.getLastSixMonTransactions(account);
+			model.addObject("transations", transactions6 );
+		}
 	
 		return model;
 
