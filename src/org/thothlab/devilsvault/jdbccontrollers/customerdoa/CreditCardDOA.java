@@ -34,8 +34,8 @@ public class CreditCardDOA extends CustomerDOAImpl {
 	 */
 		public CreditAccount getCreditAccount(Customer customer) {
 		String query = "select cc.id id, cc.credit_card_no credit_card_no, cc.available_balance available_balance,"
-				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.bank_accounts_id bank_accounts_id "
-				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.id = cc.bank_accounts_id  "
+				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.account_number account_number "
+				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.account_number = cc.account_number  "
 				+ "AND bk.external_users_id= 100";//+customer.getID();
 		
 		System.out.println(query);
