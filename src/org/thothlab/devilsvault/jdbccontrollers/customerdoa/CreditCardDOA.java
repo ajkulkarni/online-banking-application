@@ -50,13 +50,86 @@ public class CreditCardDOA extends CustomerDOAImpl {
 	 */
 	public List<TransactionModel> getAllTransactions(CreditAccount account) {
 		
-		String query = "select * from transaction_completed WHERE payee_id = 100"
-				+" OR payer_id = 101";
+		String query = "select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, isPending from "
+				+"(select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated,False isPending from transaction_completed WHERE payee_id = 100"
+				+" OR payer_id = 101" 
+				+" union "
+				+"select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated ,True isPending  from transaction_pending WHERE payee_id = 100"
+				+" OR payer_id = 101) as transactiontable limit 10"
+				;
 		System.out.println("Query - " + query);
 		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
 				return transactionList;		
 		//return null;
 	}
+	
+	/**
+	 * Returns last 1 month credit card transaction for the user.
+	 * @return
+	 */
+	public List<TransactionModel> getLastOneMonTransactions(CreditAccount account) {
+		
+		String query ="select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated,isPending from  " 
+					 +"(select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, False isPending from transaction_completed "
+					 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+					 +" and timestamp_updated >= (CURDATE()-interval 1 month) "
+					 +" union "
+					 +" select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, True isPending from transaction_completed "
+					 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+					 +" and timestamp_updated >= (CURDATE()-interval 1 month) "
+					 +" ) transaction"
+					 +" order by timestamp_updated desc ";
+		System.out.println("Query - " + query);
+		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
+				return transactionList;		
+		//return null;
+	}
+	
+	/**
+	 * Returns last 3 month credit card transaction for the user.
+	 * @return
+	 */
+	public List<TransactionModel> getLastThreeMonTransactions(CreditAccount account) {
+		
+		String query = "select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated,isPending from  " 
+				 +"(select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, False isPending from transaction_completed "
+				 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+				 +" and timestamp_updated >= (CURDATE()-interval 3 month) "
+				 +" union "
+				 +" select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, True isPending from transaction_completed "
+				 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+				 +" and timestamp_updated >= (CURDATE()-interval 3 month) "
+				 +" ) transaction"
+				 +" order by timestamp_updated desc ";
+		System.out.println("Query - " + query);
+		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
+				return transactionList;		
+		//return null;
+	}
+	
+	/**
+	 * Returns last 3 month credit card transaction for the user.
+	 * @return
+	 */
+	public List<TransactionModel> getLastSixMonTransactions(CreditAccount account) {
+		
+		String query = "select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated,isPending from  " 
+				 +"(select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, False isPending from transaction_completed "
+				 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+				 +" and timestamp_updated >= (CURDATE()-interval 6 month) "
+				 +" union "
+				 +" select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, True isPending from transaction_completed "
+				 +" where (payee_id = "+ "101" +" or payer_id = "+ "101"+")"
+				 +" and timestamp_updated >= (CURDATE()-interval 6 month) "
+				 +" ) transaction"
+				 +" order by timestamp_updated desc ";
+		System.out.println("Query - " + query);
+		 		List<TransactionModel> transactionList = jdbcTemplate.query(query,new CreditCardTransMapper());
+				return transactionList;		
+		//return null;
+	}
+	
+	
 	
 	
 	
