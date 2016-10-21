@@ -20,7 +20,8 @@
 				
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
-					<div class="col-sm-3">${min_payment_due}</div>
+					<div class="col-sm-3">${CheckingAccBal}</div>
+					
 					<hr>
 					<center><b>Last 5 transactions</b></center>
 					<hr>
@@ -68,8 +69,6 @@
 				<div class="row">
 					<div class="col-sm-3">Current Balance:</div>
 					<div class="col-sm-3">${SavingsAccBal}</div>
-
-					<div class="col-sm-3">${min_payment_due}</div>
 										<hr>
 					<center><b>Last 5 transactions</b></center>
 					<hr>

@@ -61,7 +61,7 @@ public class CustomerAccountsController {
 		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
 		TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
 		ctx.close();
-		ModelAndView model = new ModelAndView("customerPages/accountsCheckingPage");
+		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
 		model.addObject("Customer",customer);
 		model.addObject("cAccount", checkingAccount );
 		model.addObject("sAccount", savingAccount );
