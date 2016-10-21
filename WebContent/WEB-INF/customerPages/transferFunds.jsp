@@ -3,15 +3,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 
 <%@include file="customerHeader.jsp"%>
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+	  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		$('#etpdatetimepicker').datetimepicker();
@@ -23,104 +23,103 @@
 	});
 </script>
 
-<script>	
-function validateEmailPhone(){
-		
+<script>
+	function validateEmailPhone(){
+
 		console.log("valdate");
-		
+
 		var amount = document.getElementById("eptpinputAmount").value;
 		console.log(amount);
-		
+
 		var mode = $("#eptpModeOfTransfer").val();
 		var modeValue = $("#eptpinputMode").val();
 		var payer = $("#eptpselectPayerAccount").val();
-		
+
 		var validInput = true;
 		//validate Amount
-		if (isNaN(amount) || amount < 0){  
-		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
- */		  $("#eptpinputAmount").val('');
-		  $("#eptpinputAmount").attr("placeholder","Enter valid Amount");
-		  console.log("error");
-		  validInput = false;  
+		if (isNaN(amount) || amount < 0){
+			/* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";
+			 */		  $("#eptpinputAmount").val('');
+			$("#eptpinputAmount").attr("placeholder","Enter valid Amount");
+			console.log("error");
+			validInput = false;
 		}
-		
+
 		if(mode == "Select Mode of Transfer"){
 			$("#eptpModeOfTransfer").val('Select Mode of Transfer');
 			validInput = false;
 		}
-		
+
 		if(modeValue == ""){
 			$("#eptpinputMode").val('');
 			$("#eptpinputMode").attr("placeholder","Enter Payee's Email/Phone");
 			validInput = false;
 		}
-		
+
 		if(payer == "Select Account"){
 			$("#eptpselectPayerAccount").val('Select Account');
 			validInput = false;
 		}
-		
-		return validInput;
-		}
 
-	
- 	function validate(){  
+		return validInput;
+	}
+
+	function validate(){
 		var amount = document.getElementById("etpinputAmount").value;
 		var payer = $("#etpselectPayerAccount").val();
 		var payee = $("#etpselectPayeeAccount").val();
-		
+
 		var validInput = true;
-		if (isNaN(amount) || amount < 0){  
-		  $("#etpinputAmount").val('');
-		  $("#etpinputAmount").attr("placeholder","Enter valid Amount");
-		  console.log("error");
-		  validInput = false;  
+		if (isNaN(amount) || amount < 0){
+			$("#etpinputAmount").val('');
+			$("#etpinputAmount").attr("placeholder","Enter valid Amount");
+			console.log("error");
+			validInput = false;
 		}
-		
+
 		if(payer == "Select Account"){
 			$("#etpselectPayerAccount").val('Select Account');
 			validInput = false;
 		}
-		
+
 		if(payee == "Select Payee"){
 			$("#etpselectPayeeAccount").val('Select Payee');
 			validInput = false;
 		}
-		
+
 		return validInput;
-		
-	} 
-	
-	
-		
-	
-	function validateInternal(){  
+
+	}
+
+
+
+
+	function validateInternal(){
 		var amount = document.getElementById("itpinputAmount").value;
 		var payer = $("#itpselectPayerAccount").val();
 		var payee = $("#itpselectPayeeAccount").val();
-		
+
 		var validInput = true;
-		if (isNaN(amount) || amount < 0){  
-		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
- */		  $("#itpinputAmount").val('');
-		  $("#itpinputAmount").attr("placeholder","Enter valid Amount");
-		  console.log("error");
-		  validInput = false;  
-		} 
-		
+		if (isNaN(amount) || amount < 0){
+			/* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";
+			 */		  $("#itpinputAmount").val('');
+			$("#itpinputAmount").attr("placeholder","Enter valid Amount");
+			console.log("error");
+			validInput = false;
+		}
+
 		if(payer == "Select Account"){
 			$("#itpselectPayerAccount").val('Select Account');
 			validInput = false;
 		}
-		
+
 		if(payee == "Select Account"){
 			$("#itpselectPayeeAccount").val('Select Account');
 			validInput = false;
 		}
-		
+
 		if(payer == payee){
-			
+
 			$("#itpselectPayerAccount").val('Select Account');
 			$("#itpselectPayeeAccount").val('Select Account');
 			validInput = false;
@@ -138,10 +137,8 @@ function validateEmailPhone(){
 <div class="content-wrapper">
 	<div class="col-md-12" id="tfrfundsPageContent">
 		<div class="container" id="chooseTransferMethodContainer"
-			style="display: none;">
-
-
-			<form class="form-horizontal" >
+			 style="display: none;">
+			<form  class="form-horizontal" >
 
 				<fieldset>
 					<div class="form-group">
@@ -149,9 +146,9 @@ function validateEmailPhone(){
 							<h2>Choose Method of Transfer</h2>
 							<a href="#" class="btn btn-success btn-lg" id="extTfrBtn">External
 								Transfer</a> <a href="#" class="btn btn-success btn-lg"
-								id="intTfrBtn">Internal Transfer</a> <a href="#"
-								class="btn btn-success btn-lg" id="emailphoneTfrBtn">Email/Phone
-								Transfer</a>
+												id="intTfrBtn">Internal Transfer</a> <a href="#"
+																						class="btn btn-success btn-lg" id="emailphoneTfrBtn">Email/Phone
+							Transfer</a>
 						</div>
 					</div>
 				</fieldset>
@@ -160,13 +157,13 @@ function validateEmailPhone(){
 		</div>
 
 		<div class="panel panel-primary" id="externaltransferpanel"
-			style="display: none;">
+			 style="display: none;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Transfer Money - Someone's Account</h3>
 			</div>
 			<div class="panel-body">
 				<form class="form-horizontal" action="ExternalTransfer"
-					method='POST' onsubmit="return validate()">
+					  method='POST' onsubmit="return validate()">
 					<fieldset>
 						<div class="form-group">
 							<label for="etpselectPayeeAccount" class="col-lg-2 control-label">Transfer
@@ -185,7 +182,7 @@ function validateEmailPhone(){
 								From : </label>
 							<div class="col-lg-5 input-group">
 								<select class="form-control" id="etpselectPayerAccount"
-									name="etpselectPayerAccount">
+										name="etpselectPayerAccount">
 									<option>Select Account</option>
 									<c:forEach items="${userAccounts}" var="item">
 										<option value="${item}">${item}</option>
@@ -198,7 +195,7 @@ function validateEmailPhone(){
 								: </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="etpinputAmount"
-									name="etpinputAmount" placeholder="Enter Amount">
+									   name="etpinputAmount" placeholder="Enter Amount">
 							</div>
 						</div>
 						<!-- <div class="form-group">
@@ -219,8 +216,8 @@ function validateEmailPhone(){
 								: </label>
 							<div class="col-lg-5 input-group">
 								<textarea class="form-control" rows="3" id="etpTextArea"
-									name="etpTextArea"
-									placeholder="Enter a short desription for this transaction"></textarea>
+										  name="etpTextArea"
+										  placeholder="Enter a short desription for this transaction"></textarea>
 								<span class="help-block"> </span>
 							</div>
 						</div>
@@ -237,13 +234,13 @@ function validateEmailPhone(){
 		</div>
 
 		<div class="panel panel-primary" id="internaltransferpanel"
-			style="display: none;">
+			 style="display: none;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Transfer Money - Within Account</h3>
 			</div>
 			<div class="panel-body">
 				<form class="form-horizontal" action="InternalTransfer"
-					method='POST'onsubmit="return validateInternal()">
+					  method='POST'onsubmit="return validateInternal()">
 					<fieldset>
 						<div class="form-group">
 							<label for="itpselectPayeeAccount" class="col-lg-2 control-label">Transfer
@@ -269,13 +266,13 @@ function validateEmailPhone(){
 								</select>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="itpinputAmount" class="col-lg-2 control-label">Amount
 								: </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="itpinputAmount" name="itpinputAmount"
-									placeholder="Enter Amount">
+									   placeholder="Enter Amount">
 							</div>
 						</div>
 						<!-- <div class="form-group">
@@ -294,12 +291,12 @@ function validateEmailPhone(){
 								: </label>
 							<div class="col-lg-5 input-group">
 								<textarea class="form-control" rows="3" id="itpTextArea"
-									name="itpTextArea"
-									placeholder="Enter a short desription for this transaction"></textarea>
+										  name="itpTextArea"
+										  placeholder="Enter a short desription for this transaction"></textarea>
 								<span class="help-block"> </span>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label class="col-lg-2 control-label"></label>
 							<div class="col-lg-5 input-group">
@@ -312,20 +309,20 @@ function validateEmailPhone(){
 		</div>
 
 		<div class="panel panel-primary" id="emailphonetransferpanel"
-			style="display: none;">
+			 style="display: none;">
 			<div class="panel-heading">
 				<h3 class="panel-title">Email/Phone Transfer</h3>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal"  onsubmit="return validateEmailPhone()"   action="EmailPhoneTransfer" 
-					method="POST" >
+				<form class="form-horizontal"  onsubmit="return validateEmailPhone()"   action="EmailPhoneTransfer"
+					  method="POST" >
 					<fieldset>
 						<div class="form-group">
 							<label for="eptpModeOfTransfer" class="col-lg-2 control-label">Transfer
 								Via : </label>
 							<div class="col-lg-5 input-group">
 								<select class="form-control" id="eptpModeOfTransfer"
-									name="eptpModeOfTransfer">
+										name="eptpModeOfTransfer">
 									<option>Select Mode of Transfer</option>
 									<option>Email</option>
 									<option>Phone</option>
@@ -337,15 +334,15 @@ function validateEmailPhone(){
 								To : </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="eptpinputMode"
-									name="eptpinputMode" placeholder="Enter Payee's Email/Phone">
+									   name="eptpinputMode" placeholder="Enter Payee's Email/Phone">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="eptpselectPayerAccount"
-								class="col-lg-2 control-label">Transfer From : </label>
+								   class="col-lg-2 control-label">Transfer From : </label>
 							<div class="col-lg-5 input-group">
 								<select class="form-control" id="eptpselectPayerAccount"
-									name="eptpselectPayerAccount">
+										name="eptpselectPayerAccount">
 									<option>Select Account</option>
 									<c:forEach items="${userAccounts}" var="item">
 										<option value="${item}">${item}</option>
@@ -358,7 +355,7 @@ function validateEmailPhone(){
 								: </label>
 							<div class="col-lg-5 input-group">
 								<input type="text" class="form-control" id="eptpinputAmount"
-									name="eptpinputAmount" placeholder="Enter Amount">
+									   name="eptpinputAmount" placeholder="Enter Amount">
 							</div>
 						</div>
 						<!-- <div class="form-group">
@@ -377,8 +374,8 @@ function validateEmailPhone(){
 								: </label>
 							<div class="col-lg-5 input-group">
 								<textarea class="form-control" rows="3" id="eptpTextArea"
-									name="eptpTextArea"
-									placeholder="Enter a short desription for this transaction"></textarea>
+										  name="eptpTextArea"
+										  placeholder="Enter a short desription for this transaction"></textarea>
 								<span class="help-block"> </span>
 							</div>
 						</div>

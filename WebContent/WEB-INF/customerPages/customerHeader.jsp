@@ -47,7 +47,7 @@
 			<ul>
 				<li class="has-children">
 					<a href="#0">Accounts</a>
-					
+
 					<ul>
 						<li><a href="#0">Checking</a></li>
 						<li><a href="#0">Savings</a></li>
@@ -59,12 +59,12 @@
 				</li>
 
 				<li class="has-children">
-					<a href="<c:url value="/customer/transferfunds" />">Transfer Money</a>
-					
+					<a href="transferfunds">Transfer Money</a>
+
 					<ul>
-						<li><a href="<c:url value="/customer/transferfunds" />" id="etfrTab">External Transfer</a></li>
-						<li><a href="<c:url value="/customer/transferfunds" />" id="itfrTab">Internal Transfer</a></li>
-						<li><a href="<c:url value="/customer/transferfunds" />" id="eptfrTab">Email/Phone Transfer</a></li>
+						<li><a href="/customer/transferfunds#externaltransferpanel" id="etfrTab">External Transfer</a></li>
+						<li><a href="/customer/transferfunds#internaltransferpanel" id="itfrTab">Internal Transfer</a></li>
+						<li><a href="/customer/transferfunds#emailphonetransferpanel" id="eptfrTab">Email/Phone Transfer</a></li>
 					</ul>
 				</li>
 			</ul>

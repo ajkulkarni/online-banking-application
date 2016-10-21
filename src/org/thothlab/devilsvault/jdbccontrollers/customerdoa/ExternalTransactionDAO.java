@@ -28,7 +28,7 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 	}
 
 	public Transaction createExternalTransaction(int payerAccountNumber, float amount, int payeeAccountNumber,
-			String description, String transactionType) {
+												 String description, String transactionType) {
 		Transaction extTransfer = new Transaction();
 
 		extTransfer.setPayer_id(payerAccountNumber);
@@ -92,5 +92,5 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 		}
 		return false;
 	}
-	
+
 }

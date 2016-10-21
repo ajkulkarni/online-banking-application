@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.BankAccountExternal;
 import org.w3c.dom.ls.LSInput;
 
+
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.databaseMappers.*;
+
 @Repository("transferDAO")
 public class TransferDAO {
 
@@ -29,7 +32,7 @@ public class TransferDAO {
 
 	/*
 	 * public List<BankAccount> getPayerAccounts(int payerID) {
-	 * 
+	 *
 	 * String query = "select * from bankaccount WHERE payer_id = " + payerID ;
 	 * List<Integer> bankAccounts = jdbcTemplate.query(query, new
 	 * AccountsMapper()); return relatedAccounts; }
@@ -92,7 +95,7 @@ public class TransferDAO {
 		}
 
 		for (Integer listAccountElement : relatedAccounts) {
-			
+
 			System.out.println("-<<" + listAccountElement);
 			String fetchAccountName = "Select external_users_id from bank_accounts where account_number="
 					+ listAccountElement;
@@ -165,10 +168,10 @@ public class TransferDAO {
 
 				String account_number_query = "select account_number from bank_accounts where external_users_id="
 						+ external_user_id + " " + "and account_type='CHECKING' ";
-				 account_number = jdbcTemplate.query(account_number_query, new AccountsMapper()).get(0);
+				account_number = jdbcTemplate.query(account_number_query, new AccountsMapper()).get(0);
 
 
-				
+
 			} else {
 				return -1;
 			}
@@ -181,7 +184,7 @@ public class TransferDAO {
 		return account_number;
 
 	}
-	
+
 	public void updateHold(int payerAccountNumber, float amount){
 		String updateStmt = "Update bank_accounts set hold = hold + ? where account_number = ?";
 		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);

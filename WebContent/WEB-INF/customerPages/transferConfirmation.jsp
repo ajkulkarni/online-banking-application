@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 
 <%@include file="customerHeader.jsp"%>
 
@@ -49,26 +49,22 @@
 			</div>
 		</c:if>
 		<c:if test="${ success == false }">
-			<div class="container col-lg-12"" id="transferRejected">
-				<div class="alert alert-dismissible alert-warning">
-					<h4 id="transferRejectMsg">
-						<strong>Sorry! Your payment was rejected.</strong> <strong>${error_msg}</strong>
-					</h4>
-				</div>
-			</div>
-		</c:if>
-
+		<div class="container col-lg-12"" id="transferRejected">
+		<div class="alert alert-dismissible alert-warning">
+			<h4 id="transferRejectMsg">
+				<strong>Sorry! Your payment was rejected.</strong> <strong>${error_msg}</strong>
+			</h4>
+		</div>
 	</div>
+	</c:if>
+</div>
 </div>
 <!-- .content-wrapper -->
-
 </main>
-
 <script type="text/javascript">
 	$(document).ready(function() {
 		sideNavigationSettings();
 	});
 </script>
-
 </body>
 </html>

@@ -1,10 +1,10 @@
 $().ready(function(){
-	
+
 	$("#chooseTransferMethodContainer").show();
 	$("#externaltransferpanel").hide();
 	$("#internaltransferpanel").hide();
 	$("#emailphonetransferpanel").hide();
-	
+
 	function clearExternalTransferPanel(){
 		$("#etpselectPayeeAccount").val('Select Payee');
 		$("#etpselectPayerAccount").val('Select Account');
@@ -13,9 +13,9 @@ $().ready(function(){
 		$("#etpdatetimepicker_result").val('');
 		$("#etpTextArea").val('');
 		$("#eptpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
-		
+
 	}
-	
+
 	function clearInternalTransferPanel(){
 		$("#itpselectPayeeAccount").val('Select Account');
 		$("#itpselectPayerAccount").val('Select Account');
@@ -26,7 +26,7 @@ $().ready(function(){
 		$("#itpTextArea").val('');
 		$("#itpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
 	}
-	
+
 	function clearEmailphoneTransferPanel(){
 		$("#eptpModeOfTransfer").val('Select Mode of Transfer');
 		$("#eptpselectPayerAccount").val('Select Account');
@@ -38,7 +38,7 @@ $().ready(function(){
 		$("#eptpTextArea").val('');
 		$("#eptpdatetimepicker_result").attr("placeholder","Enter a short desription for this transaction");
 	}
-	
+
 	function displayExternalTransferPanel(){
 		clearExternalTransferPanel();
 		clearInternalTransferPanel();
@@ -48,7 +48,7 @@ $().ready(function(){
 		$("#emailphonetransferpanel").hide();
 		$("#externaltransferpanel").show();
 	}
-	
+
 	function displayInternalTransferPanel(){
 		clearExternalTransferPanel();
 		clearInternalTransferPanel();
@@ -58,7 +58,7 @@ $().ready(function(){
 		$("#externaltransferpanel").hide();
 		$("#internaltransferpanel").show();
 	}
-	
+
 	function displayEmailphoneTransferPanel(){
 		clearExternalTransferPanel();
 		clearInternalTransferPanel();
@@ -68,33 +68,32 @@ $().ready(function(){
 		$("#internaltransferpanel").hide();
 		$("#emailphonetransferpanel").show();
 	}
-	
+
 	$("#extTfrBtn").click(function(){
 		displayExternalTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#externaltransferpanel").clone()[0].outerHTML));
 	});
-	
+
 	$("#intTfrBtn").click(function(){
 		displayInternalTransferPanel();
-		//$("#tfrfundsPageContent").html(new String($("#internaltransferpanel").clone()[0].outerHTML));	
+		//$("#tfrfundsPageContent").html(new String($("#internaltransferpanel").clone()[0].outerHTML));
 	});
-	
+
 	$("#emailphoneTfrBtn").click(function(){
 		displayEmailphoneTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#emailphonetransferpanel").clone()[0].outerHTML));
 	});
-	
+
 	$("#etfrTab").click(function(){
-		alert("hello")
 		displayExternalTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#externaltransferpanel").clone()[0].outerHTML));
 	});
-	
+
 	$("#itfrTab").click(function(){
 		displayInternalTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#internaltransferpanel").clone()[0].outerHTML));	
 	});
-	
+
 	$("#eptfrTab").click(function(){
 		displayEmailphoneTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#emailphonetransferpanel").clone()[0].outerHTML));

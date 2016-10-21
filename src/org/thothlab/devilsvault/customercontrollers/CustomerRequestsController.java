@@ -13,18 +13,18 @@ public class CustomerRequestsController {
 	@RequestMapping("/customerRequests")
 	public ModelAndView helloworld(){
 		ModelAndView model = new ModelAndView("customerPages/customerRequest");
-		
+
 		DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
 		checkingAccount.setAccountNumber(123);
 		DebitAccount savingAccount = new DebitAccount(AccountType.SAVINGS);
 		savingAccount.setAccountNumber(100);
 		CreditAccount creditAccount = new CreditAccount();
 		creditAccount.setAccountNumber(102);
-		
+
 		model.addObject("cAccount", checkingAccount );
 		model.addObject("sAccount", savingAccount );
 		model.addObject("ccAccount", creditAccount );
-	
+
 		return model;
 	}
 }
