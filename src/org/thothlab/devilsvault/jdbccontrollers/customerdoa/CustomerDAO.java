@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 
+import java.util.ArrayList;
 @Repository ("customerDAO")
 public class CustomerDAO {
 	
@@ -28,4 +29,15 @@ public class CustomerDAO {
 		return custList.get(0);
 	}
 
+	private static List customers;
+	{
+		customers = new ArrayList();
+		Customer cust = new Customer();
+		cust.setID(101);
+		customers.add(cust);
+	}
+	
+	public List list() {
+		return customers;
+	}
 }

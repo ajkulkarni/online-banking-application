@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.Customer;
+import org.thothlab.devilsvault.CustomerModel.MerchantPayment;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 @Repository ("CustomerAccountsDAO")
@@ -60,6 +61,10 @@ public class CustomerAccountsDAO{
 			}
 		}
 		return TransactionLines;
-     }     
+     }
+	public boolean CheckPayment(MerchantPayment merchantpayment) {
+		// TODO Auto-generated method stub
+		return true;
+	}     
 }
 
