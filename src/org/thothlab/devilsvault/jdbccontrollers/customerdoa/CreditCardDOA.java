@@ -36,7 +36,7 @@ public class CreditCardDOA extends CustomerDOAImpl {
 		String query = "select cc.id id, cc.credit_card_no credit_card_no, cc.available_balance available_balance,"
 				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.account_number account_number "
 				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.account_number = cc.account_number  "
-				+ "AND bk.external_users_id= 100";//+customer.getID();
+				+ "AND bk.external_users_id= 100 AND bk.account_type='cc' ";//+customer.getID();
 		
 		System.out.println(query);
 		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());

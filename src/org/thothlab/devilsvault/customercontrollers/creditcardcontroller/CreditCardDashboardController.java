@@ -3,7 +3,11 @@ import java.util.List;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
@@ -18,7 +22,7 @@ import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 public class CreditCardDashboardController {
 
 	@RequestMapping("/credithome")
-	public ModelAndView helloworld(){
+	public ModelAndView showCreditHome(){
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 	
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
@@ -35,4 +39,39 @@ public class CreditCardDashboardController {
 		
 		return model;
 	}
+	
+	public @ResponseBody String byParameter(@RequestParam("interval") String interval) {
+	    return "Mapped by path + method + presence of query parameter! (MappingController) - foo = "
+	           + interval;
+	}
+	
+	
+	
+	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
+	
+	public ModelAndView getSearchResultViaAjax(@RequestParam("monthPicker") String interval) {
+
+		System.out.println("HERE" + interval);
+		
+		ModelAndView model = new ModelAndView("redirect:"+"credithome");
+		
+		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
+		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
+		Customer cust = cust_dao.getCustomer(100);
+		
+		CreditAccount account = doa.getCreditAccount(cust);
+		System.out.println(account.getAccountNumber());
+		model.addObject("creditAccount",account);
+		
+		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
+		List<TransactionModel> transactions = transdao.getAllTransactions(account);
+		transactions.remove(0);
+		model.addObject("transations", transactions );
+	
+		return model;
+
+	}
+	
+	
+
 }
