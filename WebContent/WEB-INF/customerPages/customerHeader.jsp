@@ -59,12 +59,12 @@
 				</li>
 
 				<li class="has-children">
-					<a href="transferfunds">Transfer Money</a>
+					<a href="<c:url value="/customer/transferfunds" />">Transfer Money</a>
 					
 					<ul>
-						<li><a href="#" id="etfrTab">External Transfer</a></li>
-						<li><a href="#" id="itfrTab">Internal Transfer</a></li>
-						<li><a href="#" id="eptfrTab">Email/Phone Transfer</a></li>
+						<li><a href="<c:url value="/customer/transferfunds" />" id="etfrTab">External Transfer</a></li>
+						<li><a href="<c:url value="/customer/transferfunds" />" id="itfrTab">Internal Transfer</a></li>
+						<li><a href="<c:url value="/customer/transferfunds" />" id="eptfrTab">Email/Phone Transfer</a></li>
 					</ul>
 				</li>
 			</ul>

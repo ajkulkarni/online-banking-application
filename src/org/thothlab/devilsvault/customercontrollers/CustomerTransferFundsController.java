@@ -42,9 +42,9 @@ public class CustomerTransferFundsController {
 		 
 
 	//	System.out.println(account.size());
-	
+		
 		for(String elem: populatedPayeeAccounts){
-			System.out.println(elem);
+			System.out.println("Payee: "+elem);
 		}
 		
 		model.addObject("payeeAccounts",populatedPayeeAccounts);
@@ -63,7 +63,9 @@ public class CustomerTransferFundsController {
 		//System.out.println(request.getParameter("etpdatetimepicker_result"));
 		float amount = Float.parseFloat(request.getParameter("etpinputAmount"));
 		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]); 
+		String payerAccountType = request.getParameter("etpselectPayerAccount").split(":")[1];
 		int payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
+		String payeeName = request.getParameter("etpselectPayeeAccount").split(":")[0];
 		String description = request.getParameter("etpTextArea");
 
 		
@@ -78,7 +80,8 @@ public class CustomerTransferFundsController {
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		transferDAO.updateHold(payerAccountNumber,amount);
 		model.addObject("success", true);
-		model.addObject("payee_info", payeeAccountNumber);
+		model.addObject("payee_info", payeeName + "-" +payeeAccountNumber );
+		model.addObject("payer_info", payerAccountNumber + "-" +payerAccountType );
 		model.addObject("Amount", amount);
 		return model;
 	}
@@ -91,7 +94,9 @@ public class CustomerTransferFundsController {
 		
 		float amount = Float.parseFloat(request.getParameter("itpinputAmount"));
 		int payerAccountNumber = Integer.parseInt(request.getParameter("itpselectPayerAccount").split(":")[0]); 
+		String payerAccountType = request.getParameter("itpselectPayerAccount").split(":")[1];
 		int payeeAccountNumber = Integer.parseInt(request.getParameter("itpselectPayeeAccount").split(":")[0]);
+		String payeeAccountType = request.getParameter("itpselectPayeeAccount").split(":")[1];
 		String description = request.getParameter("itpTextArea");
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber,amount);
 		if(!amountValid){
@@ -102,11 +107,12 @@ public class CustomerTransferFundsController {
 			return model;
 		}
 		ExternalTransactionDAO extTransactionDAO = CustomerDAOHelper.extTransactionDAO();
-		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "external");
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amount,payeeAccountNumber, description, "internal");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		transferDAO.updateHold(payerAccountNumber,amount);
 		model.addObject("success", true);
-		model.addObject("payee_info", payeeAccountNumber);
+		model.addObject("payee_info", payeeAccountNumber + "-" + payeeAccountType);
+		model.addObject("payer_info", payerAccountNumber + "-" + payerAccountType);
 		model.addObject("Amount", amount);
 		return model;
 	}
@@ -122,7 +128,7 @@ public class CustomerTransferFundsController {
 		int PayeeAccountNumber = transferDAO.fetchAccountNumber(modeOfTransfer,inputMode);
 		
 		int payerAccountNumber = Integer.parseInt(request.getParameter("eptpselectPayerAccount").split(":")[0]);
-		
+		String payerAccountType = request.getParameter("eptpselectPayerAccount").split(":")[1];
 		
 		float amount = Float.parseFloat(request.getParameter("eptpinputAmount")); 
 		String description = request.getParameter("eptpTextArea");
@@ -142,6 +148,7 @@ public class CustomerTransferFundsController {
 			transferDAO.updateHold(payerAccountNumber,amount);
 			model.addObject("success", true);
 			model.addObject("payee_info", inputMode);
+			model.addObject("payer_info", payerAccountNumber + "-" + payerAccountType);
 			model.addObject("Amount", amount);
 			return model;
 		}

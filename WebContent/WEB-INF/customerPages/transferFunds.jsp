@@ -21,7 +21,9 @@
 	$(function() {
 		$('#itpdatetimepicker').datetimepicker();
 	});
-	
+</script>
+
+<script>	
 function validateEmailPhone(){
 		
 		console.log("valdate");
@@ -37,8 +39,8 @@ function validateEmailPhone(){
 		//validate Amount
 		if (isNaN(amount) || amount < 0){  
 		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
- */		  $("#etpinputAmount").val('');
-		  $("#etpinputAmount").attr("placeholder","Enter valid Amount");
+ */		  $("#eptpinputAmount").val('');
+		  $("#eptpinputAmount").attr("placeholder","Enter valid Amount");
 		  console.log("error");
 		  validInput = false;  
 		}
@@ -50,7 +52,7 @@ function validateEmailPhone(){
 		
 		if(modeValue == ""){
 			$("#eptpinputMode").val('');
-			$("#eptpinputMode").attr("placeholder","Enter valid Amount");
+			$("#eptpinputMode").attr("placeholder","Enter Payee's Email/Phone");
 			validInput = false;
 		}
 		
@@ -63,36 +65,68 @@ function validateEmailPhone(){
 		}
 
 	
-	function validate(){  
-		var num = document.getElementById("etpinputAmount").value;
+ 	function validate(){  
+		var amount = document.getElementById("etpinputAmount").value;
+		var payer = $("#etpselectPayerAccount").val();
+		var payee = $("#etpselectPayeeAccount").val();
 		
-		if (isNaN(num) || num < 0){  
-		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
- */		  $("#etpinputAmount").val('');
-			$("#etpinputAmount").attr("placeholder","Enter valid Amount");
+		var validInput = true;
+		if (isNaN(amount) || amount < 0){  
+		  $("#etpinputAmount").val('');
+		  $("#etpinputAmount").attr("placeholder","Enter valid Amount");
 		  console.log("error");
-		  return false;  
-		}else{  
-		  return true;  
-		  }  
+		  validInput = false;  
 		}
+		
+		if(payer == "Select Account"){
+			$("#etpselectPayerAccount").val('Select Account');
+			validInput = false;
+		}
+		
+		if(payee == "Select Payee"){
+			$("#etpselectPayeeAccount").val('Select Payee');
+			validInput = false;
+		}
+		
+		return validInput;
+		
+	} 
 	
 	
 		
 	
 	function validateInternal(){  
-		var num = document.getElementById("itpinputAmount").value;
+		var amount = document.getElementById("itpinputAmount").value;
+		var payer = $("#itpselectPayerAccount").val();
+		var payee = $("#itpselectPayeeAccount").val();
 		
-		if (isNaN(num) || num < 0){  
+		var validInput = true;
+		if (isNaN(amount) || amount < 0){  
 		  /* document.getElementById("etpinputAmount").placeholder="Enter Numeric value only";  
  */		  $("#itpinputAmount").val('');
-			$("#itpinputAmount").attr("placeholder","Enter valid Amount");
+		  $("#itpinputAmount").attr("placeholder","Enter valid Amount");
 		  console.log("error");
-		  return false;  
-		}else{  
-		  return true;  
-		  }  
+		  validInput = false;  
+		} 
+		
+		if(payer == "Select Account"){
+			$("#itpselectPayerAccount").val('Select Account');
+			validInput = false;
 		}
+		
+		if(payee == "Select Account"){
+			$("#itpselectPayeeAccount").val('Select Account');
+			validInput = false;
+		}
+		
+		if(payer == payee){
+			
+			$("#itpselectPayerAccount").val('Select Account');
+			$("#itpselectPayeeAccount").val('Select Account');
+			validInput = false;
+		}
+		return validInput;
+	}
 </script>
 <script type="text/javascript">
 	$(function() {
@@ -100,7 +134,6 @@ function validateEmailPhone(){
 	});
 </script>
 
-<script src="<c:url value="/resources/js/transferfunds.js" />"></script>
 
 <div class="content-wrapper">
 	<div class="col-md-12" id="tfrfundsPageContent">
@@ -113,7 +146,7 @@ function validateEmailPhone(){
 				<fieldset>
 					<div class="form-group">
 						<div class="col-lg-12">
-							<legend>Choose Method of Transfer</legend>
+							<h2>Choose Method of Transfer</h2>
 							<a href="#" class="btn btn-success btn-lg" id="extTfrBtn">External
 								Transfer</a> <a href="#" class="btn btn-success btn-lg"
 								id="intTfrBtn">Internal Transfer</a> <a href="#"
@@ -136,12 +169,11 @@ function validateEmailPhone(){
 					method='POST' onsubmit="return validate()">
 					<fieldset>
 						<div class="form-group">
-							<label for="etpselectPayee" class="col-lg-2 control-label">Transfer
+							<label for="etpselectPayeeAccount" class="col-lg-2 control-label">Transfer
 								To : </label>
 							<div class="col-lg-5 input-group">
-								<select class="form-control" id="etpselectPayeeAccount"
-									name="etpselectPayeeAccount">
-									<option>Select payee</option>
+								<select class="form-control" id="etpselectPayeeAccount" name="etpselectPayeeAccount">
+									<option>Select Payee</option>
 									<c:forEach items="${payeeAccounts}" var="item">
 										<option value="${item}">${item}</option>
 									</c:forEach>
@@ -365,8 +397,7 @@ function validateEmailPhone(){
 </div>
 <!-- .content-wrapper -->
 
-</main>
-
+<script src="<c:url value="/resources/js/transferfunds.js" />"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		sideNavigationSettings();

@@ -1,16 +1,12 @@
 $().ready(function(){
 	
-  
-  
-
-	
 	$("#chooseTransferMethodContainer").show();
 	$("#externaltransferpanel").hide();
 	$("#internaltransferpanel").hide();
 	$("#emailphonetransferpanel").hide();
 	
 	function clearExternalTransferPanel(){
-		$("#etpselectPayee").val('Select Payee');
+		$("#etpselectPayeeAccount").val('Select Payee');
 		$("#etpselectPayerAccount").val('Select Account');
 		$("#etpinputAmount").val('');
 		$("#etpinputAmount").attr("placeholder","Enter Amount");
@@ -21,7 +17,7 @@ $().ready(function(){
 	}
 	
 	function clearInternalTransferPanel(){
-		$("#itpselectPayee").val('Select Account');
+		$("#itpselectPayeeAccount").val('Select Account');
 		$("#itpselectPayerAccount").val('Select Account');
 		$('#itpAlert').hide();
 		$("#itpinputAmount").val('');
@@ -89,6 +85,7 @@ $().ready(function(){
 	});
 	
 	$("#etfrTab").click(function(){
+		alert("hello")
 		displayExternalTransferPanel();
 		//$("#tfrfundsPageContent").html(new String($("#externaltransferpanel").clone()[0].outerHTML));
 	});

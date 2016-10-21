@@ -43,7 +43,6 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 		 */
 
 		extTransfer.setHashvalue("");
-		extTransfer.setTransaction_type("");
 		extTransfer.setStatus("pending");
 		extTransfer.setApprover("");
 		extTransfer.setCritical(true);

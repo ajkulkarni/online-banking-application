@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.BankAccountExternal;
+import org.w3c.dom.ls.LSInput;
 
 @Repository("transferDAO")
 public class TransferDAO {
@@ -74,7 +75,7 @@ public class TransferDAO {
 	 */
 	public void getRelatedAccounts(int payerID, List<String> populatedPayeeAccounts) {
 
-		String query = "select payee_id from transaction_pending WHERE payer_id =" + payerID;
+		String query = "select payee_id from transaction_pending WHERE transaction_type = \'external\' AND payer_id =" + payerID;
 
 		System.out.println(query);
 		List<Integer> relatedAccounts = jdbcTemplate.query(query, new AccountsMapper());
@@ -91,8 +92,7 @@ public class TransferDAO {
 		}
 
 		for (Integer listAccountElement : relatedAccounts) {
-
-			String userName = getUserNames(listAccountElement);
+			
 			System.out.println("-<<" + listAccountElement);
 			String fetchAccountName = "Select external_users_id from bank_accounts where account_number="
 					+ listAccountElement;
@@ -100,7 +100,11 @@ public class TransferDAO {
 			System.out.println(fetchAccountName);
 
 			int external_user_id = jdbcTemplate.query(fetchAccountName, new AccountsMapper()).get(0);
-
+			System.out.println("Get username for : " + external_user_id);
+			String userName = getUserNames(external_user_id);
+			String username_account = userName + ":" + listAccountElement;
+			if(populatedPayeeAccounts.contains(username_account))
+				continue;
 			String selectAccountNumbers = "select account_number from bank_accounts where external_users_id="
 					+ external_user_id;
 			List<Integer> userBankAccounts = jdbcTemplate.query(selectAccountNumbers, new AccountsMapper());
