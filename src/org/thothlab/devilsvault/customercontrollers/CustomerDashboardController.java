@@ -4,11 +4,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.thothlab.devilsvault.CustomerDAO.ExtUserDaoImpl;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.DebitAccount;
 import org.thothlab.devilsvault.CustomerModel.BankAccount.AccountType;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExtUserDaoImpl;
 
 @Controller
 public class CustomerDashboardController {

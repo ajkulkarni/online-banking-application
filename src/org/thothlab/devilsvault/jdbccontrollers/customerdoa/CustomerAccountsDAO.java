@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.CustomerDAO;
+package org.thothlab.devilsvault.jdbccontrollers.customerdoa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

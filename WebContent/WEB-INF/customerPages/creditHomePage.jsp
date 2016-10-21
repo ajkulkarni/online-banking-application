@@ -120,9 +120,9 @@
 					<tr>
 						<th scope="row">${loop.index + 1}</th>
 						<td>${trans.description}</td>
-						<td>${trans.payee}</td>
+						<td>${trans.payee_id}</td>
 						<td>${trans.amount}</td>
-						<td>${trans.timeStamp}</td>
+						<td>${trans.timestamp_updated}</td>
 					</tr>
 				</c:forEach>
 
