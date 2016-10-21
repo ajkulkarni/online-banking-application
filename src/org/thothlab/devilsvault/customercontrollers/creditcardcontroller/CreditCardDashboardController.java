@@ -33,6 +33,19 @@ public class CreditCardDashboardController {
 		List<TransactionModel> transactions = transdao.getAllTransactions(account);
 		model.addObject("transations", transactions );
 		
+		CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
+		List<TransactionModel> transactions1 = transdao1.getLastOneMonTransactions(account);
+		model.addObject("transations_one", transactions1 );
+		
+		CreditCardDOA transdao3 = CustomerDAOHelper.creditCardDAO();
+		List<TransactionModel> transactions3 = transdao3.getLastThreeMonTransactions(account);
+		model.addObject("transations_three", transactions3 );
+		
+		CreditCardDOA transdao6 = CustomerDAOHelper.creditCardDAO();
+		List<TransactionModel> transactions6 = transdao6.getLastSixMonTransactions(account);
+		model.addObject("transations_six", transactions6 );
+		
+		
 		return model;
 	}
 }

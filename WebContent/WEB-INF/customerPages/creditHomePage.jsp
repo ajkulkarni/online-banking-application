@@ -108,8 +108,10 @@
 					<th>#</th>
 					<th>Description</th>
 					<th>Payee</th>
+					<th>Payer</th>
 					<th>Amount</th>
 					<th>Date</th>
+					<th>Transaction Status</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -121,8 +123,10 @@
 						<th scope="row">${loop.index + 1}</th>
 						<td>${trans.description}</td>
 						<td>${trans.payee_id}</td>
+						<td>${trans.payer_id}</th>
 						<td>${trans.amount}</td>
 						<td>${trans.timestamp_updated}</td>
+						<td>${trans.pendingStrg}</td>
 					</tr>
 				</c:forEach>
 
