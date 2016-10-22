@@ -82,8 +82,8 @@
 				    <br>
 				    <br>
 				    
-				    <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
-				    <br>
+			<!-- 	    <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+			 -->	    <br>
 				    <br>
 				    <input type="submit" value="Login" class="btn" id="submit"/>
 				    <br>

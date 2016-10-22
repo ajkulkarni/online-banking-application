@@ -31,7 +31,7 @@
 			<ul class="cd-top-nav">
 				<li class="has-children account">
 					<a href="#0">
-						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>UserID</a>
+						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>${username}</a>
 					<ul>
 
 						<li><a href="userdetails">My Account</a></li>
@@ -44,12 +44,8 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
-				<li class="has-children">
-					<a href="#0">User Management</a>
-					<ul>
-						<li><a href="pendingregistration">Pending Registration</a></li>
-						<li><a href="#">User Details</a></li>
-					</ul>
+				<li>
+					<a href="management">Management</a>
 				</li>
 				<li class="has-children">
 					<a href="#0">Request</a>
@@ -58,11 +54,15 @@
 						<li><a href="completedrequest">Completed</a></li>
 					</ul>
 				</li>
+				<c:if test="${role == 'ROLE_MANAGER' }">
 				<li>
-					<a href="transaction">Transaction<span class="count">${stats['transaction']}</span></a>
+					<a href="transaction">Transaction<span class="count">${transaction_count}</span></a>
 				</li>
+				</c:if>
+				<c:if test="${role == 'ROLE_ADMIN' }">
 				<li>
-					<a href="#0">Admin Options</a>
+					<a href="systemlogs">System Logs</a>
 				</li>
+				</c:if>
 			</ul>
 		</nav>

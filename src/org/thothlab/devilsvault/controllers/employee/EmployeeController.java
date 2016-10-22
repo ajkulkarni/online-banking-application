@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.controllers.employee;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,17 +12,190 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.thothlab.devilsvault.dao.authorization.AthorizationDaoImpl;
+import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
 import org.thothlab.devilsvault.dao.pendingregistration.PendingRegistrationDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
+import org.thothlab.devilsvault.db.model.Authorization;
 import org.thothlab.devilsvault.db.model.PendingRegistration;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 @Controller
 public class EmployeeController {
+	
+	String role;
+	int userID;
+	String username;
+	
+	public void setGlobals(HttpServletRequest request){
+		role = (String) request.getSession().getAttribute("role");
+		userID = (int) request.getSession().getAttribute("userID");
+		username = (String) request.getSession().getAttribute("username");
+	}
+	
+	@RequestMapping(value="/employee/home", method=RequestMethod.GET)
+	public ModelAndView PendingDashboardContoller(HttpServletRequest request){
+		setGlobals(request);	
+		if (role.equalsIgnoreCase("ROLE_REGULAR")){
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+			InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+			InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+			PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
+			List<Integer> externalIDs = internalCustomerDao.getExternalUserIds(userID, "transaction");
+			List<Integer> accountNos = internalCustomerDao.getAccNos(externalIDs);
+			List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+			int transaction_count = transactionList.size();
+			if(transactionList.size() > 5)
+				transactionList = transactionList.subList(transactionList.size()-5, transactionList.size());
+			List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
+			int request_count = external_list.size();
+			if(external_list.size() > 5)
+				external_list = external_list.subList(external_list.size()-5, external_list.size());
+			ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
+			request.getSession().setAttribute("transaction_count", transaction_count);
+			model.addObject("request_count",request_count);
+			model.addObject("transaction_list",transactionList);
+			model.addObject("external_list",external_list);
+			ctx.close();
+			return model;
+		}else{
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+			PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
+			HashMap<String,Integer> stats = new HashMap<String,Integer>();
+			stats = pendingStatisticsDao.getPendingStatistics();
+			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests();
+			if(internal_list.size() > 5)
+				internal_list = internal_list.subList(internal_list.size()-5, internal_list.size());
+			List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
+			if(external_list.size() > 5)
+				external_list = external_list.subList(external_list.size()-5, external_list.size());
+			List<PendingRegistration> user_list = pendingStatisticsDao.getPendingUserRegistrations();
+			if(user_list.size() > 5)
+				user_list = user_list.subList(user_list.size()-5, user_list.size());
+			List<Transaction> transaction_list = pendingStatisticsDao.getPendingTransactions();
+			if(transaction_list.size() > 5)
+				transaction_list = transaction_list.subList(transaction_list.size()-5, transaction_list.size());
+			ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
+			model.addObject("stats",stats);
+			model.addObject("internal_list",internal_list);
+			model.addObject("external_list",external_list);
+			model.addObject("user_list",user_list);
+			model.addObject("transaction_list",transaction_list);
+			ctx.close();
+			return model;
+		}	
+	}
+	
+	@RequestMapping(value="/employee/management", method=RequestMethod.GET)
+    public ModelAndView ManagementContoller(HttpServletRequest request){
+		setGlobals(request);
+		if(role.equalsIgnoreCase("ROLE_REGULAR")){
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	        AthorizationDaoImpl authorizationDAO = ctx.getBean("AuthorizationDao", AthorizationDaoImpl.class);
+	        List<Authorization> pendingList = authorizationDAO.getAllPendingAuthorization(userID);
+	        ctx.close();
+	        List<Authorization> completeList = authorizationDAO.getAllCompleteAuthorization(userID);
+	        ModelAndView model = new ModelAndView("employeePages/UserManagementRegular");
+	        model.addObject("pendingList",pendingList);
+	        model.addObject("completeList",completeList);
+	        return model;
+		}else{
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	        AthorizationDaoImpl authorizationDAO = ctx.getBean("AuthorizationDao", AthorizationDaoImpl.class);
+	        List<Authorization> pendingList = authorizationDAO.getAllPendingAuthorization(userID);
+	        ctx.close();
+	        List<Authorization> completeList = authorizationDAO.getAllCompleteAuthorization(userID);
+	        ModelAndView model = new ModelAndView("employeePages/UserManagementRegular");
+	        model.addObject("pendingList",pendingList);
+	        model.addObject("completeList",completeList);
+	        return model;
+		}
+    }
+	
+	@RequestMapping(value="/employee/viewtransaction", method = RequestMethod.POST)
+    public ModelAndView viewTransactions(@RequestParam("extUserID") String extuserID) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+        List<Integer> extuserIDs = new ArrayList<Integer>();
+        extuserIDs.add(Integer.parseInt(extuserID));
+        List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
+        InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+        ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+        model.addObject("transactionList",transactionList);
+        model.addObject("extUserID",extuserID);
+	    ctx.close();
+	    return model;
+    }
+	
+	@RequestMapping(value="/employee/processAccTransaction", method = RequestMethod.POST)
+    public ModelAndView processAccTransactions(@RequestParam("transactionID") String transactionID,@RequestParam("requestType") String requestType,@RequestParam("extUserID") String extuserID) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+        List<Integer> extuserIDs = new ArrayList<Integer>();
+        extuserIDs.add(Integer.parseInt(extuserID));
+        System.out.println(transactionID);
+        System.out.println(requestType);
+        List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
+        InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+        ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+        model.addObject("transactionList",transactionList);
+        model.addObject("extUserID",extuserID);
+	    ctx.close();
+	    return model;
+    }
+	
+	@RequestMapping(value="/employee/newaccTransaction", method = RequestMethod.POST)
+    public ModelAndView newAccTransactions(@RequestParam("accountNo") String accountNo,@RequestParam("receiverAccount") String receiverAccount,@RequestParam("amount") String amount,@RequestParam("extUserID") String extuserID) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+        List<Integer> extuserIDs = new ArrayList<Integer>();
+        extuserIDs.add(Integer.parseInt(extuserID));
+//        System.out.println(transactionID);
+//        System.out.println(requestType);
+        List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
+        InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+        ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+        model.addObject("transactionList",transactionList);
+        model.addObject("extUserID",extuserID);
+	    ctx.close();
+	    return model;
+    }
+		
+	@RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
+    public ModelAndView viewExtAccountDetails(@RequestParam("extUserID") String extuserID) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+        System.out.println(userID);
+        ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+	    ctx.close();
+	    return model;
+    }
+	
+	@RequestMapping(value="/employee/newauthorizationreq", method = RequestMethod.POST)
+    public ModelAndView newAuthorizationRequest(@RequestParam("extUserID") String extuserID,@RequestParam("requestType") String requestType) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+        System.out.println(extuserID);
+        System.out.println(requestType);
+        ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+	    ctx.close();
+	    return model;
+    }
+	
+	@RequestMapping(value="/employee/externalRegistration", method = RequestMethod.POST)
+    public ModelAndView externalRegistration(@RequestParam("userType") String userType) {
+        ModelAndView model = new ModelAndView("employeePages/employeeUserDetails");
+	    System.out.println(userType);
+	    return model;
+    }
+
 	
 	@RequestMapping("/employee/userdetails")
 	public ModelAndView UserDetailsContoller(){
@@ -215,39 +389,7 @@ public class EmployeeController {
         ctx.close();
         return model;
 	}
-	
-	
-	@RequestMapping(value="/employee/home", method=RequestMethod.GET)
-	public ModelAndView PendingDashboardContoller(HttpServletRequest request){
-		String role = (String) request.getSession().getAttribute("role");
-		String username = (String) request.getSession().getAttribute("username");
-		System.out.println(username);
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
-		HashMap<String,Integer> stats = new HashMap<String,Integer>();
-		stats = pendingStatisticsDao.getPendingStatistics();
-		List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests();
-		if(internal_list.size() > 5)
-			internal_list = internal_list.subList(internal_list.size()-5, internal_list.size());
-		List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
-		if(external_list.size() > 5)
-			external_list = external_list.subList(external_list.size()-5, external_list.size());
-		List<PendingRegistration> user_list = pendingStatisticsDao.getPendingUserRegistrations();
-		if(user_list.size() > 5)
-			user_list = user_list.subList(user_list.size()-5, user_list.size());
-		List<Transaction> transaction_list = pendingStatisticsDao.getPendingTransactions();
-		if(transaction_list.size() > 5)
-			transaction_list = transaction_list.subList(transaction_list.size()-5, transaction_list.size());
-		ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
-		model.addObject("stats",stats);
-		model.addObject("internal_list",internal_list);
-		model.addObject("external_list",external_list);
-		model.addObject("user_list",user_list);
-		model.addObject("transaction_list",transaction_list);
-		ctx.close();
-		return model;
-	}
-	
+		
 	@RequestMapping("/employee/openrequests")
 	public ModelAndView OpenRequestContoller(){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");

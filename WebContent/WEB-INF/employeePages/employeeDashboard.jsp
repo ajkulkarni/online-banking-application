@@ -22,25 +22,25 @@
 						<tbody>
 							<tr>
 								<td>Account Status Requests</td>
-								<td>${stats['user']}</td>
+								<td></td>
 							</tr>
 							<tr>
 								<td>Internal User Requests</td>
-								<td>${stats['internal']}</td>
+								<td></td>
 							</tr>
 							<tr>
 								<td>External User Requests</td>
-								<td>${stats['external']}</td>
+								<td>${request_count}</td>
 							</tr>
 							<tr>
 								<td>Transaction Requests</td>
-								<td>${stats['transaction']}</td>
+								<td>${transaction_count}</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<div class="panel panel-primary">
+			<%-- <div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending Account Registrations</h3>
 				</div>
@@ -68,8 +68,8 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
-			<div class="panel panel-primary">
+			</div> --%>
+			<%-- <div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending Internal Requests</h3>
 				</div>
@@ -97,7 +97,7 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</div> --%>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending External Request</h3>

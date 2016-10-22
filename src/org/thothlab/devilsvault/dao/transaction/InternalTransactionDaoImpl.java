@@ -108,6 +108,19 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
         save(transaction, "transaction_completed");
         deleteById(id, type);
     }
-
-	
+    
+    public List<Transaction> getAllPendingTransactionByAccountNo(List<Integer> accoNos)
+    {
+        String query = "SELECT *FROM transaction_pending WHERE (";
+    for(int i = 0;i < accoNos.size(); i++)
+    {
+        if(i < accoNos.size() - 1)
+            query += "payer_id = '" + accoNos.get(i) + "' OR ";
+        else
+            query += "payer_id = '" + accoNos.get(i) + "'";
+    }
+    query += ") AND critical='1'";
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
+        return transactionList;
+    }	
 }

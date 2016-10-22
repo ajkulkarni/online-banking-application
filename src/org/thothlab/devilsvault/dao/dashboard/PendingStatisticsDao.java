@@ -44,7 +44,7 @@ public class PendingStatisticsDao {
 	
 	public List<Request> getPendingExternalRequests() {
 		String query = "SELECT * FROM external_request_pending";
-		List<Request> external_list = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> external_list = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		//int  pendingExternalRequests = jdbcTemplate.queryForObject(query, Integer.class);
 		return external_list;
 	}
