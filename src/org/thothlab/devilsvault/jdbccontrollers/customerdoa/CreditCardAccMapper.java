@@ -15,7 +15,7 @@ public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 		obj.setCredit_card_no(rs.getInt("credit_card_no"));
 		obj.setAvailBalance(rs.getInt("available_balance"));
 		obj.setLastBillAmount(rs.getInt("last_bill_amount"));
-		obj.setDueDateTimestamp(rs.getInt("due_date"));
+		obj.setDueDateTimestamp(rs.getDate("due_date"));
 		obj.setApr(rs.getFloat("apr"));
 		obj.setBank_accounts_id(rs.getInt("account_number"));
 		return obj;
