@@ -32,8 +32,9 @@ import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 
 @RestController
 public class MerchantRestController {
-	@Autowired
 	private TransferDAO transferDAO;
+	
+	
 	private CreditCardDOA creditcarddao;
 	private ExternalTransactionDAO extTransactionDAO;
 	private CreditAccount bankaccount;
@@ -66,7 +67,7 @@ public class MerchantRestController {
 		}
 		if(valid_payment){
 			int merchant_account = 0;
-			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(bankaccount.getBank_accounts_id(), merchantpayment.getAmount(), merchant_account, merchantpayment.getDescription(), "external");
+			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(bankaccount.getAccountNumber(), merchantpayment.getAmount(), merchant_account, merchantpayment.getDescription(), "external");
 			extTransactionDAO.save(extTransferTrans, "transaction_pending");
 			return new ResponseEntity(HttpStatus.OK);
 		}
