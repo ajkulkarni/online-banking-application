@@ -13,11 +13,15 @@
 
 			<c:if test="${not empty paymentResult}" >
 				<c:if test="${paymentResult == '1'}">
-				Success
+				<script type="text/javascript">
+    			confirm('Transaction is successful');
+				</script>
 				</c:if>
 				
 				<c:if test="${paymentResult == '0'}">
-				Failed
+				<script type="text/javascript">
+    			alert('Transaction Failed');
+				</script>
 				</c:if>
 			</c:if>
 			
