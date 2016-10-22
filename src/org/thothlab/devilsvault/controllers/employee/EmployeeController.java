@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.employeecontrollers;
+package org.thothlab.devilsvault.controllers.employee;
 
 import java.util.HashMap;
 import java.util.List;

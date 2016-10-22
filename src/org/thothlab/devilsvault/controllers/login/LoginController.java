@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.logincontrollers;
+package org.thothlab.devilsvault.controllers.login;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

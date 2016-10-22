@@ -10,11 +10,9 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
  
-		<context:component-scan base-package="org.thothlab.devilsvault.logincontrollers"/>
-		<context:component-scan base-package="org.thothlab.devilsvault.customercontrollers"/>
-		<context:component-scan base-package="org.thothlab.devilsvault.employeecontrollers"/>
+		<context:component-scan base-package="org.thothlab.devilsvault.controllers"/>
 		
-		<bean id="customAuthenticationSuccessHandler" class="org.thothlab.devilsvault.logincontrollers.CustomAuthenticationSuccessHandler"></bean>
+		<bean id="customAuthenticationSuccessHandler" class="org.thothlab.devilsvault.controllers.login.CustomAuthenticationSuccessHandler"></bean>
 		<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 		
 		<context:property-placeholder location="classpath:jdbc/config/database.properties"/>

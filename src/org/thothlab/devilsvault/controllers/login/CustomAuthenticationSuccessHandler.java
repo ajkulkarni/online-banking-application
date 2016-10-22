@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.logincontrollers;
+package org.thothlab.devilsvault.controllers.login;
 
 import java.io.IOException;
 

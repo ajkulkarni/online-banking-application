@@ -6,6 +6,7 @@
 
  	<http use-expressions="true" auto-config="false">
         <intercept-url pattern="/employee/**" access="hasRole('ROLE_USER')"></intercept-url>
+        <intercept-url pattern="/customer/**" access="hasRole('ROLE_USER')"></intercept-url>
 
         <form-login 
 	        login-page="/login" 

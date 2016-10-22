@@ -67,5 +67,11 @@ public class InternalUser {
 	public void setPhone(int phone) {
 		this.phone = phone;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	
 }
