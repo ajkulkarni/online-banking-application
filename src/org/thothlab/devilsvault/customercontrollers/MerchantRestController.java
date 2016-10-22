@@ -56,7 +56,6 @@ public class MerchantRestController {
 		boolean valid_payment = false;
 		try 
 		{
-//		int account_number = 0;
 		bankaccount = creditcarddao.getAccount("creditcard", "", "", "");
 		if(bankaccount != null){
 			valid_payment = transferDAO.validateAmount(bankaccount.getAccountNumber(), merchantpayment.getAmount());

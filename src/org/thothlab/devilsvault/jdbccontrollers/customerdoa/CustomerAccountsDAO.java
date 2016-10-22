@@ -9,6 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
@@ -75,9 +76,24 @@ public class CustomerAccountsDAO{
 		// TODO Auto-generated method stub
 		return true;
 	}
-	public int getMerchantAccountFromSecret(String string) {
+	public int getMerchantAccountFromSecret(final String secret) {
 		// TODO Auto-generated method stub
-		return 0;
+		String query = "select * from bank_accounts where merchant_secret == secret";
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		int account = 0;
+		try {
+			conn = dataSource.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, secret); // set input parameter
+			rs = pstmt.executeQuery();
+			account = rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // create a statement
+	   
+		return account;
 	}     
 
 }

@@ -13,12 +13,14 @@ public class MerchantPayment {
 	private String description;
 
 
-	public MerchantPayment(Float amount, String card_no, String pin, String date, String year) {
+	public MerchantPayment(Float amount, String card_no, String pin, String date, String year, String merchant_secret, String description) {
 		this.card_no = card_no;
 		this.pin = pin;
 		this.date = date;
 		this.year = year;
 		this.amount = amount;
+		this.merchant_secret = merchant_secret;
+		this.description = description;
 	}
 
 	public MerchantPayment() {
@@ -76,7 +78,7 @@ public class MerchantPayment {
 		return merchant_secret;
 	}
 
-	public String setMerchant_secret() {
+	public void setMerchant_secret(String merchant_secret) {
 		this.merchant_secret = merchant_secret;
 	}
 }
