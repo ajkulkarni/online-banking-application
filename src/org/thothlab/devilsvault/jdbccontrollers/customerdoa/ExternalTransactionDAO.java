@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
-import org.thothlab.devilsvault.CustomerModel.Transaction;
-
+import org.thothlab.devilsvault.db.model.Transaction;
 
 @Repository("extTransactionDAO")
 public class ExternalTransactionDAO extends TransactionDaoImpl {
@@ -31,6 +30,7 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 	public Transaction createExternalTransaction(int payerAccountNumber, float amount, int payeeAccountNumber,
 												 String description, String transactionType) {
 		Transaction extTransfer = new Transaction();
+
 		extTransfer.setPayer_id(payerAccountNumber);
 		extTransfer.setPayee_id(payeeAccountNumber);
 		extTransfer.setAmount(amount);

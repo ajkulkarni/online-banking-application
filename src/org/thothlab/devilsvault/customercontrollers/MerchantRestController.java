@@ -17,10 +17,13 @@ import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.DebitAccount;
 import org.thothlab.devilsvault.CustomerModel.MerchantPayment;
+import org.thothlab.devilsvault.db.model.Transaction;
 import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.BankAccount.AccountType;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExtUserDaoImpl;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExternalTransactionDAO;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerAccountsDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
@@ -31,6 +34,9 @@ import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 public class MerchantRestController {
 	@Autowired
 	private TransferDAO transferDAO;
+	private CreditCardDOA creditcarddao;
+	private ExternalTransactionDAO extTransactionDAO;
+	private CreditAccount bankaccount;
 	
 	@GetMapping("/merchants")
 	public List getCustomers() {
@@ -49,14 +55,19 @@ public class MerchantRestController {
 		try 
 		{
 		int account_number = 0;
-		valid_payment = transferDAO.validateAmount(account_number, merchantpayment.getAmount());
-				sAccountDAO.CheckPayment(merchantpayment);
+		bankaccount = creditcarddao.getAccount("creditcard", "", "", "");
+		if(bankaccount != null){
+			valid_payment = transferDAO.validateAmount(account_number, merchantpayment.getAmount());
+		}
 		} 
 		catch (Exception e) 
 		{
 		throw new RuntimeException(e);
 		}
 		if(valid_payment){
+			int merchant_account = 0;
+			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(bankaccount.getBank_accounts_id(), merchantpayment.getAmount(), merchant_account, merchantpayment.getDescription(), "external");
+			extTransactionDAO.save(extTransferTrans, "transaction_pending");
 			return new ResponseEntity(HttpStatus.OK);
 		}
 		return new ResponseEntity(HttpStatus.BAD_REQUEST);
