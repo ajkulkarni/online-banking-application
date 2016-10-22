@@ -7,7 +7,7 @@ public class CreditAccount extends BankAccount {
 	private int Id;
 	private int interset;
 	private int credit_card_no;
-	private int bank_accounts_id;
+	
 	private double availBalance;
 	private double lastBillAmount;
 	private int dueDateTimestamp;
@@ -37,13 +37,7 @@ public class CreditAccount extends BankAccount {
 		this.credit_card_no = credit_card_no;
 	}
 
-	public int getBank_accounts_id() {
-		return bank_accounts_id;
-	}
 
-	public void setBank_accounts_id(int bank_accounts_id) {
-		this.bank_accounts_id = bank_accounts_id;
-	}
 	
 	public CreditAccount() {
 		this.setAccountType(AccountType.CREDIT);

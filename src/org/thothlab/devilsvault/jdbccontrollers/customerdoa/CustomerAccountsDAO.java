@@ -64,7 +64,7 @@ public class CustomerAccountsDAO{
      }     
 	
 	public BankAccount getAccount(int accountNumber) {
-		
+		String query = "SELECT * FROM bank_accounts where account_number = " + accountNumber;
 		return null;
 	}
 }

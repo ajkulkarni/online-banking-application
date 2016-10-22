@@ -131,14 +131,20 @@ public class CreditCardDOA extends CustomerDOAImpl {
 	}
 	
 	
-	public BankAccount getAccount(String creditCardNumber, int cvv, String month, String year) {
+	public CreditAccount getAccount(String creditCardNumber, int cvv, String month, String year) {
 		
 		String query = "SELECT * FROM credit_card_account_details where credit_card_no = " + creditCardNumber;
 		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
 		CreditAccount creditaccount = creditcard_details.get(0);
-		CustomerAccountsDAO customerAccDao = CustomerDAOHelper.customerAccountsDAO();
-		return customerAccDao.getAccount(creditaccount.getAccountNumber());
 		
+		CustomerAccountsDAO customerAccDao = CustomerDAOHelper.customerAccountsDAO();
+		BankAccount bankAcc = customerAccDao.getAccount(creditaccount.getAccountNumber());
+		
+		creditaccount.setAccountNumber(bankAcc.getAccountNumber());
+		creditaccount.setOwner(bankAcc.getOwner());
+		creditaccount.setAccountType(bankAcc.getAccountType());
+		
+		return creditaccount;
 	}
 	
 	
