@@ -25,9 +25,12 @@ import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerAccountsDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
 import org.springframework.http.ResponseEntity;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 
 @RestController
 public class MerchantRestController {
+	@Autowired
+	private TransferDAO transferDAO;
 	
 	@GetMapping("/merchants")
 	public List getCustomers() {
@@ -45,7 +48,9 @@ public class MerchantRestController {
 		boolean valid_payment = false;
 		try 
 		{
-		valid_payment = sAccountDAO.CheckPayment(merchantpayment);
+		int account_number = 0;
+		valid_payment = transferDAO.validateAmount(account_number, merchantpayment.getAmount());
+				sAccountDAO.CheckPayment(merchantpayment);
 		} 
 		catch (Exception e) 
 		{
