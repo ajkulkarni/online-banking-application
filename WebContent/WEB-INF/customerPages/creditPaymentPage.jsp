@@ -11,7 +11,16 @@
 
 		<div class="row">
 
-
+			<c:if test="${not empty paymentResult}" >
+				<c:if test="${paymentResult == '1'}">
+				Success
+				</c:if>
+				
+				<c:if test="${paymentResult == '0'}">
+				Failed
+				</c:if>
+			</c:if>
+			
 			<form class="form-horizontal" action="makePayement" method='POST'
 				onSubmit="return checkInputOr()">
 		<div class="panel panel-warning">
@@ -32,12 +41,17 @@
 			</div>
 			</div>
 				<div class="form-group">
-					<label for="inputAmount" class="col-sm-3 control-label">Enter the amount to pay</label> 
-					<label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+
+					<label for="inputAmount" class="col-sm-3 control-label">Enter
+						the amount to pay</label>
+						
+
 					<div class="input-group" class="col-sm-4">
 						<div class="input-group-addon">$</div>
-						<input type="text" class="form-control" id="inputAmount"
-							placeholder="Amount">
+						
+						<input type="text" class="form-control" id="inputAmountField"
+							placeholder="Amount" name="inputAmountField">
+							
 						<div class="input-group-addon">.00</div>
 					</div>
 				</div>
@@ -51,7 +65,7 @@
 				</div>
 				</fieldset>
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-sm-3">
 						<button type="submit" class="btn btn-default">Pay</button>
 					</div>
 				</div>

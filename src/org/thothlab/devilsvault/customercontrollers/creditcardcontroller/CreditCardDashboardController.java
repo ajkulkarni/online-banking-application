@@ -46,7 +46,7 @@ public class CreditCardDashboardController {
 
 
 	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
-	public ModelAndView getSearchResultViaAjax(@RequestParam("monthPicker") String interval) {
+	public ModelAndView getTransactionsBasedOnInterval(@RequestParam("monthPicker") String interval) {
 
 	
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
