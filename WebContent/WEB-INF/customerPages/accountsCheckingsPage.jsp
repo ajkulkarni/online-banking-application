@@ -17,11 +17,15 @@
 					<div class="row">
 						<div class="col-sm-2"><b>Account Balance:</b></div>
 						<div class="col-sm-3">${CheckingAccBal}</div>
-        				<select class="form-control" id="select" name="interval" style="max-width:30%;">
+						<form class="form-horizontal" action="getcheckingTransactions" method='POST' onSubmit="return checkInputOr()">
+        				<select class="form-control" id="select" name="monthPicker" style="max-width:30%;">
           					<option>Last month</option>
           					<option>Last 3 months</option>
           					<option>Last 6 months</option>
         				</select>
+        				<button type="submit" style="float:right" class="btn btn-primary">Submit</button>
+        				</form>
+        				
         			</div>
 					<hr>
 					<h4><center>Transaction History</center></h4>

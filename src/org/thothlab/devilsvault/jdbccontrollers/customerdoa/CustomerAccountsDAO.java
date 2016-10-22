@@ -22,14 +22,14 @@ public class CustomerAccountsDAO{
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	public List<TransactionModel> getTransactionLines(Customer user,int interval)
+	public List<TransactionModel> getTransactionLines(Customer user, int interval)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		TransactionModel TransactionLine = new TransactionModel();
 		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>(); 
-		String sql ="SELECT * FROM  transaction_completed WHERE payer_id="+user.getID()+" OR payee_id = "+user.getID();
+		String sql ="SELECT * FROM  transaction_completed WHERE (payer_id="+user.getID()+" OR payee_id ="+user.getID()+") ";//+"AND "+TransactionLine.getTimestamp_updated()+">=(now()- interval "+interval+" month)";
 				//+"AND "+TransactionLine.getTimestamp_updated()+" between DATE_SUB(NOW(), INTERVAL "+interval+" MONTH) AND NOW()";
 		try{
 			con = dataSource.getConnection();
