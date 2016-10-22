@@ -31,15 +31,8 @@ public class BankAccountMapper  implements RowMapper<BankAccount> {
 		CustomerDAO custDao = CustomerDAOHelper.customerDAO();
 		Customer cust = custDao.getCustomer(rs.getInt("external_users_id"));
 		obj.setOwner(cust);
-		
-		
-//		obj.setId(rs.getInt("id"));
-//		obj.setCredit_card_no(rs.getInt("credit_card_no"));
-//		obj.setAvailBalance(rs.getInt("available_balance"));
-//		obj.setLastBillAmount(rs.getInt("last_bill_amount"));
-//		obj.setDueDateTimestamp(rs.getDate("due_date"));
-//		obj.setApr(rs.getFloat("apr"));
-//		obj.setAccountNumber(rs.getInt("account_number"));
+		obj.setAccountNumber(rs.getInt("account_number"));
+
 		return obj;
 	}
 
