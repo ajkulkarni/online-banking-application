@@ -37,6 +37,7 @@ public class MerchantRestController {
 	private CreditCardDOA creditcarddao;
 	private ExternalTransactionDAO extTransactionDAO;
 	private CreditAccount bankaccount;
+	private CustomerAccountsDAO sAccountDAO;
 	
 	@GetMapping("/merchants")
 	public List getCustomers() {
@@ -47,17 +48,17 @@ public class MerchantRestController {
 	
 	@PostMapping("/make_payment")
 	public ResponseEntity makePayment(@RequestBody MerchantPayment merchantpayment) {
-		
-		System.out.println(merchantpayment);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
-		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
+		sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
+		System.out.println(merchantpayment);
+		
 		boolean valid_payment = false;
 		try 
 		{
-		int account_number = 0;
+//		int account_number = 0;
 		bankaccount = creditcarddao.getAccount("creditcard", "", "", "");
 		if(bankaccount != null){
-			valid_payment = transferDAO.validateAmount(account_number, merchantpayment.getAmount());
+			valid_payment = transferDAO.validateAmount(bankaccount.getAccountNumber(), merchantpayment.getAmount());
 		}
 		} 
 		catch (Exception e) 
@@ -65,7 +66,7 @@ public class MerchantRestController {
 		throw new RuntimeException(e);
 		}
 		if(valid_payment){
-			int merchant_account = 0;
+			int merchant_account = sAccountDAO.getMerchantAccountFromSecret("");
 			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(bankaccount.getBank_accounts_id(), merchantpayment.getAmount(), merchant_account, merchantpayment.getDescription(), "external");
 			extTransactionDAO.save(extTransferTrans, "transaction_pending");
 			return new ResponseEntity(HttpStatus.OK);

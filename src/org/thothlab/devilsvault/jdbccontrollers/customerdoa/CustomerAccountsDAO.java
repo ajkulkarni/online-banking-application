@@ -65,6 +65,10 @@ public class CustomerAccountsDAO{
 	public boolean CheckPayment(MerchantPayment merchantpayment) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	public int getMerchantAccountFromSecret(String string) {
+		// TODO Auto-generated method stub
+		return 0;
 	}     
 }
 

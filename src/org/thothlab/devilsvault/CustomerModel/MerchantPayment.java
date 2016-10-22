@@ -75,4 +75,8 @@ public class MerchantPayment {
 	public String getMerchant_secret() {
 		return merchant_secret;
 	}
+
+	public String setMerchant_secret() {
+		this.merchant_secret = merchant_secret;
+	}
 }
