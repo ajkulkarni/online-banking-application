@@ -6,29 +6,34 @@
 
 <div class="content-wrapper">
 	<div class="col-md-12" id="page-content">
-		<h1>Credit Card Payment</h1>
-		<div class="row">
-			
 
-			<form class="form-horizontal">
+		<h1>Credit Card Payment</h1>
+
+		<div class="row">
+
+
+			<form class="form-horizontal" action="makePayement" method='POST'
+				onSubmit="return checkInputOr()">
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-3 control-label">Enter the amount to pay</label>
-					<label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-					<div class="input-group">
+					<label for="inputAmount" class="col-sm-3 control-label">Enter
+						the amount to pay</label> <label class="sr-only" for="exampleInputAmount">Amount
+						(in dollars)</label>
+					<div class="input-group" class="col-sm-4">
 						<div class="input-group-addon">$</div>
 						<input type="text" class="form-control" id="inputAmount"
 							placeholder="Amount">
 						<div class="input-group-addon">.00</div>
 					</div>
 				</div>
+				<fieldset disabled>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-3 control-label">Select the account</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" id="inputPassword3"
-							placeholder="Password">
+					<label for="labelAccount" class="col-sm-3 control-label">Account</label>
+					<div class="input-group" class="col-sm-5">
+						<input type="text" class="form-control" id="inputAmount"
+							placeholder="Checking Account (Balance: )">
 					</div>
 				</div>
-				
+				</fieldset>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" class="btn btn-default">Pay</button>
@@ -41,7 +46,7 @@
 </div>
 <!-- .content-wrapper -->
 
-</main>
+
 
 <script type="text/javascript">
 	$(document).ready(function() {

@@ -11,9 +11,13 @@
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />"> <!-- Resource style -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/accountsPage.css" />"> <!-- Resource style -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.0.36/jspdf.plugin.autotable.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
+	
+	
 	<title>Home</title>
 </head>
 <body>

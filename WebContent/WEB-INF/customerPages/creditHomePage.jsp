@@ -71,7 +71,7 @@
 			<option>Last 6 months</option>
 
 		</select>
-		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		
  		 <button type="submit" class="btn btn-primary">Submit</button>
 	</form>
 		<table class="table table-striped">
@@ -113,42 +113,12 @@
 
 <script type="text/javascript">
 
-/* $("#monthPicker" ).change(function() {
-	interval = this.value;
-	pickTransactions(interval)
-	  
-});
-
-function pickTransactions(data) {
-	
-
-	$.ajax({
-		type : "POST",
-		contentType : "application/json",
-		url : "credithomeTest",
-		data : JSON.stringify(data),
-		dataType : 'json',
-		timeout : 100000,
-		success : function(data) {
-			alert('Succces');
-			console.log("SUCCESS: ", data);
-			display(data);
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-			display(e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
-	});
-}
 
 	$(document).ready(function() {
 		sideNavigationSettings();
 	});
 	
-	 */
+	
 	
 	
 
