@@ -23,6 +23,7 @@ public class CustomerDAO {
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
+	
 	public Customer getCustomer(int id) {
 		String query = "select * from external_users WHERE id = 101";//+ id;
 		List<Customer> custList = jdbcTemplate.query(query, new CustomerMapper());
