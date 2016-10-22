@@ -12,6 +12,7 @@ public class LoginForm {
 	private String captcha;
 	private String ip;
 	private String usertype;
+	private String otp;
 	public String getUserType() {
 		return usertype;
 	}
@@ -43,5 +44,11 @@ public class LoginForm {
     public void setCaptcha(String captcha) {
         this.captcha = captcha;
     }
-    
+    public void setOtp(String otp) {
+        this.otp = otp;
+        
+       }
+       public String getOtp() {
+        return otp;
+       }
 }

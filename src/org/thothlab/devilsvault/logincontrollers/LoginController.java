@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.context.annotation.Bean;
@@ -133,30 +134,73 @@ public class LoginController {
 		
 		return modelandview;
 	}
-	@RequestMapping(value ="backtologin.html", method = RequestMethod.POST)
-	public ModelAndView sendEmail(@Valid LoginForm loginForm, BindingResult result, HttpServletRequest request) {
- 	
-		ModelAndView modelandview = new ModelAndView("forgotpassword");
-		System.out.println("Forgotpassword email " + loginForm.getUserName());
-	
-		/*if(result.hasErrors())
-		{
-			System.out.println("dddd"+result.hasErrors());
-			return modelandview;
-		}*/
-			
-		
-		LoginDB db = new LoginDB();
-		
-		String result_email = db.query(loginForm.getUserName());
-		if(result_email.equals("invalid email/email not present"))
-		{
-			System.out.println("invalid email/email not present");
-			modelandview = new ModelAndView("LoginPage");
-			return modelandview;
-		}
-		System.out.println(result_email);
-		modelandview = new ModelAndView("VerifyOTP");
-		return modelandview;
-	}
+	@RequestMapping(value ="verifyOTP.html", method = RequestMethod.POST)
+	 public ModelAndView sendEmail(@Valid LoginForm loginForm, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+	  
+	  ModelAndView modelandview = new ModelAndView("forgotpassword");
+	  System.out.println("Forgotpassword email " + loginForm.getUserName());
+	 
+	  /*if(result.hasErrors())
+	  {
+	   System.out.println("dddd"+result.hasErrors());
+	   return modelandview;
+	  }*/
+	   
+	  
+	  LoginDB db = new LoginDB();
+	  String email = loginForm.getUserName();
+	  String result_email = db.query(email);
+	  if(result_email.equals("invalid email/email not present"))
+	  {
+	   System.out.println("invalid email/email not present");
+	   modelandview = new ModelAndView("LoginPage");
+	   return modelandview;
+	  }
+	  System.out.println(result_email);
+	  
+	//  System.out.println("This is the email that will be stored in the session attribute email " + email);
+	  HttpSession session = request.getSession(true); 
+	  session.setAttribute("email", email); // I think this part is not working properly for some reason.
+	  String encodedURL = response.encodeURL("VerifyOTP");
+	  modelandview = new ModelAndView(encodedURL);
+	  System.out.println("This is the session attribute email" + session.getAttribute("email"));
+	  return modelandview;
+	 }
+	 
+	 @RequestMapping(value ="backtologin.html", method = RequestMethod.POST)
+	 public ModelAndView sendOTP(@Valid LoginForm loginForm, BindingResult result,HttpServletRequest request) {
+	  
+	  ModelAndView modelandview = new ModelAndView("verifyOTP");
+	  //System.out.println("Forgotpassword email " + loginForm.getUserName());
+	 
+	  /*if(result.hasErrors())
+	  {
+	   System.out.println("dddd"+result.hasErrors());
+	   return modelandview;
+	  }*/
+	  LoginDB db = new LoginDB();
+	  HttpSession session = request.getSession();
+	  String email = (String)session.getAttribute("email");
+	  System.out.println("This is the email in Session" + email + "/n");
+	  
+	  String result_OTP = db.OTPVerification(loginForm.getOtp(),email);
+	  if(result_OTP.equals("Invalid OTP"))
+	  {
+	   System.out.println("Invalid OTP. Please enter a valid OTP.");
+	   modelandview = new ModelAndView("VerifyOTP");
+	   return modelandview;
+	  }
+	  else if(result_OTP.equals("OTP expired"))
+	  {
+	   System.out.println("Your OTP session has expired! Please generate a new OTP.");
+	   modelandview = new ModelAndView("forgotpassword");
+	   return modelandview;
+	  }
+	  else{
+	   System.out.println(result_OTP);
+	   modelandview = new ModelAndView("LoginPage");
+	  }
+	  
+	  return modelandview;
+	 }
 }

@@ -88,7 +88,6 @@
 				    <br>
 				    <br>
 				</form>
-				<td><input type="submit" value="Sign In"  class = "btn" onclick="location.href='register.html';"/></td>
 				
 				<script src='https://www.google.com/recaptcha/api.js'></script>
 				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>

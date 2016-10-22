@@ -28,6 +28,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         System.out.println(s);
         session.setAttribute("role", s);
        
+        String gRecaptchaResponse = arg0.getParameter("g-recaptcha-response");
+        System.out.println(gRecaptchaResponse);
+        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+        System.out.println(verify);	
 		arg1.setStatus(HttpServletResponse.SC_OK);
 		arg1.sendRedirect("/CSE545-SS/employee/home");
 		

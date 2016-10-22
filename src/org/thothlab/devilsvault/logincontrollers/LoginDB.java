@@ -7,75 +7,125 @@ public class LoginDB {
 
 	
 	public String query(String email)
-	{
-		String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
-		String user = "cse545ss_admin";
-		String pass = "cse545ss_admin";
-		//System.out.println("fff");
-		
-		try {
-			Connection myConn = DriverManager.getConnection(dbURL,user,pass);
-			//System.out.println(myConn);
-			Statement myStmt = myConn.createStatement();
-			
-			ResultSet myRs = myStmt.executeQuery("select * from external_users");
-			while(myRs.next())
-			{
-				//System.out.println("Stored email:" +myRs.getString("email"));
-				String s = myRs.getString("email");
-				//System.out.println(email);
-				if(email.equals(s))
-				{
-					
-					
-					
-				    ResultSet myRs1 = myStmt.executeQuery("select * from otp_table");
-				    while(myRs1.next())
-				    {
-				    	String s1 = myRs1.getString("userEmail");
-				    	if(email.equals(s1))
-				    	{
-				    		long stored_time = myRs1.getLong("timestamp");
-				    		long currentTime    = (System.currentTimeMillis());
-				    		long diff = currentTime - stored_time;
-				    		System.out.println(diff/1000);
-				    		if (diff/1000>30)
-				    		{
-				    			int k =0;
-								String delete_entry = "delete from otp_table where userEmail = '"+s1+"';";
-								myStmt.executeUpdate(delete_entry);
-								Email E = new Email();
-								String otp = E.send("Your One Time Password is ", s, 1);
-								long currentTime1    = (System.currentTimeMillis());
-								String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime1+"')";
-								myStmt.executeUpdate(so);
-								myConn.close();
-								return "OTP resent";
-				    		}
-				    		else
-				    		{
-				    			return "OTP within 30s";
-				    		}
-				    	}
-				    }
-				    long currentTime    = (System.currentTimeMillis());
-				    Email E = new Email();
-					String otp = E.send("Your One Time Password is", s, 1);
-					System.out.println(currentTime);
-				    String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime+"')";
-				    myStmt.executeUpdate(so);
-					myConn.close();
-					return "OTP sent";
-				}
-				
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "invalid email/email not present";
-	}
+	 {
+	  String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
+	  String user = "cse545ss_admin";
+	  String pass = "cse545ss_admin";
+	  ///System.out.println("fff");
+	  
+	  try {
+	   Connection myConn = DriverManager.getConnection(dbURL,user,pass);
+	   //System.out.println(myConn);
+	   Statement myStmt = myConn.createStatement();
+	   
+	   ResultSet myRs = myStmt.executeQuery("select * from external_users");
+	   while(myRs.next())
+	   {
+	    //System.out.println("Stored email:" +myRs.getString("email"));
+	    String s = myRs.getString("email");
+	    //System.out.println(email);
+	    if(email.equals(s))
+	    {
+	     
+	        ResultSet myRs1 = myStmt.executeQuery("select * from otp_table");
+	        while(myRs1.next())
+	        {
+	         String s1 = myRs1.getString("userEmail");
+	         System.out.println(s1);
+	         System.out.println(email);
+	         if(email.equals(s1))
+	         {
+	          long stored_time = myRs1.getLong("timestamp");
+	          long currentTime    = (System.currentTimeMillis());
+	          long diff = currentTime - stored_time;
+	          System.out.println(diff/1000);
+	          if (diff/1000>=0 && diff/1000<=120 )
+	          {
+	          return "Email Verified";
+	          }
+	          else
+	          {
+	          String delete_entry = "delete from otp_table where userEmail = '"+myRs1.getString("userEmail")+"';";
+	          myStmt.executeUpdate(delete_entry);
+	          long currentTime1    = (System.currentTimeMillis());
+	          Email E = new Email();
+	       String otp = E.send("Your One Time Password is", s, 1);
+	       System.out.println(currentTime1);
+	          String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime1+"')";
+	          myStmt.executeUpdate(so);
+	       myConn.close();
+	          return "Email Verified";
+	          }
+	         }
+	         }
+	         long currentTime    = (System.currentTimeMillis());
+	         Email E = new Email();
+	      String otp = E.send("Your One Time Password is", s, 1);
+	     // System.out.println(currentTime);
+	         String so="INSERT INTO `otp_table`(`userEmail`,`otp`,`timestamp`)VALUES('"+s+"','"+otp+"','"+currentTime+"')";
+	         myStmt.executeUpdate(so);
+	      myConn.close();
+	      return "Email Verified";
+	    }
+	    
+	   }
+	   
+	  } catch (SQLException e) {
+	   // TODO Auto-generated catch block
+	   System.out.println("This is entering exception");
+	   e.printStackTrace();
+	  }
+	  return "invalid email/email not present";
+	 }
+	 
+	 public String OTPVerification(String OTP, String email) {
+	  
+	  String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
+	  String user = "cse545ss_admin";
+	  String pass = "cse545ss_admin";
+	  ///System.out.println("fff");
+	  
+	  try {
+	   Connection myConn = DriverManager.getConnection(dbURL,user,pass);
+	   //System.out.println(myConn);
+	   Statement myStmt = myConn.createStatement();
+	   
+	   ResultSet myRs = myStmt.executeQuery("select * from otp_table;");
+	   
+	   if(myRs.next()){
+	       long stored_time = myRs.getLong("timestamp");
+	       long currentTime    = (System.currentTimeMillis());
+	       long diff = currentTime - stored_time;
+	       System.out.println(diff/1000);
+	       String s = myRs.getString("userEmail");
+	       System.out.println("This is the email in DB" + s + "/n");
+	       System.out.println("This is the email in Session" + email);
+	       if ((diff/1000<= 30) && email.equals(s))
+	       {
+	     String OTPDatabase = myRs.getString("otp");
+	     if(OTP.equals(OTPDatabase))
+	     {
+	      String delete_entry = "delete from otp_table where userEmail = '"+myRs.getString("userEmail")+"';";
+	      myStmt.executeUpdate(delete_entry);
+	      return "OTP has been verified successfully!";
+	     }
+	     else {
+	      return "Invalid OTP";
+	     }
+	       }
+	       else {
+	        String delete_entry = "delete from otp_table where userEmail = '"+myRs.getString("userEmail")+"';";
+	        myStmt.executeUpdate(delete_entry);
+	       }
+	      }
+	     } 
+	    catch (SQLException e) {
+	     System.out.println("This is entering exception");
+	   // TODO Auto-generated catch block
+	   e.printStackTrace();
+	  }
+	  return "OTP expired";
+	 }
 	public String store(RegistrationForm register)
 	{
 		String dbURL = "jdbc:mysql://ganga.la.asu.edu:3306/CSE545_SS?autoReconnect=true&useSSL=false";
