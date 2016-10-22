@@ -15,6 +15,7 @@ import org.w3c.dom.ls.LSInput;
 
 
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.databaseMappers.*;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.databaseMappers.BankAccountMapper;
 
 @Repository("transferDAO")
 public class TransferDAO {
