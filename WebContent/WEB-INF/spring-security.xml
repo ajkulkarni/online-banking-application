@@ -4,7 +4,7 @@
 		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
- 	<http use-expressions="true" auto-config="false">
+ 	<http use-expressions="true" auto-config="true">
         <intercept-url pattern="/employee/**" access="hasAnyRole('ROLE_REGULAR','ROLE_MANAGER','ROLE_ADMIN')"></intercept-url>
         <intercept-url pattern="/customer/**" access="hasAnyRole('ROLE_CUSTOMER','ROLE_MERCHANT')"></intercept-url>
 
@@ -15,18 +15,38 @@
 	        username-parameter="username"
             password-parameter="password"
             authentication-success-handler-ref="customAuthenticationSuccessHandler"></form-login>
-        <logout 
-        	invalidate-session="true" ></logout>
+        <session-management invalid-session-url="/login" session-fixation-protection="newSession" >
+		   	<concurrency-control  max-sessions="1" error-if-maximum-exceeded="true" />
+		</session-management>
+		<logout logout-success-url="/login" delete-cookies="JSESSIONID" />
     	<csrf />
     </http>
     
+    <b:bean id="customUserDetailsService"
+		class="org.thothlab.devilsvault.dao.user.CustomUserDetailsService">
+		<b:property name="usersByUsernameQuery" value="select * from users where username = ?"/>
+		<b:property name="authoritiesByUsernameQuery" value="select username, role from users where username =?" />
+		<b:property name="dataSource" ref="securitydataSource" />
+	</b:bean>
+ 	
+	<b:bean id="userDetailsDao" class="org.thothlab.devilsvault.dao.user.UserDetailsDaoImpl" >
+		<b:property name="dataSource" ref="securitydataSource" />
+	</b:bean>
+	
+	<b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<b:constructor-arg name="strength" value="10" />
+	</b:bean>
+	
+	<b:bean id="authenticationProvider"
+		class="org.thothlab.devilsvault.controllers.security.LimitLoginAuthenticationProvider">
+		<b:property name="userDetailsService" ref="customUserDetailsService" />
+		<b:property name="userDetailsDao" ref="userDetailsDao" />
+		<b:property name="passwordEncoder" ref="encoder" />
+		
+	</b:bean>
+	
     <authentication-manager>
-        <authentication-provider>
-        	<password-encoder ref="bcryptEncoder"/>
-            <jdbc-user-service data-source-ref="securitydataSource"
-		  		users-by-username-query="select username,password, enabled from users where username=?"
-		  		authorities-by-username-query="select username, role from users where username =?  " />
-        </authentication-provider>
+        <authentication-provider ref="authenticationProvider"/>
     </authentication-manager>
  
 </b:beans>

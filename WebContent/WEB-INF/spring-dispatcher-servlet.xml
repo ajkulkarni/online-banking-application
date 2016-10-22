@@ -12,7 +12,7 @@
  
 		<context:component-scan base-package="org.thothlab.devilsvault.controllers"/>
 		
-		<bean id="customAuthenticationSuccessHandler" class="org.thothlab.devilsvault.controllers.login.CustomAuthenticationSuccessHandler"></bean>
+		<bean id="customAuthenticationSuccessHandler" class="org.thothlab.devilsvault.controllers.security.CustomAuthenticationSuccessHandler"></bean>
 		<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 		
 		<context:property-placeholder location="classpath:jdbc/config/database.properties"/>

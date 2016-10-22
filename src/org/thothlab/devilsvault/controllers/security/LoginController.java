@@ -1,4 +1,4 @@
-package org.thothlab.devilsvault.controllers.login;
+package org.thothlab.devilsvault.controllers.security;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,6 @@ public class LoginController {
 	@RequestMapping("/login")
 	public ModelAndView helloworld(){
 		ModelAndView model = new ModelAndView("LoginPage");
-		model.addObject("msg","Hello Deepesh");
 		return model;
 	}
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
@@ -28,4 +27,15 @@ public class LoginController {
 	    }
 	    return "redirect:/login";
 	}
+	@RequestMapping(value="/loginfailed", method = RequestMethod.GET)
+	public ModelAndView loginFailed (HttpServletRequest request, HttpServletResponse response) {
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth != null){    
+	        new SecurityContextLogoutHandler().logout(request, response, auth);
+	    }
+	    ModelAndView model = new ModelAndView("LoginPage");
+		model.addObject("msg","Captcha Validation Failed !!");
+		return model;
+	}
+
 }
