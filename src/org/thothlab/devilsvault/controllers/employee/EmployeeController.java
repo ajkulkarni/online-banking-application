@@ -3,6 +3,8 @@ package org.thothlab.devilsvault.controllers.employee;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -215,8 +217,11 @@ public class EmployeeController {
 	}
 	
 	
-	@RequestMapping("/employee/home")
-	public ModelAndView PendingDashboardContoller(){
+	@RequestMapping(value="/employee/home", method=RequestMethod.GET)
+	public ModelAndView PendingDashboardContoller(HttpServletRequest request){
+		String role = (String) request.getSession().getAttribute("role");
+		String username = (String) request.getSession().getAttribute("username");
+		System.out.println(username);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
 		HashMap<String,Integer> stats = new HashMap<String,Integer>();

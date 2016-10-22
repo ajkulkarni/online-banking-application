@@ -31,7 +31,7 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
 	public List<Transaction> getAllPending() {
 		
 		String query = "SELECT * FROM transaction_pending";
-		List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+		List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
 		return transactionList;
 		/*Transaction transaction = new Transaction();
 		List <Transaction> transactionList = new ArrayList();
@@ -73,7 +73,7 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
 
 	public List<Transaction> getAllCompleted() {
 		String query = "SELECT * FROM transaction_completed";
-		List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+		List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
 		return transactionList;
 	}
 	@Override
@@ -85,14 +85,14 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
 	public List <Transaction> getByUserId(int id, String table)
     {
         String query = "select *from " + table + " where payer_id = '" + id + "' OR payee_id = '" + id + "';";
-        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         return transactionList;
     }
 	
     public void approveTransaction(int id, String type) {
         // TODO Auto-generated method stub
         String query = "SELECT * FROM "+ type +" WHERE id =" + id;
-        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         Transaction transaction = transactionList.get(0);
         transaction.setStatus("approved");
         save(transaction, "transaction_completed");
@@ -102,7 +102,7 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
     public void rejectTransaction(int id, String type) {
         // TODO Auto-generated method stub
         String query = "SELECT * FROM "+ type +" WHERE id ="+ id;
-        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         Transaction transaction = transactionList.get(0);
         transaction.setStatus("rejected");
         save(transaction, "transaction_completed");

@@ -22,10 +22,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		HttpSession session = arg0.getSession();
         User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         session.setAttribute("username", authUser.getUsername());
-        session.setAttribute("role", arg2.getAuthorities());
-        
+        String role_raw = arg2.getAuthorities().toString();
+        String role = role_raw.substring(1, role_raw.length() -1 );
+        session.setAttribute("role", role);
 		arg1.setStatus(HttpServletResponse.SC_OK);
-		arg1.sendRedirect("/CSE545-SS/employee/home");
+		if(role.equalsIgnoreCase("ROLE_REGULAR") || role.equalsIgnoreCase("ROLE_MANAGER") || role.equalsIgnoreCase("ROLE_ADMIN")){
+			arg1.sendRedirect("/CSE545-SS/employee/home");
+		}else{
+			arg1.sendRedirect("/CSE545-SS/customer/home");
+		}
+		
 		
 	}
 
