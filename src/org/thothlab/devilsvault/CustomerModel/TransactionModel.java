@@ -15,7 +15,26 @@ public class TransactionModel {
 	private boolean critical;
 	private Date timestamp_created;
 	private Date timestamp_updated;
+	private int isPending;
 	
+	private String pendingStrg;
+	
+	public void setPendingStrg(Boolean x) {
+		if(x == false)
+			this.pendingStrg="Completed";
+		else
+			this.pendingStrg= "Pending";
+	}
+	
+	public String getPendingStrg() {
+		return pendingStrg;
+	}
+	public int getIsPending() {
+		return isPending;
+	}
+	public void setIsPending(int isPending) {
+		this.isPending = isPending;
+	}
 	public int getId() {
 		return id;
 	}

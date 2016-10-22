@@ -5,8 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
-/*import org.thothlab.devilsvault.jdbccontrollers.model.Request;*/
-//import org.thothlab.devilsvault.CustomerModel.CreditCardDetailsModel;
 
 public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 
@@ -19,8 +17,7 @@ public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 		obj.setLastBillAmount(rs.getInt("last_bill_amount"));
 		obj.setDueDateTimestamp(rs.getInt("due_date"));
 		obj.setApr(rs.getFloat("apr"));
-		obj.setBank_accounts_id(rs.getInt("bank_accounts_id"));
-		//obj.setOwner(rs.get);
+		obj.setBank_accounts_id(rs.getInt("account_number"));
 		return obj;
 	}
 
