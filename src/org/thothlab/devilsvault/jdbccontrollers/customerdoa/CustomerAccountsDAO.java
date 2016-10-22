@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
+import org.thothlab.devilsvault.CustomerModel.MerchantPayment;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 @Repository ("CustomerAccountsDAO")
@@ -61,12 +62,19 @@ public class CustomerAccountsDAO{
 			}
 		}
 		return TransactionLines;
+
      }     
 	
 	public BankAccount getAccount(int accountNumber) {
 		String query = "SELECT * FROM bank_accounts where account_number = " + accountNumber;
 		List<BankAccount> accList = jdbcTemplate.query(query, new BankAccountMapper());
 		return accList.get(0);
-	}
+	
+     }
+	public boolean CheckPayment(MerchantPayment merchantpayment) {
+		// TODO Auto-generated method stub
+		return true;
+	}     
+
 }
 

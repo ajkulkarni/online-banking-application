@@ -131,7 +131,7 @@ public class CreditCardDOA extends CustomerDOAImpl {
 	}
 	
 	
-	public CreditAccount getAccount(String creditCardNumber, int cvv, String month, String year) {
+	public CreditAccount getAccount(String creditCardNumber, String cvv, String month, String year) {
 		
 		String query = "SELECT * FROM credit_card_account_details where credit_card_no = " + creditCardNumber;
 		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
