@@ -20,10 +20,11 @@ import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 
 @Controller
 public class CreditCardDashboardController {
+	public ModelAndView model_ch = new ModelAndView("customerPages/creditHomePage");
 
 	@RequestMapping("/credithome")
 	public ModelAndView showCreditHome(){
-		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
+		
 	
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
@@ -31,16 +32,16 @@ public class CreditCardDashboardController {
 		
 		CreditAccount account = doa.getCreditAccount(cust);
 		
-		model.addObject("creditAccount",account);
+		model_ch.addObject("creditAccount",account);
 		
 		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
 		List<TransactionModel> transactions = transdao.getAllTransactions(account);
-		model.addObject("transations", transactions );
+		model_ch.addObject("transations", transactions );
 		
 		
 		System.out.println("Here");
 		
-		return model;
+		return model_ch;
 	}
 
 

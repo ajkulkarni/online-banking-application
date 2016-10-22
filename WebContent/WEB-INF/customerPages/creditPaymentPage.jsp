@@ -23,10 +23,29 @@
 			
 			<form class="form-horizontal" action="makePayement" method='POST'
 				onSubmit="return checkInputOr()">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h4 class="panel-title">Account</h4>
+			</div>
+
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-3">Next Payment Date:</div>
+					<div class="col-sm-3">${creditAccount.dueDateTimestamp}</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3">Out Standing Balance:</div>
+					<div class="col-sm-3">${creditAccount.availBalance}</div>
+				</div>
+			</div>
+			</div>
 				<div class="form-group">
+
 					<label for="inputAmount" class="col-sm-3 control-label">Enter
 						the amount to pay</label>
 						
+
 					<div class="input-group" class="col-sm-4">
 						<div class="input-group-addon">$</div>
 						
