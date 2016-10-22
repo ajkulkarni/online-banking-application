@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.customercontrollers.creditcardcontroller;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,8 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerAccountsDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 import org.thothlab.devilsvault.customercontrollers.creditcardcontroller.CreditCardDashboardController;
 
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
@@ -38,6 +41,11 @@ public class CreditCardPaymentController {
 		boolean success = false;
 		
 		ModelAndView model = new ModelAndView("customerPages/creditPaymentPage");
+		
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		
+		TransferDAO transferDAO = ctx.getBean("CustomerAccountsDAO",TransferDAO.class);
+		boolean valid_payment = transferDAO.validateAmount(1, Double.parseDouble(amount));
 		if (success) {
 			model.addObject("paymentResult", "1");
 		} else {
