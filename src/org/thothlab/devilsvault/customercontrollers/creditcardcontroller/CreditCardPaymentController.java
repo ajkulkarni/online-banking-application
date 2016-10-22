@@ -13,9 +13,10 @@ import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerAccountsDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
+import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExternalTransactionDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.TransferDAO;
 import org.thothlab.devilsvault.customercontrollers.creditcardcontroller.CreditCardDashboardController;
-
+import org.thothlab.devilsvault.db.model.Transaction;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 
 
@@ -43,9 +44,18 @@ public class CreditCardPaymentController {
 		ModelAndView model = new ModelAndView("customerPages/creditPaymentPage");
 		
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		TransferDAO transferDAO = ctx.getBean("transferDAO",TransferDAO.class);
 		
-		TransferDAO transferDAO = ctx.getBean("CustomerAccountsDAO",TransferDAO.class);
 		boolean valid_payment = transferDAO.validateAmount(1, Double.parseDouble(amount));
+		if (valid_payment == false) {
+			model.addObject("paymentResult", "0");
+			return model;
+		}
+		
+		ExternalTransactionDAO extTransactionDAO = ctx.getBean("extTransactionDAO",ExternalTransactionDAO.class);
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(1, Float.parseFloat(amount), 1, "Credit Card payment", "external");
+		extTransactionDAO.save(extTransferTrans, "transaction_pending");
+		
 		if (success) {
 			model.addObject("paymentResult", "1");
 		} else {
