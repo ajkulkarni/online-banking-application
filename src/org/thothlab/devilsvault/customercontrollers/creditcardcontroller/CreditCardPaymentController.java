@@ -54,7 +54,7 @@ public class CreditCardPaymentController {
 		
 		ExternalTransactionDAO extTransactionDAO = ctx.getBean("extTransactionDAO",ExternalTransactionDAO.class);
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(1, Float.parseFloat(amount), 1, "Credit Card payment", "external");
-		extTransactionDAO.save(extTransferTrans, "transaction_pending");
+		success = extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		
 		if (success) {
 			model.addObject("paymentResult", "1");

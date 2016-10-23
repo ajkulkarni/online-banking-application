@@ -3,20 +3,16 @@ import java.util.List;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
-import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestDAOExternal;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
-import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 
 @Controller
 public class CreditCardDashboardController {
