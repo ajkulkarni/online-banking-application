@@ -5,6 +5,13 @@ public class Customer {
 	private String name;
 	private String address;
 	private String city;
+	private String email;
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	private String state;
 	private String country;
 	private int pincode;

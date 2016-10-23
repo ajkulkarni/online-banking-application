@@ -18,7 +18,7 @@ import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 @Controller
 public class CustomerAccountsController {
 	
-	@RequestMapping("/customerSavingsAccount")
+	@RequestMapping("/customer/SavingsAccount")
 	public ModelAndView helloworld(){
 		DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
 		checkingAccount.setAccountNumber(123);
@@ -44,7 +44,7 @@ public class CustomerAccountsController {
 		model.addObject("TransactionLines",TransactionLines);
 		return model;
 	}
-	@RequestMapping("/customerCheckingAccount")
+	@RequestMapping("/customer/CheckingAccount")
 	public ModelAndView checkingAccount(){
 		DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
 		checkingAccount.setAccountNumber(123);

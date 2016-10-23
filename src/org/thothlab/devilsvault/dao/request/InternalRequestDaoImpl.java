@@ -37,14 +37,14 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 	public List<Request> getAllPending() {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM internal_request_pending";
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
 	public List<Request> getAllCompleted() {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM internal_request_completed";
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
@@ -56,14 +56,14 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 	@Override
 	public List<Request> getById(int id, String status) {
 		String query = "SELECT * FROM internal_request_"+status+" WHERE id = "+id;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
 	@Override
 	public List<Request> getByUserId(int requesterid, String status) {
 		String query = "SELECT * FROM internal_request_"+status+" WHERE requesterid = "+requesterid;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	

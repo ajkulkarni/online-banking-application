@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.authorization.AthorizationDaoImpl;
+import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
 import org.thothlab.devilsvault.dao.pendingregistration.PendingRegistrationDaoImpl;
@@ -20,6 +21,7 @@ import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
 import org.thothlab.devilsvault.db.model.Authorization;
+import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.PendingRegistration;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
@@ -171,9 +173,10 @@ public class EmployeeController {
 	@RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
     public ModelAndView viewExtAccountDetails(@RequestParam("extUserID") String extuserID) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-        InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
-        System.out.println(userID);
+        CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
+        Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
         ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+        model.addObject("extUserObj",customer);
 	    ctx.close();
 	    return model;
     }

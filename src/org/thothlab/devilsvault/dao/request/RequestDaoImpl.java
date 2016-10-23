@@ -14,7 +14,6 @@ import org.thothlab.devilsvault.db.model.Request;
 
 public class RequestDaoImpl implements RequestDao{
 	private DataSource dataSource;
-	@SuppressWarnings("unused")
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
@@ -88,7 +87,7 @@ public class RequestDaoImpl implements RequestDao{
 	public void approveRequest(int id, String type) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM "+type+"_request_pending WHERE id ="+id;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		Request request = requestList.get(0);
 		request.setStatus("approved");
 		save(request, type);
@@ -98,7 +97,7 @@ public class RequestDaoImpl implements RequestDao{
 	public void rejectRequest(int id, String type) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM "+type+"_request_pending WHERE id ="+id;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		Request request = requestList.get(0);
 		request.setStatus("rejected");
 		save(request, type);
