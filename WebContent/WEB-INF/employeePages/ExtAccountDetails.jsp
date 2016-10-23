@@ -50,29 +50,32 @@
 		      <div class="modal-body no-padding">
 		        <div class="panel panel-success no-margin">
 				  <div class="panel-heading">
-				    <h3 class="panel-title">Edit User Details</h3>
+				    <h3 class="panel-title">Edit Customer Details</h3>
 				  </div>
 				  <div class="panel-body">
-				    <form class="form-horizontal">
+				    <form class="form-horizontal" action="addrequest" method="POST">
 				    	<fieldset>
 				    		<div class="form-group">
-				    			<label for="requestType" class="col-lg-2 control-label">Email</label>
-			    				<div class="col-lg-10">
-       								<select class="form-control" name="requestType">
-          								<option>Phone Change</option>
-          								<option>Email Change</option>
-          								<option>Address Change</option>
+				    			<label for="requestType" class="col-lg-3 control-label">Request Type</label>
+			    				<div class="col-lg-9">
+       								<select class="form-control" name="requestType" required>
+       									<option value="">Select Type</option>
+          								<option value="phone">Phone Change</option>
+          								<option value="email">Email Change</option>
+          								<option value="address">Address Change</option>
        								</select>
        							</div>
+       							<input type="hidden" name="extUserID" value="${extUserObj.id}">				
+       							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+       							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
+	       							<button style="float:right;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        				<button style="float:right;margin-right:15px;" type="submit" class="btn btn-primary">Submit</button>
+      							</div>
 				    		</div>
 				    	</fieldset>
 				    </form>
 				  </div>
 				</div>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="submit" class="btn btn-primary">Save changes</button>
 		      </div>
 		    </div>
 		  </div>

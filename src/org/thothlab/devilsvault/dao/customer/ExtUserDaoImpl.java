@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.db.model.Customer;
 @Repository ("ExtUserDaoImpl")
 public class ExtUserDaoImpl{
+	@SuppressWarnings("unused")
 	private JdbcTemplate jdbcTemplate;
 	private DataSource dataSource;
 	@Autowired

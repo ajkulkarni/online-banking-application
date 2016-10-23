@@ -22,8 +22,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub 
 		String gRecaptchaResponse = arg0.getParameter("g-recaptcha-response");
-        boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-        if(true){
+        @SuppressWarnings("unused")
+		boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+//        if(true){
         	HttpSession session = arg0.getSession();
             User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -52,9 +53,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     			ctx.close();
     			arg1.sendRedirect("/CSE545-SS/customer/home");
     		}
-        }else{
-        	arg1.sendRedirect("/CSE545-SS/loginfailed");
-        }
+//        }else{
+//        	arg1.sendRedirect("/CSE545-SS/loginfailed");
+//        }
 	}
 
 }

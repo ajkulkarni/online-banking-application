@@ -11,13 +11,13 @@ public class TestPendingStatistics {
 
 	private PendingStatisticsDao pendingStatisticsDao;
 	
-	@Test
-	public void testGetPendingUserRegistrations() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
-		System.out.println(pendingStatisticsDao.getPendingUserRegistrations());
-		ctx.close();
-	}
+//	@Test
+//	public void testGetPendingUserRegistrations() {
+//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+//		pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
+//		System.out.println(pendingStatisticsDao.getPendingUserRegistrations());
+//		ctx.close();
+//	}
 	
 	@Test
 	public void testGetPendingInternalRequests() {

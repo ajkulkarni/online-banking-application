@@ -15,14 +15,12 @@
                     <table id="content-table">
                         <thead>
                             <tr>
-                                <tr>
 								<th class="active">ID</th>
 								<th class="active">Sender</th>
 								<th class="active">Receiver</th>
 								<th class="active">Amount</th>
 								<th class="active">Action</th>
 							</tr>
-                            </tr>
                         </thead>
                         <tbody>
                         	<c:choose>

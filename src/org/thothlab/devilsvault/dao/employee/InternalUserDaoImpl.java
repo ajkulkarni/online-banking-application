@@ -10,6 +10,7 @@ import org.thothlab.devilsvault.dao.employee.InternalUserDao;
 @Repository ("EmployeeDAOForInternal")
 public class InternalUserDaoImpl implements InternalUserDao {
 	private JdbcTemplate jdbcTemplate;
+	@SuppressWarnings("unused")
 	private DataSource dataSource;
 
 	@Autowired

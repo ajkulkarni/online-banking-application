@@ -20,17 +20,15 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Account Status Requests</td>
-								<td></td>
-							</tr>
+							<c:if test="${role == 'ROLE_MANAGER'}">
 							<tr>
 								<td>Internal User Requests</td>
-								<td></td>
+								<td>${internal_count}</td>
 							</tr>
+							</c:if>
 							<tr>
 								<td>External User Requests</td>
-								<td>${request_count}</td>
+								<td>${external_count}</td>
 							</tr>
 							<tr>
 								<td>Transaction Requests</td>
@@ -40,64 +38,46 @@
 					</table>
 				</div>
 			</div>
-			<%-- <div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">Pending Account Registrations</h3>
-				</div>
-				<div class="panel-body no-padding">
-					<table id="content-table">
-						<thead>
-							<tr>
-								<th class="active">Email</th>
-								<th class="active">Name</th>
-								<th class="active">Address</th>
-								<th class="active">Phone Number</th>
-								<th class="active">Date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${user_list}" var="user">
+			<c:if test="${role == 'ROLE_MANAGER'}">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Pending Internal Requests</h3>
+					</div>
+					<div class="panel-body no-padding">
+						<table id="content-table">
+							<thead>
 								<tr>
-									<td>${user.userEmail}</td>
-									<td>${user.firstName} ${user.lastName}</td>
-									<td>${user.street} ${user.house} ${user.city} ${user.state} ${user.country}</td>
-									<td>${user.userPhonenumber}</td>
-									<td>${user.timestamp_created}</td>
-							</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+									<th class="active">ID</th>
+									<th class="active">Type</th>
+									<th class="active">Current Value</th>
+									<th class="active">Requested Value</th>
+									<th class="active">Creation Time</th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:choose>
+                        		<c:when test="${empty internal_list}">
+                        			<tr>
+                                    	<td colspan="5">No Internal Request Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${internal_list}" var="request">
+										<tr>
+											<td>${request.id}</td>
+											<td>${request.request_type}</td>
+											<td>${request.current_value}</td>
+											<td>${request.requested_value}</td>
+											<td>${request.timestamp_created}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div> --%>
-			<%-- <div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">Pending Internal Requests</h3>
-				</div>
-				<div class="panel-body no-padding">
-					<table id="content-table">
-						<thead>
-							<tr>
-								<th class="active">ID</th>
-								<th class="active">Type</th>
-								<th class="active">Current Value</th>
-								<th class="active">Requested Value</th>
-								<th class="active">Creation Time</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${internal_list}" var="request">
-								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.timestamp_created}</td>
-							</tr>
-							</c:forEach>	
-						</tbody>
-					</table>
-				</div>
-			</div> --%>
+			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending External Request</h3>
@@ -115,15 +95,24 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${external_list}" var="request">
-								<tr>
-									<td>${request.id}</td>
-									<td>${request.request_type}</td>
-									<td>${request.current_value}</td>
-									<td>${request.requested_value}</td>
-									<td>${request.timestamp_created}</td>
-							</tr>
-							</c:forEach>	
+							<c:choose>
+                        		<c:when test="${empty external_list}">
+                        			<tr>
+                                    	<td colspan="5">No External Request Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${external_list}" var="request">
+										<tr>
+											<td>${request.id}</td>
+											<td>${request.request_type}</td>
+											<td>${request.current_value}</td>
+											<td>${request.requested_value}</td>
+											<td>${request.timestamp_created}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>	
 						</tbody>
 					</table>
 				
@@ -145,14 +134,23 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${transaction_list}" var="transaction">
-								<tr>
-									<td>${transaction.id}</td>
-									<td>${transaction.payer_id}</td>
-									<td>${transaction.payee_id}</td>
-									<td>${transaction.amount}</td>
-							</tr>
-							</c:forEach>
+							<c:choose>
+                        		<c:when test="${empty transaction_list}">
+                        			<tr>
+                                    	<td colspan="5">No Transaction Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${transaction_list}" var="transaction">
+										<tr>
+											<td>${transaction.id}</td>
+											<td>${transaction.payer_id}</td>
+											<td>${transaction.payee_id}</td>
+											<td>${transaction.amount}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>
 						</tbody>
 					</table>
 				

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository ("CustomerDAOForInternal")
 public class InternalCustomerDAO {
 	private JdbcTemplate jdbcTemplate;
+	@SuppressWarnings("unused")
 	private DataSource dataSource;
 	@Autowired
 	public void setdataSource(DataSource dataSource) {

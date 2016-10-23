@@ -4,6 +4,8 @@ public class Authorization {
 	private int auth_id;
 	private int internal_userID;
 	private int external_userID;
+	private String auth_Type;
+	
 	public int getAuth_id() {
 		return auth_id;
 	}
@@ -28,6 +30,6 @@ public class Authorization {
 	public void setAuth_Type(String auth_Type) {
 		this.auth_Type = auth_Type;
 	}
-	private String auth_Type;
+	
 	
 }

@@ -24,9 +24,9 @@ public class CustomerDAO {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	public Customer getCustomer(int id) {
-		String query = "select * from external_users WHERE id = 101";//+ id;
+		String query = "select * from external_users WHERE id = "+id+"";//+ id;
 		List<Customer> custList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Customer>(Customer.class));
-		return custList.get(0);
+		return custList.size() == 0 ? null :custList.get(0);
 	}
 
 }

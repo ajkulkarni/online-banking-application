@@ -13,6 +13,7 @@ import org.thothlab.devilsvault.db.model.Transaction;
 @Repository ("TransactionSpecificDao")
 public class InternalTransactionDaoImpl extends TransactionDaoImpl {
 
+	@SuppressWarnings("unused")
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 

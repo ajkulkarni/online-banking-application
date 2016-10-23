@@ -16,6 +16,7 @@ import org.thothlab.devilsvault.db.model.Transaction;
 
 @Repository ("CustomerAccountsDAO")
 public class CustomerAccountsDAO{
+	@SuppressWarnings("unused")
 	private JdbcTemplate jdbcTemplate;
 	private DataSource dataSource;
 	@Autowired

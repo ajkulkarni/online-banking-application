@@ -79,7 +79,7 @@ public class TestTransactions {
 	public void testdeleteById()
 	{
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+		//InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
 //		System.out.println(transactionDAO.deleteById(8));
 		ctx.close();
 	}

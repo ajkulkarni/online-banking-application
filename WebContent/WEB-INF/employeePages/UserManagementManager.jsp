@@ -4,17 +4,70 @@
 <%@include file="employeeHeader.jsp" %>
     <div class="content-wrapper">
         <div class="col-md-12" id="page-content">
-            <h3>User Management</h3>
-            <p>${message}</p>
-            <c:if test="${role == 'ROLE_REGULAR'}">
-            <a href="#newRequest" data-toggle="modal" class="btn btn-sm btn-primary">New Request</a>
-            <form action = "externalRegistration" method = "post" id="newregisterButton" style="float:right; display:none">
+            <form action = "externalRegistration" method = "post" style="float:right;">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	       		<button type="submit" class="btn btn-sm btn-primary">New Registration</button>
             </form>
-            </c:if>
-            <br><br>
+            <h3>User Management</h3>
+            <form class="form-margin" action = "searchexternaluser" method = "post">
+            	<div class="col-md-3">
+            		<input class="form-control" type="text" name="customerID" placeholder="Customer ID">
+            	</div>
+	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+	       		<button type="submit" class="btn btn-sm btn-primary">Search Customer</button>
+            </form>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Search Results</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <table id="content-table">
+                        <thead>
+                            <tr>
+                                <th class="active">Customer ID</th>
+                                <th class="active">Customer Email</th>
+                                <th class="active">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	<tr>
+                        		<c:choose>
+	                        		<c:when test="${empty customerList}">
+	                        			<tr>
+	                                    	<td colspan="3">No Results</td>
+	                                	</tr>
+	                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${customerList}" var="customer">
+                                		<tr>
+                                			<td style="text-align:center">${customer.id}</td>
+                                			<td style="text-align:center">${customer.email}</td>
+                                			<td style="text-align:center">
+                                				<form action = "viewaccountdetails" method = "post">
+		                                    		<input type="hidden" name="extUserID" value="${customer.id}">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
+		                                    	</form>
+		                                    	<form action = "viewtransaction" method = "post">
+		                                    		<input type="hidden" name="extUserID" value="${customer.id}">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<button type="submit" class="btn btn-sm btn-primary">View Transactions</button>
+		                                    	</form>
+                                			</td>
+                                		</tr>
+                            		</c:forEach>
+                        		</c:otherwise>
+                        	</c:choose>
+                        		<td></td>
+                        	</tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>Authorization Management</h3>
+            <p>${message}</p>
+            <br>
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Pending Authorization</h3>
@@ -25,6 +78,7 @@
                             <tr>
                                 <th class="active">External User</th>
                                 <th class="active">Authorization Type</th>
+                                <th class="active">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,6 +100,18 @@
 			                                    </c:otherwise>
 		                                    </c:choose>
                                     		<td style="text-align:center">${authorization.auth_Type}</td>
+                                    		<td style="text-align:center">
+                                    			<form action = "processauthorization" method = "post">
+		                                    		<input type="hidden" name="transactionID" value="${authorization.auth_id}">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<select id="requestType" name="requestType" required>
+				       									<option value="">Select Type</option>
+				          								<option value="approve">Approve</option>
+				          								<option value="reject">Reject</option>
+				       								</select>
+		                                    		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+		                                   		</form>
+                                    		</td>
                                 		</tr>
                             		</c:forEach>
                         		</c:otherwise>
@@ -86,28 +152,13 @@
 			                                    </c:otherwise>
 		                                    </c:choose>
 		                                    <td style="text-align:center">${authorization.auth_Type}</td>
-		                                    <c:if test="${authorization.auth_Type == 'transaction'}">
 		                                    <td style="text-align:center">
-		                                    	<form action = "viewtransaction" method = "post">
-		                                    		<input type="hidden" name="extUserID" value="${authorization.external_userID}">
+		                                    	<form action = "revokeauthorization" method = "post">
+		                                    		<input type="hidden" name="authID" value="${authorization.auth_id}">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-		                                    		<button type="submit" class="btn btn-sm btn-primary">View Transactions</button>
+		                                    		<button type="submit" class="btn btn-sm btn-danger">Revoke Authorization</button>
 		                                    	</form>
 		                                    </td>
-		                                    </c:if>
-		                                    <c:if test="${authorization.auth_Type == 'account'}">
-		                                    	<td style="text-align:center">
-			                                    	<form action = "viewaccountdetails" method = "post">
-			                                    		<input type="hidden" name="extUserID" value="${authorization.external_userID}">
-			                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-			                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
-			                                    	</form>
-		                                    	</td>
-		                                    </c:if>
-		                                    <c:if test="${authorization.auth_Type == 'registration'}">
-		                                    <script> EnableRegistration() </script>
-		                                    <td style="text-align:center"></td>
-		                                    </c:if>
 		                                </tr>
                             		</c:forEach>
                         		</c:otherwise>
@@ -117,48 +168,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal" id="newRequest">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-body no-padding">
-		        <div class="panel panel-success no-margin">
-				  <div class="panel-heading">
-				    <h3 class="panel-title">Add Authorization Request</h3>
-				  </div>
-				  <div class="panel-body">
-				    <form class="form-horizontal" action="newauthorizationreq" method="POST">
-				    	<fieldset>
-				    		<div class="form-group">
-				    			<label for="extUserID" class="col-lg-3 control-label">Customer ID</label>
-			    				<div class="col-lg-9">
-		      							<input type="text" class="form-control" id="extUserID" name="extUserID" placeholder="Customer ID" required>
-		      					</div>
-		      					<br>
-		      					<br>
-				    			<label for="requestType" class="col-lg-3 control-label">Request Type</label>
-			    				<div class="col-lg-9">
-       								<select class="form-control" id="requestType" name="requestType" onchange="disableCustomerID()" required>
-       									<option value="">Select Type</option>
-          								<option value="account">Account Details</option>
-          								<option value="transaction">Transaction Access</option>
-          								<option value="registration">New Registration</option>
-       								</select>
-       							</div>
-       							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-       							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
-	       							<button style="float:right;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        				<button style="float:right;margin-right:15px;" type="submit" class="btn btn-primary">Submit</button>
-      							</div>
-				    		</div>
-				    	</fieldset>
-				    </form>
-				  </div>
-				</div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-        
     </div> <!-- .content-wrapper -->
     
 </main> 
