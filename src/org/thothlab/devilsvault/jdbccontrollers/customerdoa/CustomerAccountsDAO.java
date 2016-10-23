@@ -78,17 +78,29 @@ public class CustomerAccountsDAO{
 	}
 	public int getMerchantAccountFromSecret(final String secret) {
 		// TODO Auto-generated method stub
-		String query = "select * from bank_accounts where merchant_secret == secret";
+		String query = "select id from external_users where merchant_secret = ?";
+		String query2 = "select account_number from bank_accounts where external_users_id = ? and account_type = ?";
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		Connection conn = null;
+		int id = 0;
 		int account = 0;
 		try {
 			conn = dataSource.getConnection();
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, secret); // set input parameter
 			rs = pstmt.executeQuery();
-			account = rs.getInt(1);
+			if(rs.next()){
+				id = rs.getInt("id");
+			}
+			System.out.print("id is " + id);
+			pstmt = conn.prepareStatement(query2);
+			pstmt.setInt(1, id);
+			pstmt.setString(2,  "CHECKINGS");
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				account = rs.getInt("account_number");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} // create a statement

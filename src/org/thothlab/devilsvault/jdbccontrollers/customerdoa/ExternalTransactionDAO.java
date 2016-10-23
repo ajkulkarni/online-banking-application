@@ -29,6 +29,9 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 
 	public Transaction createExternalTransaction(int payerAccountNumber, float amount, int payeeAccountNumber,
 												 String description, String transactionType) {
+		
+		System.out.println("in createExternalTransaciton");
+		
 		Transaction extTransfer = new Transaction();
 
 		extTransfer.setPayer_id(payerAccountNumber);
@@ -42,6 +45,9 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 		 * eptpinputAmount
 		 */
 
+		
+		
+		
 		extTransfer.setHashvalue("");
 		extTransfer.setStatus("pending");
 		extTransfer.setApprover("");
@@ -75,6 +81,7 @@ public class ExternalTransactionDAO extends TransactionDaoImpl {
 			ps.setBoolean(9, transaction.isCritical());
 			// ps.setDate(10, transaction.getTimestamp_created());
 			// ps.setDate(11, transaction.getTimestamp_updated());
+			System.out.print(ps);
 			int out = ps.executeUpdate();
 			if (out != 0) {
 				return true;
