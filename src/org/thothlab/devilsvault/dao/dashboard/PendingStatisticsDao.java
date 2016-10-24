@@ -26,17 +26,16 @@ public class PendingStatisticsDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);	
 	}
 	
-	public List<Request> getPendingInternalRequests() {
-		String query = "SELECT * FROM internal_request_pending";
+	public List<Request> getPendingInternalRequests(String role) {
+		String query = "SELECT * FROM internal_request_pending where role='" + role + "'" ;
 		List<Request> internal_list = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
-		//int  pendingInternalRequests = jdbcTemplate.queryForObject(query, Integer.class);
+
 		return internal_list;
 	}
 	
 	public List<Request> getPendingExternalRequests() {
 		String query = "SELECT * FROM external_request_pending";
 		List<Request> external_list = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
-		//int  pendingExternalRequests = jdbcTemplate.queryForObject(query, Integer.class);
 		return external_list;
 	}
 	
@@ -47,9 +46,9 @@ public class PendingStatisticsDao {
 		return transaction_list;
 	}
 	
-	public HashMap<String, Integer> getPendingStatistics() {
+	public HashMap<String, Integer> getPendingStatistics(String role) {
 		HashMap<String,Integer> pendingStatisticsMap = new HashMap<String,Integer>();
-		pendingStatisticsMap.put("internal", getPendingInternalRequests().size());
+		pendingStatisticsMap.put("internal", getPendingInternalRequests(role).size());
 		pendingStatisticsMap.put("external", getPendingExternalRequests().size());
 		pendingStatisticsMap.put("transaction", getPendingTransactions().size());
 		return pendingStatisticsMap;

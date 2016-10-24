@@ -28,7 +28,7 @@ public class CustomerAccountsController {
 		creditAccount.setAccountNumber(102);
 		Customer customer = new Customer();
 		customer.setId(101);
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
 		Double SavingsAccBal = CustomerDAO.getSavingsBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
@@ -54,7 +54,7 @@ public class CustomerAccountsController {
 		creditAccount.setAccountNumber(102);
 		Customer customer = new Customer();
 		customer.setId(101);
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
 		Double CheckingAcctBal = CustomerDAO.getCheckingBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);

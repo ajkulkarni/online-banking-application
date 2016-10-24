@@ -19,11 +19,13 @@ import org.thothlab.devilsvault.dao.authorization.AthorizationDaoImpl;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
+import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
 import org.thothlab.devilsvault.db.model.Authorization;
 import org.thothlab.devilsvault.db.model.Customer;
+import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
 
@@ -73,8 +75,8 @@ public class EmployeeController {
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 			PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
 			HashMap<String,Integer> stats = new HashMap<String,Integer>();
-			stats = pendingStatisticsDao.getPendingStatistics();
-			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests();
+			stats = pendingStatisticsDao.getPendingStatistics("ROLE_REGULAR");
+			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests("ROLE_REGULAR");
 			if(internal_list.size() > 5)
 				internal_list = internal_list.subList(internal_list.size()-5, internal_list.size());
 			List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
@@ -97,8 +99,8 @@ public class EmployeeController {
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 			PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
 			HashMap<String,Integer> stats = new HashMap<String,Integer>();
-			stats = pendingStatisticsDao.getPendingStatistics();
-			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests();
+			stats = pendingStatisticsDao.getPendingStatistics("ROLE_REGULAR' AND role='ROLE_MANAGER");
+			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests("ROLE_REGULAR' AND role='ROLE_MANAGER");
 			if(internal_list.size() > 5)
 				internal_list = internal_list.subList(internal_list.size()-5, internal_list.size());
 			List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
@@ -163,9 +165,13 @@ public class EmployeeController {
         InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
         List<Integer> extuserIDs = new ArrayList<Integer>();
         extuserIDs.add(Integer.parseInt(extuserID));
-        List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
-        InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
-		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+        List<Integer> accountNos = new ArrayList<Integer>();
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+		accountNos = internalCustomerDao.getAccNos(extuserIDs);
+		if(accountNos.size() > 0){
+			transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+		}
         ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
         model.addObject("transactionList",transactionList);
         model.addObject("extUserID",extuserID);
@@ -218,6 +224,48 @@ public class EmployeeController {
 	    return model;
     }
 	
+	@RequestMapping(value="/employee/addrequest", method = RequestMethod.POST)
+    public ModelAndView modifyDetails(@RequestParam("userID") String userID ,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("userType") String userType,@RequestParam("newValue") String newValue) {
+		ModelAndView model = null; new ModelAndView("employeePages/ExtAccountDetails");
+		if(userType.equalsIgnoreCase("external"))
+		{
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		CustomerDAO customerDAO = ctx.getBean("customerDAO", CustomerDAO.class);
+		InternalRequestDaoImpl internalrequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+		Customer customer = customerDAO.getCustomer(Integer.parseInt(userID));
+		setGlobals(request);
+		Integer internalUserID= this.userID;
+		internalrequestDao.raiseExternalRequest(customer, requestType, newValue,internalUserID);
+	    ctx.close();
+	    model = new ModelAndView("employeePages/ExtAccountDetails");
+        model.addObject("extUserObj",customer);
+		}
+		else if(userType.equalsIgnoreCase("internal"))
+		{
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+			InternalUserDaoImpl internalDao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
+			InternalRequestDaoImpl internalrequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+			InternalUser internaluser = internalDao.getUserById(Integer.parseInt(userID));
+			setGlobals(request);
+			Integer internalUserID= this.userID;
+			internalrequestDao.raiseInternalPersonalRequest(internaluser, requestType, newValue,internalUserID, role);
+		    ctx.close();
+		    model = new ModelAndView("employeePages/employeeUserDetails");
+	        model.addObject("user",internaluser);
+		}
+        return model;
+
+    }
+	
+	@RequestMapping(value="/employee/deletecustomer", method = RequestMethod.POST)
+    public String deleteCustomer(@RequestParam("extUserID") String extuserID) {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalCustomerDAO internalCustomer = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+		internalCustomer.deleteCustomer(extuserID);
+	    ctx.close();
+	    return "redirect:/employee/home";
+    }
+	
 	@RequestMapping(value="/employee/newauthorizationreq", method = RequestMethod.POST)
 	 public String newAuthorizationRequest(HttpServletRequest request, @RequestParam(value = "extUserID", defaultValue="0") String extuserID,@RequestParam("requestType") String requestType) throws UnsupportedEncodingException {
         setGlobals(request);
@@ -261,9 +309,14 @@ public class EmployeeController {
 
 	
 	@RequestMapping("/employee/userdetails")
-	public ModelAndView UserDetailsContoller(){
+	public ModelAndView UserDetailsContoller(HttpServletRequest request){
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalUserDaoImpl internalDao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
+		setGlobals(request);
+		InternalUser internaluser = internalDao.getUserById(userID);
 		ModelAndView model = new ModelAndView("employeePages/employeeUserDetails");
-		model.addObject("request_list","test message");
+		model.addObject("user",internaluser);
+		ctx.close();
 		return model;
 	}
 	
@@ -334,9 +387,14 @@ public class EmployeeController {
         ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
         InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
         List<Request> externalRequestList = externalRequestDao.getAllPending();
+        List<Request> internalRequestList = new ArrayList<Request>();
         if(externalRequestList.size() > 10)
             externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
-        List<Request> internalRequestList = internalRequestDao.getAllPending();
+        if(role.equalsIgnoreCase("ROLE_MANAGER")){
+        	internalRequestList = internalRequestDao.getAllPending("ROLE_REGULAR");
+        }else{
+        	internalRequestList = internalRequestDao.getAllPending("ROLE_REGULAR' AND role='ROLE_MANAGER");
+        }
         if(internalRequestList.size() > 10)
             internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
         ModelAndView model = new ModelAndView("employeePages/PendingRequest");

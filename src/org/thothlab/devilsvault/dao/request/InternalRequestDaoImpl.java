@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.request;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.db.model.Customer;
+import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
 
 @Repository ("internalRequestDao")
@@ -34,9 +37,9 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 	    return rowsAffected;
 	}
 	
-	public List<Request> getAllPending() {
+	public List<Request> getAllPending(String role) {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM internal_request_pending";
+		String query = "SELECT * FROM internal_request_pending where role='" + role + "'";
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
@@ -77,6 +80,65 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 	public void rejectRequest(int id, String type) {
 		// TODO Auto-generated method stub
 		super.rejectRequest(id, type);
+	}
+	
+	public void raiseExternalRequest(Customer customer, String requestType, String newValue, Integer internalUserID)
+	{
+		Request request = new Request();
+		request.setRequesterid(internalUserID);
+		request.setRequest_type(requestType);
+		if(requestType.equalsIgnoreCase("email"))
+		{
+			request.setCurrent_value(customer.getEmail());
+		}
+		else if(requestType.equalsIgnoreCase("phone"))
+		{
+			request.setCurrent_value(Integer.toString(customer.getPhone()));
+		}
+		else
+		{
+			request.setCurrent_value(customer.getAddress());
+		}
+		request.setRequested_value(newValue);
+		request.setStatus("Pending");
+		request.setApprover(Integer.toString(customer.getId()));
+		request.setDescription("Request to change " + requestType);
+		Date utilDate = new Date();
+		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		request.setTimestamp_created(sqlDate);
+		request.setTimestamp_updated(sqlDate);
+		request.setRole("ROLE_CUSTOMER");
+		super.saveRaisedRequest(request, "external_request_pending");
+		
+	}
+	public void raiseInternalPersonalRequest(InternalUser internaluser, String requestType, String newValue, Integer internalUserID, String role)
+	{
+		Request request = new Request();
+		request.setRequesterid(internalUserID);
+		request.setRequest_type(requestType);
+		if(requestType.equalsIgnoreCase("email"))
+		{
+			request.setCurrent_value(internaluser.getEmail());
+		}
+		else if(requestType.equalsIgnoreCase("phone"))
+		{
+			request.setCurrent_value(Integer.toString(internaluser.getPhone()));
+		}
+		else
+		{
+			request.setCurrent_value(internaluser.getAddress());
+		}
+		request.setRequested_value(newValue);
+		request.setStatus("Pending");
+		request.setApprover(Integer.toString(0));
+		request.setDescription("Request to change " + requestType);
+		Date utilDate = new Date();
+		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		request.setTimestamp_created(sqlDate);
+		request.setTimestamp_updated(sqlDate);
+		request.setRole(role);
+		super.saveRaisedRequest(request, "internal_request_pending");
+		
 	}
 
 }

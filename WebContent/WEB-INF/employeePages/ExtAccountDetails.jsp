@@ -57,7 +57,7 @@
 				    	<fieldset>
 				    		<div class="form-group">
 				    			<label for="requestType" class="col-lg-3 control-label">Request Type</label>
-			    				<div class="col-lg-9">
+			    				<div class="col-lg-9 form-margin">
        								<select class="form-control" name="requestType" required>
        									<option value="">Select Type</option>
           								<option value="phone">Phone Change</option>
@@ -65,7 +65,12 @@
           								<option value="address">Address Change</option>
        								</select>
        							</div>
-       							<input type="hidden" name="extUserID" value="${extUserObj.id}">				
+       							<label for="newValue" class="col-lg-3 control-label">Enter</label>
+      							<div class="col-lg-9">
+        							<input type="text" class="form-control" name="newValue" placeholder="New Detail" required>
+      							</div>
+       							<input type="hidden" name="userID" value="${extUserObj.id}">	
+       							<input type="hidden" name="userType" value="external">				
        							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
        							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
 	       							<button style="float:right;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>

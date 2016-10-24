@@ -1,15 +1,18 @@
 package org.thothlab.devilsvault.dao.customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.db.model.Customer;
 
 @Repository ("CustomerDAOForInternal")
-public class InternalCustomerDAO {
+public class InternalCustomerDAO extends CustomerDAO{
 	private JdbcTemplate jdbcTemplate;
 	@SuppressWarnings("unused")
 	private DataSource dataSource;
@@ -43,6 +46,38 @@ public class InternalCustomerDAO {
         String query = "SELECT id from external_users where email= '" + email + "'"; 
         Integer id = jdbcTemplate.queryForList(query, Integer.class).get(0);
         return id;
+    }
+    
+    public void deleteInTable(String table,String where, String id)
+    {
+        String query = "DELETE FROM " + table + " WHERE " + where + " ='" + id + "'";
+        jdbcTemplate.update(query);
+    }
+    public void deleteCustomer(String extUserID)
+    {
+    	
+		List<Integer> extIdList = new ArrayList<Integer>();
+		extIdList.add(Integer.parseInt(extUserID));
+		List<Integer> accNos = getAccNos(extIdList);
+		Customer customer = getCustomer(Integer.parseInt(extUserID));
+		deleteInTable("authorization_pending", "external_userID", extUserID);
+		deleteInTable("authorization_completed", "external_userID", extUserID);
+		deleteInTable("external_log", "userid", extUserID);
+		deleteInTable("transaction_pending", "payer_id", extUserID);
+		deleteInTable("transaction_pending", "payee_id", extUserID);
+		deleteInTable("otp_table", "userEmail", customer.getEmail());
+		deleteInTable("user_attempts", "username", customer.getEmail());
+		deleteInTable("users", "username", customer.getEmail());
+		deleteInTable("external_users", "id", extUserID.toString());
+		if(accNos != null)
+		{
+			for(int i=0; i< accNos.size();i ++)
+			{
+				deleteInTable("credit_card_account_details","account_number" , accNos.get(i).toString());
+			}
+		}
+		deleteInTable("bank_accounts", "external_users_id", extUserID.toString());
+		
     }
 
 }

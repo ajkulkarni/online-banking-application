@@ -23,7 +23,7 @@ public class TestPendingStatistics {
 	public void testGetPendingInternalRequests() {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
-		System.out.println(pendingStatisticsDao.getPendingInternalRequests());
+		//System.out.println(pendingStatisticsDao.getPendingInternalRequests());
 		ctx.close();
 	}
 	
@@ -48,7 +48,7 @@ public class TestPendingStatistics {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
 		HashMap<String,Integer> items = new HashMap<String,Integer>();
-		items = pendingStatisticsDao.getPendingStatistics();
+		//items = pendingStatisticsDao.getPendingStatistics();
 		for (Map.Entry<String, Integer> entry : items.entrySet()) {
 			System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
 		}

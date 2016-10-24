@@ -36,7 +36,7 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	
 	public List<Request> getAllPending() {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM external_request_pending";
+		String query = "SELECT * FROM external_request_pending where approver='0'";
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
