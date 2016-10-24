@@ -12,8 +12,10 @@
   				<strong>${message}</strong>
 			</div>
 			</c:if>
+			<c:if test="${role != 'ROLE_ADMIN' }">
 			<a href="#modifyaccount" class="btn btn-primary btn-sm" style="margin-bottom:20px;" data-toggle="modal">Modify Account</a>
 			<a href="#changepassword" class="btn btn-primary btn-sm" style="margin-left: 15px;margin-bottom:20px;" data-toggle="modal">Change Password</a>
+			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">User Details</h3>
@@ -49,6 +51,7 @@
 					</table>
 				</div>					
 			</div>
+			<c:if test="${role != 'ROLE_ADMIN' }">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Your Requests History</h3>
@@ -94,6 +97,7 @@
 					</table>
 				</div>
 			</div>
+			</c:if>
 		</div>
 		<div class="modal" id="modifyaccount">
 		  <div class="modal-dialog">

@@ -20,6 +20,7 @@ import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
 import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
+import org.thothlab.devilsvault.dao.log.LogDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
@@ -27,6 +28,7 @@ import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl
 import org.thothlab.devilsvault.db.model.Authorization;
 import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
+import org.thothlab.devilsvault.db.model.DatabaseLog;
 import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
@@ -97,7 +99,7 @@ public class EmployeeController {
 			ctx.close();
 			return model;
 		}	
-		else{
+		else if(role.equalsIgnoreCase("ROLE_ADMIN")){
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 			PendingStatisticsDao pendingStatisticsDao = ctx.getBean("pendingStatistics", PendingStatisticsDao.class);
 			HashMap<String,Integer> stats = new HashMap<String,Integer>();
@@ -105,18 +107,13 @@ public class EmployeeController {
 			List<Request> internal_list = pendingStatisticsDao.getPendingInternalRequests("ROLE_REGULAR' AND role='ROLE_MANAGER");
 			if(internal_list.size() > 5)
 				internal_list = internal_list.subList(internal_list.size()-5, internal_list.size());
-			List<Request> external_list = pendingStatisticsDao.getPendingExternalRequests();
-			if(external_list.size() > 5)
-				external_list = external_list.subList(external_list.size()-5, external_list.size());
-			List<Transaction> transaction_list = pendingStatisticsDao.getPendingTransactions();
-			if(transaction_list.size() > 5)
-				transaction_list = transaction_list.subList(transaction_list.size()-5, transaction_list.size());
 			ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
-			model.addObject("stats",stats);
+			model.addObject("internal_count",stats.get("internal"));
 			model.addObject("internal_list",internal_list);
-			model.addObject("external_list",external_list);
-			model.addObject("transaction_list",transaction_list);
 			ctx.close();
+			return model;
+		}else{
+			ModelAndView model = new ModelAndView("employeePages/employeeDashboard");
 			return model;
 		}
 	}
@@ -145,14 +142,7 @@ public class EmployeeController {
 	        model.addObject("completeList",completeList);
 	        return model;
 		}else{
-			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-	        AthorizationDaoImpl authorizationDAO = ctx.getBean("AuthorizationDao", AthorizationDaoImpl.class);
-	        List<Authorization> pendingList = authorizationDAO.getAllPendingAuthorization(userID);
-	        ctx.close();
-	        List<Authorization> completeList = authorizationDAO.getAllCompleteAuthorization(userID);
-	        ModelAndView model = new ModelAndView("employeePages/UserManagementRegular");
-	        model.addObject("pendingList",pendingList);
-	        model.addObject("completeList",completeList);
+	        ModelAndView model = new ModelAndView("employeePages/UserManagementAdmin");
 	        return model;
 		}
     }
@@ -605,4 +595,33 @@ public class EmployeeController {
 		ctx.close();
 		return model;
 	}
+	
+	@RequestMapping(value="/employee/systemlogs")
+	   public ModelAndView getLogs() {
+	        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	        LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+	        List<DatabaseLog> databaseLogInternal = logDao.getLogs("internal");
+	        List<DatabaseLog> databaseLogExternal = logDao.getLogs("external");
+	        ModelAndView model = new ModelAndView("employeePages/SystemLogs");
+	        model.addObject("internal_log",databaseLogInternal);
+	        model.addObject("external_log",databaseLogExternal);
+	        ctx.close();
+	        return model;
+	   }
+	
+	@RequestMapping(value="/employee/searchlogs", method = RequestMethod.POST)
+	   public ModelAndView searchLogs(RedirectAttributes redir, @RequestParam("userid") int userid, @RequestParam("type") String type) {
+	        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	        LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+	        List<DatabaseLog> databaseLog = logDao.getByUserId(userid, type);
+	        ModelAndView model = new ModelAndView();
+	        model.setViewName("redirect:/employee/systemlogs");
+	        if(type.equals("internal")){
+	        	redir.addFlashAttribute("internal_log",databaseLog);
+	        }else{
+	        	redir.addFlashAttribute("external_log",databaseLog);
+	        }
+	        ctx.close();
+	        return model;
+	   }
 }
