@@ -51,7 +51,6 @@
 									<th class="active">Type</th>
 									<th class="active">Current Value</th>
 									<th class="active">Requested Value</th>
-									<th class="active">Creation Time</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -68,7 +67,6 @@
 											<td>${request.request_type}</td>
 											<td>${request.current_value}</td>
 											<td>${request.requested_value}</td>
-											<td>${request.timestamp_created}</td>
 										</tr>
 									</c:forEach>
                         		</c:otherwise>
@@ -91,7 +89,6 @@
 								<th class="active">Type</th>
 								<th class="active">Current Value</th>
 								<th class="active">Requested Value</th>
-								<th class="active">Creation Time</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -108,7 +105,6 @@
 											<td>${request.request_type}</td>
 											<td>${request.current_value}</td>
 											<td>${request.requested_value}</td>
-											<td>${request.timestamp_created}</td>
 										</tr>
 									</c:forEach>
                         		</c:otherwise>
@@ -137,7 +133,7 @@
 							<c:choose>
                         		<c:when test="${empty transaction_list}">
                         			<tr>
-                                    	<td colspan="5">No Transaction Pending</td>
+                                    	<td colspan="4">No Transaction Pending</td>
                                 	</tr>
                         		</c:when>
                         		<c:otherwise>

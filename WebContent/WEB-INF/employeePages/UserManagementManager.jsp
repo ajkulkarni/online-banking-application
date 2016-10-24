@@ -33,30 +33,28 @@
                         <tbody>
                         	<tr>
                         		<c:choose>
-	                        		<c:when test="${empty customerList}">
+	                        		<c:when test="${empty customerObj}">
 	                        			<tr>
 	                                    	<td colspan="3">No Results</td>
 	                                	</tr>
 	                        		</c:when>
                         		<c:otherwise>
-                        			<c:forEach items="${customerList}" var="customer">
                                 		<tr>
-                                			<td style="text-align:center">${customer.id}</td>
-                                			<td style="text-align:center">${customer.email}</td>
+                                			<td style="text-align:center">${customerObj.id}</td>
+                                			<td style="text-align:center">${customerObj.email}</td>
                                 			<td style="text-align:center">
-                                				<form action = "viewaccountdetails" method = "post">
-		                                    		<input type="hidden" name="extUserID" value="${customer.id}">
+                                				<form action = "viewaccountdetails" method = "post" style="display:inline">
+		                                    		<input type="hidden" name="extUserID" value="${customerObj.id}">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
 		                                    	</form>
-		                                    	<form action = "viewtransaction" method = "post">
-		                                    		<input type="hidden" name="extUserID" value="${customer.id}">
+		                                    	<form action = "viewtransaction" method = "post" style="display:inline">
+		                                    		<input type="hidden" name="extUserID" value="${customerObj.id}">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                    		<button type="submit" class="btn btn-sm btn-primary">View Transactions</button>
 		                                    	</form>
                                 			</td>
                                 		</tr>
-                            		</c:forEach>
                         		</c:otherwise>
                         	</c:choose>
                         		<td></td>

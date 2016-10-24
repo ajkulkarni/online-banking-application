@@ -40,5 +40,12 @@ public class InternalUserDaoImpl implements InternalUserDao {
         }
         return user;
     }
+	
+	public String getEmailID(Integer userID)
+	{
+		 String query = "SELECT email from internal_user where id= '" + userID + "'"; 
+	        String email = jdbcTemplate.queryForList(query, String.class).get(0);
+	        return email;
+	}
 
 }

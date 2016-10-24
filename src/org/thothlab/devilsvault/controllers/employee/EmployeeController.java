@@ -1,8 +1,6 @@
 package org.thothlab.devilsvault.controllers.employee;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +23,7 @@ import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
+import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
 import org.thothlab.devilsvault.db.model.Authorization;
 import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
@@ -123,7 +122,7 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value="/employee/management", method=RequestMethod.GET)
-    public ModelAndView ManagementContoller(HttpServletRequest request,@RequestParam(required=false) String message) throws UnsupportedEncodingException{
+    public ModelAndView ManagementContoller(HttpServletRequest request) throws UnsupportedEncodingException{
 		setGlobals(request);
 		if(role.equalsIgnoreCase("ROLE_REGULAR")){
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -134,8 +133,6 @@ public class EmployeeController {
             ModelAndView model = new ModelAndView("employeePages/UserManagementRegular");
             model.addObject("pendingList",pendingList);
             model.addObject("completeList",completeList);
-            if(message != null) message = URLDecoder.decode(message,"UTF-8");
-            model.addObject("message",message);
             return model;
 		}else if (role.equalsIgnoreCase("ROLE_MANAGER")){
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -145,7 +142,6 @@ public class EmployeeController {
 	        List<Authorization> completeList = authorizationDAO.getAllCompleteAuthorizationManager();
 	        ModelAndView model = new ModelAndView("employeePages/UserManagementManager");
 	        model.addObject("pendingList",pendingList);
-	        model.addObject("message",message);
 	        model.addObject("completeList",completeList);
 	        return model;
 		}else{
@@ -156,12 +152,25 @@ public class EmployeeController {
 	        List<Authorization> completeList = authorizationDAO.getAllCompleteAuthorization(userID);
 	        ModelAndView model = new ModelAndView("employeePages/UserManagementRegular");
 	        model.addObject("pendingList",pendingList);
-	        model.addObject("message",message);
 	        model.addObject("completeList",completeList);
 	        return model;
 		}
     }
 	
+	@RequestMapping(value="/employee/searchexternaluser", method = RequestMethod.POST)
+    public ModelAndView SearchExternalUser(RedirectAttributes redir, @RequestParam("customerID") String id) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
+        Customer customer = new Customer(); 
+        customer = customerdao.getCustomer(Integer.parseInt(id));
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/employee/management");
+        redir.addFlashAttribute("customerObj",customer);
+        ctx.close();
+        return model;
+    }
+
+		
 	@RequestMapping(value="/employee/viewtransaction", method = RequestMethod.POST)
     public ModelAndView viewTransactions(@RequestParam("extUserID") String extuserID) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -277,35 +286,39 @@ public class EmployeeController {
     }
 	
 	@RequestMapping(value="/employee/newauthorizationreq", method = RequestMethod.POST)
-	 public String newAuthorizationRequest(HttpServletRequest request, @RequestParam(value = "extUserID", defaultValue="0") String extuserID,@RequestParam("requestType") String requestType) throws UnsupportedEncodingException {
+	 public ModelAndView newAuthorizationRequest(HttpServletRequest request, RedirectAttributes redir, @RequestParam(value = "extUserID", defaultValue="0") String extuserID,@RequestParam("requestType") String requestType) throws UnsupportedEncodingException {
         setGlobals(request);
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
        CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
-       
+       ModelAndView model = new ModelAndView();
+       String msg = "";
        AthorizationDaoImpl authorizationDao = ctx.getBean("AuthorizationDao",AthorizationDaoImpl.class);
        ctx.close();
        switch(requestType) {
        case "registration": 
            if(authorizationDao.isExist(userID,Integer.parseInt(extuserID),requestType))
-               return "redirect:/employee/management?message="+URLEncoder.encode("Request is already exist","UTF-8");
+               msg = "Request already exist !!";
            else {
                if(!authorizationDao.save(userID,Integer.parseInt(extuserID),requestType))
-                   return "redirect:/employee/management?message="+URLEncoder.encode("Request does not processed successfully","UTF-8");
-               else return "redirect:/employee/management?message="+URLEncoder.encode("Request inserted successfully","UTF-8");
+            	   msg = "Request insert failed !!";
+               else msg = "Request added successfully !!";
            }
        default:
            Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
-           if(customer == null)  return "redirect:/employee/management?message="+ URLEncoder.encode("Customer Id is invalid", "UTF-8"); 
+           if(customer == null)  msg = "Customer Id is invalid !!"; 
            else {
                if(authorizationDao.isExist(userID,Integer.parseInt(extuserID),requestType))
-                   return "redirect:/employee/management?message="+URLEncoder.encode("Request is already exist","UTF-8");
+                   msg = "Request already exist !!";
                else {
                    if(!authorizationDao.save(userID,Integer.parseInt(extuserID),requestType))
-                       return "redirect:/employee/management?message="+URLEncoder.encode("Request does not processed successfully","UTF-8");
-                   else return "redirect:/employee/management?message="+URLEncoder.encode("Request inserted successfully","UTF-8");
+                       msg = "Request insert failed !!";
+                   else msg = "Request inserted successfully !!";
                }
            }
-       } 
+       }
+       model.setViewName("redirect:/employee/management");
+       redir.addFlashAttribute("message",msg);
+       return model;
 	}
 	
 	@RequestMapping(value="/employee/processauthorization", method = RequestMethod.POST)
@@ -359,6 +372,21 @@ public class EmployeeController {
 		ctx.close();
 		return model;
 	}
+	
+	@RequestMapping(value="/employee/changepassword", method = RequestMethod.POST)
+    public ModelAndView changePasswordInternal(RedirectAttributes redir, @RequestParam("oldpassword") String oldPassword, HttpServletRequest request, @RequestParam("newpassword") String newPassword,@RequestParam("confirmpassword") String confirmPassword) {
+		ModelAndView model = new ModelAndView();
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		setGlobals(request);
+		UserAuthenticationDaoImpl userauthenticationDao = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
+		String message = userauthenticationDao.changePassword(oldPassword, newPassword, confirmPassword, userID);
+		ctx.close();
+		model.setViewName("redirect:/employee/userdetails");
+        redir.addFlashAttribute("message",message);
+        return model;
+		
+
+    }
 	
 	@RequestMapping("/employee/transaction")
 	public ModelAndView TransactionContoller(){

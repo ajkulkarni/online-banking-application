@@ -6,6 +6,12 @@
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
+			<c:if test="${not empty message}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${message}</strong>
+			</div>
+			</c:if>
 			<a href="#modifyaccount" class="btn btn-primary btn-sm" style="margin-bottom:20px;" data-toggle="modal">Modify Account</a>
 			<a href="#changepassword" class="btn btn-primary btn-sm" style="margin-left: 15px;margin-bottom:20px;" data-toggle="modal">Change Password</a>
 			<div class="panel panel-primary">
@@ -150,9 +156,9 @@
       							<div class="col-lg-9 form-margin">
         							<input type="password" class="form-control" name="newpassword" placeholder="New Password" required>
       							</div>
-      							<label for="confirm" class="col-lg-3 control-label">Confirm</label>
+      							<label for="confirmpassword" class="col-lg-3 control-label">Confirm</label>
       							<div class="col-lg-9 form-margin">
-        							<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" required>
+        							<input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" required>
       							</div>
        							<input type="hidden" name="userID" value="${userID}">					
        							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
