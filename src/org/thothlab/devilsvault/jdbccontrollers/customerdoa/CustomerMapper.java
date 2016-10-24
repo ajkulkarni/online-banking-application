@@ -14,6 +14,7 @@ public class CustomerMapper implements RowMapper<Customer>  {
 		Customer cust = new Customer();
 		cust.setID(rs.getInt("ID"));
 		cust.setName(rs.getString("name"));
+		cust.setMerchant_secret(rs.getString("merchant_secret"));
 		
 		return cust;
 	}

@@ -9,8 +9,11 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
+import org.thothlab.devilsvault.CustomerModel.MerchantPayment;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
 @Repository ("CustomerAccountsDAO")
@@ -62,6 +65,50 @@ public class CustomerAccountsDAO{
 			}
 		}
 		return TransactionLines;
+
      }     
+	
+	public BankAccount getAccount(int accountNumber) {
+		String query = "SELECT * FROM bank_accounts where account_number = " + accountNumber;
+		List<BankAccount> accList = jdbcTemplate.query(query, new BankAccountMapper());
+		return accList.get(0);
+	
+     }
+	public boolean CheckPayment(MerchantPayment merchantpayment) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	public int getMerchantAccountFromSecret(final String secret) {
+		// TODO Auto-generated method stub
+		String query = "select id from external_users where merchant_secret = ?";
+		String query2 = "select account_number from bank_accounts where external_users_id = ? and account_type = ?";
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		int id = 0;
+		int account = 0;
+		try {
+			conn = dataSource.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, secret); // set input parameter
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				id = rs.getInt("id");
+			}
+			System.out.print("id is " + id);
+			pstmt = conn.prepareStatement(query2);
+			pstmt.setInt(1, id);
+			pstmt.setString(2,  "CHECKINGS");
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				account = rs.getInt("account_number");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // create a statement
+	   
+		return account;
+	}     
+
 }
 

@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
@@ -129,6 +130,22 @@ public class CreditCardDOA extends CustomerDOAImpl {
 		//return null;
 	}
 	
+	
+	public CreditAccount getAccount(String creditCardNumber, String cvv, String month, String year) {
+		String query = "SELECT * FROM credit_card_account_details where credit_card_no = " + creditCardNumber;
+		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
+		CreditAccount creditaccount = creditcard_details.get(0);
+		
+		
+		CustomerAccountsDAO customerAccDao = CustomerDAOHelper.customerAccountsDAO();
+		BankAccount bankAcc = customerAccDao.getAccount(creditaccount.getAccountNumber());
+		
+		creditaccount.setAccountNumber(bankAcc.getAccountNumber());
+		creditaccount.setOwner(bankAcc.getOwner());
+		creditaccount.setAccountType(bankAcc.getAccountType());
+		
+		return creditaccount;
+	}
 	
 	
 	

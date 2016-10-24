@@ -3,27 +3,24 @@ import java.util.List;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
-import org.thothlab.devilsvault.jdbccontrollers.RequestDOA.RequestDAOExternal;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardDOA;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAO;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
-import org.thothlab.devilsvault.jdbccontrollers.model.Request;
 
 @Controller
 public class CreditCardDashboardController {
+	public ModelAndView model_ch = new ModelAndView("customerPages/creditHomePage");
 
 	@RequestMapping("/credithome")
 	public ModelAndView showCreditHome(){
-		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
+		
 	
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
@@ -31,21 +28,21 @@ public class CreditCardDashboardController {
 		
 		CreditAccount account = doa.getCreditAccount(cust);
 		
-		model.addObject("creditAccount",account);
+		model_ch.addObject("creditAccount",account);
 		
 		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
 		List<TransactionModel> transactions = transdao.getAllTransactions(account);
-		model.addObject("transations", transactions );
+		model_ch.addObject("transations", transactions );
 		
 		
 		System.out.println("Here");
 		
-		return model;
+		return model_ch;
 	}
 
 
 	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
-	public ModelAndView getSearchResultViaAjax(@RequestParam("monthPicker") String interval) {
+	public ModelAndView getTransactionsBasedOnInterval(@RequestParam("monthPicker") String interval) {
 
 	
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");

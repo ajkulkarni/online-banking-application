@@ -18,5 +18,14 @@ public class CustomerDAOHelper {
 		
 		return getApplicationContext().getBean("customerDAO", CustomerDAO.class);
 	}
+	
+	public static CustomerAccountsDAO customerAccountsDAO () {
+		
+		return getApplicationContext().getBean("CustomerAccountsDAO", CustomerAccountsDAO.class);
+	}
+
+	public static TransferDAO transferDAO () {
+		return getApplicationContext().getBean("transferDAO", TransferDAO.class);
+	}
 
 }

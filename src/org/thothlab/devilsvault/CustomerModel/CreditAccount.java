@@ -1,5 +1,7 @@
 package org.thothlab.devilsvault.CustomerModel;
 
+import java.util.Date;
+
 
 
 public class CreditAccount extends BankAccount {
@@ -7,10 +9,10 @@ public class CreditAccount extends BankAccount {
 	private int Id;
 	private int interset;
 	private int credit_card_no;
-	private int bank_accounts_id;
+	
 	private double availBalance;
 	private double lastBillAmount;
-	private int dueDateTimestamp;
+	private Date dueDateTimestamp;
 	private float apr;
 	
 	public int getInterset() {
@@ -37,13 +39,7 @@ public class CreditAccount extends BankAccount {
 		this.credit_card_no = credit_card_no;
 	}
 
-	public int getBank_accounts_id() {
-		return bank_accounts_id;
-	}
 
-	public void setBank_accounts_id(int bank_accounts_id) {
-		this.bank_accounts_id = bank_accounts_id;
-	}
 	
 	public CreditAccount() {
 		this.setAccountType(AccountType.CREDIT);
@@ -65,11 +61,11 @@ public class CreditAccount extends BankAccount {
 		this.lastBillAmount = lastBillAmount;
 	}
 	
-	public int getDueDateTimestamp() {
+	public Date getDueDateTimestamp() {
 		return dueDateTimestamp;
 	}
 	
-	public void setDueDateTimestamp(int dueDateTimestamp) {
+	public void setDueDateTimestamp(Date dueDateTimestamp) {
 		this.dueDateTimestamp = dueDateTimestamp;
 	}
 	
