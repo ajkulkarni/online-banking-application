@@ -76,7 +76,8 @@
                     <table id="content-table">
                         <thead>
                             <tr>
-                                <th class="active">External User</th>
+                            	<th class="active">Employee ID</th>
+                                <th class="active">Customer ID</th>
                                 <th class="active">Authorization Type</th>
                                 <th class="active">Action</th>
                             </tr>
@@ -91,6 +92,7 @@
                         		<c:otherwise>
                         			<c:forEach items="${pendingList}" var="authorization">
                                 		<tr>
+                                			<td style="text-align:center">${authorization.internal_userID}</td>
                                 			<c:choose>
 			                                	<c:when test="${authorization.auth_Type == 'registration'}">
 			                                    	<td style="text-align:center">N/A</td>
@@ -127,8 +129,9 @@
                 <div class="panel-body no-padding">
                     <table id="content-table">
                         <thead>
-                            <tr>                               
-                                <th class="active">External User</th>
+                            <tr>
+                            	<th class="active">Employee ID</th>
+                                <th class="active">Customer ID</th>                               
                                 <th class="active">Authorization Type</th>
                                 <th class="active">Option</th>
                             </tr>
@@ -143,6 +146,7 @@
                         		<c:otherwise>
                         			<c:forEach items="${completeList}" var="authorization">
 		                                <tr>
+		                                	<td style="text-align:center">${authorization.internal_userID}</td>
 		                                	<c:choose>
 			                                	<c:when test="${authorization.auth_Type == 'registration'}">
 			                                    	<td style="text-align:center">N/A</td>

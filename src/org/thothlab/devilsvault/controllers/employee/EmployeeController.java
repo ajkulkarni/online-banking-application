@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thothlab.devilsvault.dao.authorization.AthorizationDaoImpl;
+import org.thothlab.devilsvault.dao.bankaccount.BankAccountDaoImpl;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.dashboard.PendingStatisticsDao;
@@ -24,6 +26,7 @@ import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
 import org.thothlab.devilsvault.db.model.Authorization;
+import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
@@ -213,20 +216,27 @@ public class EmployeeController {
 	    return model;
     }
 		
-	@RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
-    public ModelAndView viewExtAccountDetails(@RequestParam("extUserID") String extuserID) {
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-        CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
-        Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
-        ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
-        model.addObject("extUserObj",customer);
-	    ctx.close();
-	    return model;
-    }
+    @RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
+		public ModelAndView viewExtAccountDetails(@RequestParam("extUserID") String extuserID) {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
+		BankAccountDaoImpl bankaccountdaoimpl = ctx.getBean("bankAccountDao",BankAccountDaoImpl.class);
+		List <BankAccountDB> account_list_new = bankaccountdaoimpl.getAccountDetailsById(Integer.parseInt(extuserID));
+		if(account_list_new.size() < 1)
+		{
+			account_list_new = new ArrayList<BankAccountDB>(); 
+		}
+		Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
+		ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+		model.addObject("extUserObj",customer);
+		model.addObject("account_list",account_list_new);
+		ctx.close();
+		return model;
+	}
 	
 	@RequestMapping(value="/employee/addrequest", method = RequestMethod.POST)
     public ModelAndView modifyDetails(@RequestParam("userID") String userID ,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("userType") String userType,@RequestParam("newValue") String newValue) {
-		ModelAndView model = null; new ModelAndView("employeePages/ExtAccountDetails");
+		ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
 		if(userType.equalsIgnoreCase("external"))
 		{
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -295,10 +305,36 @@ public class EmployeeController {
                    else return "redirect:/employee/management?message="+URLEncoder.encode("Request inserted successfully","UTF-8");
                }
            }
-       }
-       
-        
-   }
+       } 
+	}
+	
+	@RequestMapping(value="/employee/processauthorization", method = RequestMethod.POST)
+    public String ProcessAuthorization(@RequestParam("requestType") String requestType, @RequestParam("transactionID") String auth_id) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");  
+        AthorizationDaoImpl authorizationDao = ctx.getBean("AuthorizationDao",AthorizationDaoImpl.class);
+        Authorization request = authorizationDao.getByID(Integer.valueOf(auth_id));
+        switch(requestType) {
+        case "approve":
+            authorizationDao.deleteByID(Integer.valueOf(auth_id),"authorization_pending");
+            authorizationDao.addByID(request);
+            break;
+        case "reject":
+            authorizationDao.deleteByID(Integer.valueOf(auth_id),"authorization_pending");
+            break;
+        default:
+            
+        }
+        ctx.close();
+       return "redirect:/employee/management";
+    }
+    @RequestMapping(value="/employee/revokeauthorization", method = RequestMethod.POST)
+    public String RevokeAuthorization(@RequestParam("authID") String auth_id) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");  
+        AthorizationDaoImpl authorizationDao = ctx.getBean("AuthorizationDao",AthorizationDaoImpl.class);
+        authorizationDao.deleteByID(Integer.valueOf(auth_id),"authorization_completed");
+        ctx.close();
+       return "redirect:/employee/management";
+    }
 	
 	@RequestMapping(value="/employee/externalRegistration", method = RequestMethod.POST)
     public ModelAndView externalRegistration(@RequestParam("userType") String userType) {
@@ -314,8 +350,12 @@ public class EmployeeController {
 		InternalUserDaoImpl internalDao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
 		setGlobals(request);
 		InternalUser internaluser = internalDao.getUserById(userID);
+		InternalRequestDaoImpl internalRequest = ctx.getBean("internalRequestDao",InternalRequestDaoImpl.class);
+		List <Request> request_list = internalRequest.getByUserId(userID, "pending");
+		request_list.addAll(internalRequest.getById(userID, "completed"));
 		ModelAndView model = new ModelAndView("employeePages/employeeUserDetails");
 		model.addObject("user",internaluser);
+		model.addObject("request_list",request_list);
 		ctx.close();
 		return model;
 	}
@@ -382,73 +422,86 @@ public class EmployeeController {
     }
 	
 	@RequestMapping("/employee/pendingrequest")
-	public ModelAndView PendingRequestContoller(){
+	public ModelAndView PendingRequestContoller(HttpServletRequest request){
+		setGlobals(request);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
         ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
         InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
         List<Request> externalRequestList = externalRequestDao.getAllPending();
         List<Request> internalRequestList = new ArrayList<Request>();
-        if(externalRequestList.size() > 10)
-            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
         if(role.equalsIgnoreCase("ROLE_MANAGER")){
         	internalRequestList = internalRequestDao.getAllPending("ROLE_REGULAR");
-        }else{
+        }else if(role.equalsIgnoreCase("ROLE_ADMIN")){
         	internalRequestList = internalRequestDao.getAllPending("ROLE_REGULAR' AND role='ROLE_MANAGER");
-        }
-        if(internalRequestList.size() > 10)
-            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        }        
         ModelAndView model = new ModelAndView("employeePages/PendingRequest");
-        model.addObject("internal_list",internalRequestList);
+        if(role.equalsIgnoreCase("ROLE_MANAGER") || role.equalsIgnoreCase("ROLE_ADMIN")){
+        	model.addObject("internal_list",internalRequestList);
+        }
         model.addObject("external_list",externalRequestList);
         ctx.close();
         return model;
 	}
 	
-	@RequestMapping("/employee/pendingrequest/approve")
-	public ModelAndView PendingRequestApproveContoller(@RequestParam("requestID") String requestID, @RequestParam("requestType") String requestType){
+	@RequestMapping(value="/employee/processrequestinternal", method = RequestMethod.POST)
+	public ModelAndView PendingRequestApproveContoller(HttpServletRequest request, RedirectAttributes redir, @RequestParam("requestID") String requestID, @RequestParam("action") String action){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		ModelAndView model = new ModelAndView("employeePages/PendingRequest");
-		if(requestType.equals("internal")) {
+		setGlobals(request);
+		ModelAndView model = new ModelAndView();
+		String msg = "";
+		if(action.equals("approve")) {
 	        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
-	        internalRequestDao.approveRequest(Integer.parseInt(requestID), requestType);
+	        internalRequestDao.approveRequest(Integer.parseInt(requestID), "internal",userID);
+	        msg = "Request Approved!";
 		}
-		else {
-			ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-			externalRequestDao.approveRequest(Integer.parseInt(requestID), requestType);
-		} 
-        model.addObject("error_msg","Request Approved!");
+		else
+		{
+			InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+	        internalRequestDao.rejectRequest(Integer.parseInt(requestID), "internal", userID);
+	        msg="Request Rejected!";
+		}
         ctx.close();
+        model.setViewName("redirect:/employee/pendingrequest");
+        redir.addFlashAttribute("error_msg",msg);
         return model;
 	}
 	
-	@RequestMapping("/employee/pendingrequest/reject")
-	public ModelAndView PendingRequestRejectContoller(@RequestParam("requestID") String requestID, @RequestParam("requestType") String requestType){
+	@RequestMapping(value="/employee/processrequestexternal", method = RequestMethod.POST)
+	public ModelAndView PendingRequestRejectContoller(HttpServletRequest request,RedirectAttributes redir, @RequestParam("requestID") String requestID, @RequestParam("action") String action){
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		ModelAndView model = new ModelAndView("employeePages/PendingRequest");
-		if(requestType.equals("internal")) {
-	        InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
-	        internalRequestDao.rejectRequest(Integer.parseInt(requestID), requestType);
+		setGlobals(request);
+		ModelAndView model = new ModelAndView();
+		String msg = "";
+		if(action.equals("approve")) {
+			ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
+			externalRequestDao.approveRequest(Integer.parseInt(requestID), "external", userID);	
+			msg = "Request Approved!";
 		}
 		else {
 			ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-			externalRequestDao.rejectRequest(Integer.parseInt(requestID), requestType);
+			externalRequestDao.rejectRequest(Integer.parseInt(requestID), "external", userID);
+			msg="Request Rejected!";
 		} 
-        model.addObject("error_msg","Request Rejected!");
         ctx.close();
+        model.setViewName("redirect:/employee/pendingrequest");
+        redir.addFlashAttribute("error_msg",msg);
         return model;
 	}
 	
 	@RequestMapping("/employee/completedrequest")
-	public ModelAndView CompletedRequestContoller(){
+	public ModelAndView CompletedRequestContoller(HttpServletRequest request){
+		setGlobals(request);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
         ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
         InternalRequestDaoImpl internalRequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
-        List<Request> externalRequestList = externalRequestDao.getAllCompleted();
-        if(externalRequestList.size() > 10)
-            externalRequestList = externalRequestList.subList(externalRequestList.size()-10, externalRequestList.size());
-        List<Request> internalRequestList = internalRequestDao.getAllCompleted();
-        if(internalRequestList.size() > 10)
-            internalRequestList = internalRequestList.subList(internalRequestList.size()-10, internalRequestList.size());
+        List<Request> externalRequestList = new ArrayList<Request>();
+        externalRequestList = externalRequestDao.getAllCompleted();
+        List<Request> internalRequestList = new ArrayList<Request>();
+        if(role.equalsIgnoreCase("ROLE_MANAGER")){
+        	internalRequestList = internalRequestDao.getAllCompleted("ROLE_REGULAR");
+        }else if(role.equalsIgnoreCase("ROLE_ADMIN")){
+        	internalRequestList = internalRequestDao.getAllCompleted("ROLE_REGULAR' AND role='ROLE_MANAGER");
+        }
         ModelAndView model = new ModelAndView("employeePages/CompleteRequest");
         model.addObject("internal_list",internalRequestList);
         model.addObject("external_list",externalRequestList);

@@ -18,10 +18,10 @@
 <body>
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
-		<a href="/cs445-ss" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
+		<a href="home" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
 						 style="vertical-align:top;"
 						 width="35px" height="65px" alt="Sparky"></a>
-		<a href="/cs445-ss"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
+		<a href="home"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
 													style="padding: 7px 0 7px 0"
 													width="200px" height="65px" alt="Devil's Vault"></a>
 
@@ -44,6 +44,9 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
+				<li>
+					<a href="home">Home</a>
+				</li>
 				<li>
 					<a href="management">Management</a>
 				</li>

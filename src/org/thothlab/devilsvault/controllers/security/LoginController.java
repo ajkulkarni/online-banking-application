@@ -19,6 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String login() throws IOException {
+		return "redirect:/login";
+	}
+
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout, HttpServletRequest request) throws IOException {

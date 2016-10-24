@@ -68,15 +68,15 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	}
 	
 	@Override
-	public void approveRequest(int id, String type) {
+	public void approveRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
-		super.approveRequest(id, type);		
+		super.approveRequest(id, type, approver);		
 	}
 
 	@Override
-	public void rejectRequest(int id, String type) {
+	public void rejectRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
-		super.rejectRequest(id, type);
+		super.rejectRequest(id, type, approver);
 	}
 
 }

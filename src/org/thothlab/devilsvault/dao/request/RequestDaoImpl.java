@@ -67,10 +67,11 @@ public class RequestDaoImpl implements RequestDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public void update(Request employee) {
+	public void update(String table,String set,String newValue,String where,String oldValue) {
 		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE " + table +" SET "+ set + " = '" + newValue +
+				"' WHERE " + where + " = '" + oldValue + "'"  ;
+		jdbcTemplate.update(sql);
 	}
 	@Override
 	public void deleteById(int id, String type) {
@@ -84,22 +85,31 @@ public class RequestDaoImpl implements RequestDao{
 		return null;
 	}
 	@Override
-	public void approveRequest(int id, String type) {
+	public void approveRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM "+type+"_request_pending WHERE id ="+id;
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		Request request = requestList.get(0);
 		request.setStatus("approved");
+		request.setApprover(Integer.toString(approver));
+		String table;
+		if(type.equalsIgnoreCase("internal"))
+			table ="internal_user";
+		else
+			table = "external_users";
+		update(table,request.getRequest_type(),request.getRequested_value(),"id",Integer.toString(request.getRequesterid()));
 		save(request, type);
 		deleteById(id, type);
 	}
+	
 	@Override
-	public void rejectRequest(int id, String type) {
+	public void rejectRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM "+type+"_request_pending WHERE id ="+id;
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		Request request = requestList.get(0);
 		request.setStatus("rejected");
+		request.setApprover(Integer.toString(approver));
 		save(request, type);
 		deleteById(id, type);
 	}

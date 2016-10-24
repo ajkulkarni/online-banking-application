@@ -18,4 +18,9 @@ public interface AthorizationDao {
 	
 	public Boolean save(int internal_userID,int external_userID, String auth_Type);
 	
+	public boolean deleteByID(int auth_id, String table);
+	
+	public boolean addByID(Authorization request);
+	
+	public Authorization getByID(int auth_id);
 }

@@ -44,9 +44,9 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 		return requestList;
 	}
 	
-	public List<Request> getAllCompleted() {
+	public List<Request> getAllCompleted(String role) {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM internal_request_completed";
+		String query = "SELECT * FROM internal_request_completed where role='" + role + "'";
 		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
@@ -71,15 +71,15 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 	}
 	
 	@Override
-	public void approveRequest(int id, String type) {
+	public void approveRequest(int id, String type,int approver) {
 		// TODO Auto-generated method stub
-		super.approveRequest(id, type);
+		super.approveRequest(id, type, approver);
 	}
 
 	@Override
-	public void rejectRequest(int id, String type) {
+	public void rejectRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
-		super.rejectRequest(id, type);
+		super.rejectRequest(id, type, approver);
 	}
 	
 	public void raiseExternalRequest(Customer customer, String requestType, String newValue, Integer internalUserID)

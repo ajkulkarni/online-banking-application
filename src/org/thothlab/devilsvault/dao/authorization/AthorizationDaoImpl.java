@@ -89,6 +89,63 @@ public class AthorizationDaoImpl implements AthorizationDao{
 		}
 		return false;
 	}
+	@Override
+	public boolean deleteByID(int auth_id, String table) {
+		String query = "DELETE FROM "+table+" WHERE auth_id = "+auth_id+"";
+		Connection con = null;
+		PreparedStatement ps = null;
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(query);
+			int out = ps.executeUpdate();
+			if(out !=0){
+				return true;
+			}else return false;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	@Override
+	public boolean addByID(Authorization request) {
+		String query = "insert into authorization_completed(internal_userID, external_userID, auth_Type) values (?,?,?)";
+		Connection con = null;
+		PreparedStatement ps = null;
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setInt(1, request.getInternal_userID());
+			ps.setInt(2, request.getExternal_userID());
+			ps.setString(3, request.getAuth_Type());
+			int out = ps.executeUpdate();
+			if(out !=0){
+				return true;
+			}else return false;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	@Override
+	public Authorization getByID(int auth_id) {
+		String query = "SELECT * FROM authorization_pending WHERE auth_id = "+auth_id+"";
+		List<Authorization> authorizationList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Authorization>(Authorization.class));
+		return authorizationList.get(0);
+	}
 
 	
 

@@ -37,7 +37,39 @@
 					</table>
 				</div>					
 			</div>
-			<a href="#modifyaccount" class="btn btn-primary btn-sm" style="padding-left: 5px;" data-toggle="modal">Modify Account</a>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Account Details</h3>
+				</div>
+				<div class="panel-body no-padding">
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">Account Number</th>
+								<th class="active">Account Type</th>
+							</tr>
+						</thead>
+						<tbody>
+						<c:choose>
+                        		<c:when test="${empty account_list}">
+                        			<tr>
+                                    	<td colspan="2">No Account Details</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${account_list}" var="row_value">
+										<tr>
+											<td style="text-align:center">${row_value.account_number}</td>
+											<td style="text-align:center">${row_value.account_type}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+                        	</c:choose>	
+						</tbody>
+					</table>
+				</div>					
+			</div>
+			<a href="#modifyaccount" class="btn btn-primary btn-sm" data-toggle="modal">Modify Account</a>
 			<form action = "deletecustomer" method = "post" style="float:right">
                 <input type="hidden" name="extUserID" value="${extUserObj.id}">
                 <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
