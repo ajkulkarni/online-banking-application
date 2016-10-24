@@ -32,7 +32,7 @@ public class TestRequestDao {
 	public void testApproveRequest() {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-		externalRequest.approveRequest(1, "external");
+		//externalRequest.approveRequest(1, "external");
 		ctx.close();
 	}
 	
@@ -40,7 +40,7 @@ public class TestRequestDao {
 	public void testRejectRequest() {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		externalRequest = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-		externalRequest.rejectRequest(4, "external");
+		//externalRequest.rejectRequest(4, "external");
 		ctx.close();
 	}
 	

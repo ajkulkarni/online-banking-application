@@ -61,7 +61,7 @@ public class LogDaoImpl implements LogDao{
 	public List<DatabaseLog> getByUserId(int userID, String tablename) {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM " + tablename + " WHERE userid = " + userID;
-		List<DatabaseLog> logList = jdbcTemplate.query(query, new BeanPropertyRowMapper(DatabaseLog.class));
+		List<DatabaseLog> logList = jdbcTemplate.query(query, new BeanPropertyRowMapper<DatabaseLog>(DatabaseLog.class));
 		return logList;
 	}
 	

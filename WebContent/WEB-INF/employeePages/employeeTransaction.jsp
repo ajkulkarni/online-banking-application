@@ -43,8 +43,8 @@
 						<thead>
 							<tr>
 								<th class="active">ID</th>
-								<th class="active">Sender Account</th>
-								<th class="active">Receiver Account</th>
+								<th class="active">Sender</th>
+								<th class="active">Receiver</th>
 								<th class="active">Amount</th>
 							</tr>
 						</thead>

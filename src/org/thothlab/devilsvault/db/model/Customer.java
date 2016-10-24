@@ -1,10 +1,17 @@
 package org.thothlab.devilsvault.db.model;
 
-public class ExternalUser {
+public class Customer {
 	private int id;
 	private String name;
 	private String address;
 	private String city;
+	private String email;
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	private String state;
 	private String country;
 	private int pincode;

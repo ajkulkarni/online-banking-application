@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.thothlab.devilsvault.db.model.PendingRegistration;
-import org.thothlab.devilsvault.db.model.Request;
 
 @Repository("PendingRegistrationDao")
 public class PendingRegistrationDaoImpl implements PendingRegistrationDao {
@@ -32,7 +31,7 @@ public class PendingRegistrationDaoImpl implements PendingRegistrationDao {
 	@Override
 	public PendingRegistration getById(int id, String table) {
 		String query = "SELECT * FROM user_pending id = "+id+"";
-		List<PendingRegistration> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(PendingRegistration.class));
+		List<PendingRegistration> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<PendingRegistration>(PendingRegistration.class));
 		return requestList.get(0);
 	}
 
@@ -133,7 +132,7 @@ public class PendingRegistrationDaoImpl implements PendingRegistrationDao {
 	@Override
 	public List<PendingRegistration> getAllPending() {
 		String query = "SELECT * FROM user_pending";
-		List<PendingRegistration> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(PendingRegistration.class));
+		List<PendingRegistration> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<PendingRegistration>(PendingRegistration.class));
 		return requestList;
 	}
 

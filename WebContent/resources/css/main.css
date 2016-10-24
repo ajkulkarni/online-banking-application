@@ -694,3 +694,7 @@ table#content-table td.full-row{
     color: #fff;
     padding-left: 15px;
 }
+
+.form-margin{
+	margin-bottom:15px;
+}

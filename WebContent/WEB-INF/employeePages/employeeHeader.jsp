@@ -18,10 +18,10 @@
 <body>
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
-		<a href="/cs445-ss" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
+		<a href="home" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
 						 style="vertical-align:top;"
 						 width="35px" height="65px" alt="Sparky"></a>
-		<a href="/cs445-ss"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
+		<a href="home"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
 													style="padding: 7px 0 7px 0"
 													width="200px" height="65px" alt="Devil's Vault"></a>
 
@@ -31,7 +31,7 @@
 			<ul class="cd-top-nav">
 				<li class="has-children account">
 					<a href="#0">
-						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>UserID</a>
+						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>${username}</a>
 					<ul>
 
 						<li><a href="userdetails">My Account</a></li>
@@ -44,12 +44,11 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
-				<li class="has-children">
-					<a href="#0">User Management</a>
-					<ul>
-						<li><a href="pendingregistration">Pending Registration</a></li>
-						<li><a href="#">User Details</a></li>
-					</ul>
+				<li>
+					<a href="home">Home</a>
+				</li>
+				<li>
+					<a href="management">Management</a>
 				</li>
 				<li class="has-children">
 					<a href="#0">Request</a>
@@ -58,11 +57,15 @@
 						<li><a href="completedrequest">Completed</a></li>
 					</ul>
 				</li>
+				<c:if test="${role == 'ROLE_MANAGER' }">
 				<li>
-					<a href="transaction">Transaction<span class="count">${stats['transaction']}</span></a>
+					<a href="transaction">Transaction<span class="count">${transaction_count}</span></a>
 				</li>
+				</c:if>
+				<c:if test="${role == 'ROLE_ADMIN' }">
 				<li>
-					<a href="#0">Admin Options</a>
+					<a href="systemlogs">System Logs</a>
 				</li>
+				</c:if>
 			</ul>
 		</nav>

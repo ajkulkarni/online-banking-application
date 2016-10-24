@@ -11,6 +11,14 @@ public class Request {
 	private String status;
 	private String approver;
 	private String description;
+	private String role;
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 	private Date timestamp_created;
 	private Date timestamp_updated;
 	

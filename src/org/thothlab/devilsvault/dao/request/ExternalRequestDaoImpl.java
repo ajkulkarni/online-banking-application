@@ -36,15 +36,15 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	
 	public List<Request> getAllPending() {
 		// TODO Auto-generated method stub
-		String query = "SELECT * FROM external_request_pending";
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		String query = "SELECT * FROM external_request_pending where approver='0'";
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
 	public List<Request> getAllCompleted() {
 		// TODO Auto-generated method stub
 		String query = "SELECT * FROM external_request_completed";
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
@@ -56,27 +56,27 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 	@Override
 	public List<Request> getById(int id, String status) {
 		String query = "SELECT * FROM external_request_"+status+" WHERE id = "+id;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
 	@Override
 	public List<Request> getByUserId(int requesterid, String status) {
 		String query = "SELECT * FROM external_request_"+status+" WHERE requesterid = "+requesterid;
-		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Request.class));
+		List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
 		return requestList;
 	}
 	
 	@Override
-	public void approveRequest(int id, String type) {
+	public void approveRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
-		super.approveRequest(id, type);		
+		super.approveRequest(id, type, approver);		
 	}
 
 	@Override
-	public void rejectRequest(int id, String type) {
+	public void rejectRequest(int id, String type, int approver) {
 		// TODO Auto-generated method stub
-		super.rejectRequest(id, type);
+		super.rejectRequest(id, type, approver);
 	}
 
 }

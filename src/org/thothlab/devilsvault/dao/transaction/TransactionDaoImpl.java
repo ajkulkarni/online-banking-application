@@ -1,9 +1,7 @@
 package org.thothlab.devilsvault.dao.transaction;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.thothlab.devilsvault.dao.transaction.TransactionDao;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 @Repository ("TransactionDao")
@@ -68,7 +65,7 @@ public class TransactionDaoImpl implements TransactionDao {
 	@Override
 	public List<Transaction> getById(int id, String table) {
         String query = "SELECT * FROM "+ table +" WHERE id = "+id;
-        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         return transactionList;
     }
 	
