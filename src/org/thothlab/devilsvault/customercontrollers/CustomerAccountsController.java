@@ -39,7 +39,7 @@ public class CustomerAccountsController {
 		Double SavingsAccBal = CustomerDAO.getSavingsBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
 		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
-		TransactionLines = sAccountDAO.getTransactionLines(customer, 3);
+		TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
 		ctx.close();
 		ModelAndView model = new ModelAndView("customerPages/accountsSavingsPage");
 		model.addObject("Customer",customer);
@@ -78,7 +78,7 @@ public class CustomerAccountsController {
 	}
 	
 	@RequestMapping(value="getcheckingTransactions", method = RequestMethod.POST) 
-	public ModelAndView getSearchResultViaAjax(@RequestParam("monthPicker") String interval) {
+	public ModelAndView getCheckingSearchResultViaAjax(@RequestParam("checkingPicker") String interval) {
 		DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
 		checkingAccount.setAccountNumber(123);
 		DebitAccount savingAccount = new DebitAccount(AccountType.SAVINGS);
@@ -92,17 +92,22 @@ public class CustomerAccountsController {
 		Double CheckingAcctBal = CustomerDAO.getCheckingBalance(customer);
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
 		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
-		if (interval.equals("Last one month")) {
+		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
+
+		if (interval.equals("Last month")) {
 		TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
 		}
 		else if (interval.equals("Last 3 months")) {
 			TransactionLines = sAccountDAO.getTransactionLines(customer, 3);
+
+
 		}
 		else if (interval.equals("Last 6 months")) {
 			TransactionLines = sAccountDAO.getTransactionLines(customer, 6);
+
+
 		}		
 		ctx.close();
-		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
 		model.addObject("Customer",customer);
 		model.addObject("cAccount", checkingAccount );
 		model.addObject("sAccount", savingAccount );
@@ -110,7 +115,50 @@ public class CustomerAccountsController {
 		model.addObject("CheckingAccBal", CheckingAcctBal);
 		model.addObject("TransactionLines",TransactionLines);
 		return model;
-		
-		
+			
 	}
+
+
+@RequestMapping(value="getsavingTransactions", method = RequestMethod.POST) 
+public ModelAndView getSavingsSearchResultViaAjax(@RequestParam("savingsPicker") String interval) {
+	DebitAccount checkingAccount = new DebitAccount(AccountType.CHECKING);
+	checkingAccount.setAccountNumber(123);
+	DebitAccount savingAccount = new DebitAccount(AccountType.SAVINGS);
+	savingAccount.setAccountNumber(100);
+	CreditAccount creditAccount = new CreditAccount();
+	creditAccount.setAccountNumber(102);
+	Customer customer = new Customer();
+	customer.setID(101);
+	ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("DaoDetails.xml");
+	ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
+	Double CheckingAcctBal = CustomerDAO.getCheckingBalance(customer);
+	CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
+	List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>();
+	if (interval.equals("Last month")) {
+	TransactionLines = sAccountDAO.getTransactionLines(customer, 1);
+	}
+	else if (interval.equals("Last 3 months")) {
+		TransactionLines = sAccountDAO.getTransactionLines(customer, 3);
+
+
+
+	}
+	else if (interval.equals("Last 6 months")) {
+		TransactionLines = sAccountDAO.getTransactionLines(customer, 6);
+
+
+	}		
+	ctx.close();
+	ModelAndView model = new ModelAndView("customerPages/accountsSavingsPage");
+	model.addObject("Customer",customer);
+	model.addObject("cAccount", checkingAccount );
+	model.addObject("sAccount", savingAccount );
+	model.addObject("ccAccount", creditAccount );
+	model.addObject("CheckingAccBal", CheckingAcctBal);
+	model.addObject("TransactionLines",TransactionLines);
+	return model;
+	
+	
 }
+}
+

@@ -16,11 +16,14 @@
 					<div class="row">
 						<div class="col-sm-2"><b>Account Balance:</b></div>
 						<div class="col-sm-3">${SavingsAccBal}</div>
-        				<select class="form-control" id="select" style="max-width:30%;">
+						<form class="form-horizontal" action="getsavingTransactions" method='POST' onSubmit="return checkInputOr()">
+        				<select class="form-control" name="savingsPicker" id="select" style="max-width:30%;float:right">
           					<option>Last month</option>
           					<option>Last 3 months</option>
           					<option>Last 6 months</option>
         				</select>
+        				<button type="submit" style="float:right" class="btn btn-primary">Submit</button>
+        				</form>
         			</div>
 					<hr>
 					<h4><center>Transaction History</center></h4>
@@ -32,7 +35,8 @@
               						<th class="col-xs-2">#</th>
               						<th class="col-xs-4">Description</th>
               						<th class="col-xs-3">Payee</th>
-              						<th class="col-xs-3">Amount</th>          
+              						<th class="col-xs-3">Amount</th>         
+              						<th class="col-xs-3">Date</th>      
             					</tr>
           					</thead>
             				<tbody>
@@ -42,6 +46,8 @@
 										<td>${trans.description}</td>
 										<td>${trans.payee_id}</td>
 										<td>${trans.amount}</td>
+										<td>${trans.timestamp_updated}</td>
+										
 									</tr>
 								</c:forEach>
 							</tbody>

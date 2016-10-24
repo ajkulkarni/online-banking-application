@@ -13,8 +13,8 @@ public class TransactionModel {
 	private String status;
 	private String approver;
 	private boolean critical;
-	private Date timestamp_created;
-	private Date timestamp_updated;
+	private String timestamp_created;
+	private String timestamp_updated;
 	private int isPending;
 	
 	private String pendingStrg;
@@ -95,16 +95,16 @@ public class TransactionModel {
 	public void setCritical(boolean critical) {
 		this.critical = critical;
 	}
-	public Date getTimestamp_created() {
+	public String getTimestamp_created() {
 		return timestamp_created;
 	}
-	public void setTimestamp_created(Date timestamp_created) {
+	public void setTimestamp_created(String timestamp_created) {
 		this.timestamp_created = timestamp_created;
 	}
-	public Date getTimestamp_updated() {
+	public String getTimestamp_updated() {
 		return timestamp_updated;
 	}
-	public void setTimestamp_updated(Date timestamp_updated) {
+	public void setTimestamp_updated(String timestamp_updated) {
 		this.timestamp_updated = timestamp_updated;
 	}
 

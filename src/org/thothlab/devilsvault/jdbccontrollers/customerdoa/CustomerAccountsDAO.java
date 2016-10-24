@@ -29,7 +29,7 @@ public class CustomerAccountsDAO{
 		ResultSet rs = null;
 		TransactionModel TransactionLine = new TransactionModel();
 		List<TransactionModel> TransactionLines = new ArrayList<TransactionModel>(); 
-		String sql ="SELECT * FROM  transaction_completed WHERE (payer_id="+user.getID()+" OR payee_id ="+user.getID()+") ";//+"AND "+TransactionLine.getTimestamp_updated()+">=(now()- interval "+interval+" month)";
+		String sql ="SELECT * FROM  transaction_completed WHERE (payer_id="+user.getID()+" OR payee_id ="+user.getID()+") AND timestamp_updated>=(now() - interval "+interval+" month)";
 				//+"AND "+TransactionLine.getTimestamp_updated()+" between DATE_SUB(NOW(), INTERVAL "+interval+" MONTH) AND NOW()";
 		try{
 			con = dataSource.getConnection();
@@ -46,6 +46,8 @@ public class CustomerAccountsDAO{
 				float amount = rs.getFloat("amount");
 				TransactionLine.setAmount(amount);
 				TransactionLine.setPayee_id(payee_id);
+				String timestamp=rs.getString("timestamp_updated");		
+				TransactionLine.setTimestamp_updated(timestamp.substring(0,timestamp.length()-2));
 				TransactionLines.add(TransactionLine);
 			}
 		}catch(SQLException e){
