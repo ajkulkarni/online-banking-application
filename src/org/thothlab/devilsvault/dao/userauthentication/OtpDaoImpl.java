@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class OtpDaoImpl implements OtpDao{
 	@Override
 	public String verifyEmail(String email) {
 		// TODO Auto-generated method stub
+		try {
+			InternetAddress emailAddress = new InternetAddress(email);
+			emailAddress.validate();
+		} catch(AddressException ae) {
+			return "Invalid User";
+		}
 		String query = "SELECT * FROM users WHERE username = '"+email+"' LIMIT 1";
 		List<UserAuthentication> userList = jdbcTemplate.query(query, new BeanPropertyRowMapper<UserAuthentication>(UserAuthentication.class));
 		if (userList.size() == 0)
