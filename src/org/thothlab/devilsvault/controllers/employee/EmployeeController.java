@@ -129,7 +129,8 @@ public class EmployeeController {
 		InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
 		
 		
-		Integer payerID = Integer.parseInt(extuserID);
+		//Integer payerID = Integer.parseInt(extuserID);
+		int payerID = 1;
 		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 		List<Integer> currentUserAccounts  = transferDAO.getMultipleAccounts(payerID);
 		List<String> userAccounts=new ArrayList<>();
@@ -142,9 +143,15 @@ public class EmployeeController {
 		List<Integer> extuserIDs = new ArrayList<Integer>();
 		extuserIDs.add(Integer.parseInt(extuserID));
 		List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
+		for(Integer acc: accountNos){
+			System.out.println("Account : " + acc);
+		}
 		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
 				InternalTransactionDaoImpl.class);
 		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+		for(Transaction acc: transactionList){
+			System.out.println("Transaction ID : " + acc.getId());
+		}
 		ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
 		model.addObject("transactionList", transactionList);
 		model.addObject("extUserID", extuserID);
