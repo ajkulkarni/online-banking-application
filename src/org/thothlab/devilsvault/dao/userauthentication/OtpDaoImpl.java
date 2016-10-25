@@ -97,7 +97,7 @@ public class OtpDaoImpl implements OtpDao{
 	@Override
 	public String generateOTP(String email) {
 		// TODO Auto-generated method stub
-		OtpDelivery otpDelivery = new OtpDelivery();
+		OTPDelivery otpDelivery = new OTPDelivery();
 		return otpDelivery.send(email);
 	}
 
