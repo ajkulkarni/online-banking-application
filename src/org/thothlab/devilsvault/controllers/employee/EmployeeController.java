@@ -159,6 +159,19 @@ public class EmployeeController {
         ctx.close();
         return model;
     }
+	
+	@RequestMapping(value="/employee/searchinternaluser", method = RequestMethod.POST)
+    public ModelAndView SearchInternalUser(@RequestParam("employeeID") String id,RedirectAttributes redir) {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        InternalUserDaoImpl internalDao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
+        InternalUser user = new InternalUser();
+        user = internalDao.getUserById(Integer.valueOf(id));
+        ModelAndView model = new ModelAndView();
+        model.setViewName("redirect:/employee/management");
+        redir.addFlashAttribute("employeeObj",user);
+        ctx.close();
+        return model;
+    }
 
 		
 	@RequestMapping(value="/employee/viewtransaction", method = RequestMethod.POST)
@@ -216,7 +229,18 @@ public class EmployeeController {
     }
 		
     @RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
-		public ModelAndView viewExtAccountDetails(@RequestParam("extUserID") String extuserID) {
+		public ModelAndView viewExtAccountDetails(RedirectAttributes redir, HttpServletRequest request,@RequestParam("extUserID") String extuserID, @RequestParam("userType") String userType) {
+    	setGlobals(request);
+    	String msg="";
+    	if(role.equalsIgnoreCase("ROLE_MANAGER") || role.equalsIgnoreCase("ROLE_REGULAR")){
+    		if (!userType.equalsIgnoreCase("external")){
+    			msg = "You are only authorized to view customer accounts !!";
+    			ModelAndView model = new ModelAndView();
+    			model.setViewName("redirect:/employee/management");
+    			redir.addFlashAttribute("message",msg);
+    			return model;
+    		}
+    	}
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
 		BankAccountDaoImpl bankaccountdaoimpl = ctx.getBean("bankAccountDao",BankAccountDaoImpl.class);
@@ -227,6 +251,7 @@ public class EmployeeController {
 		}
 		Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
 		ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+		model.addObject("userType", userType);
 		model.addObject("extUserObj",customer);
 		model.addObject("account_list",account_list_new);
 		ctx.close();

@@ -4,6 +4,12 @@
 <%@include file="employeeHeader.jsp" %>
     <div class="content-wrapper">
         <div class="col-md-12" id="page-content">
+        	<c:if test="${not empty message}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${message}</strong>
+			</div>
+			</c:if>
             <form action = "internalRegistration" method = "post" style="float:right;">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
@@ -45,6 +51,7 @@
                                 			<td style="text-align:center">
                                 				<form action = "viewaccountdetails" method = "post" style="display:inline">
 		                                    		<input type="hidden" name="extUserID" value="${employeeObj.id}">
+		                                    		<input type="hidden" name="userType" value="internal">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
 		                                    	</form>
@@ -95,13 +102,9 @@
                                 			<td style="text-align:center">
                                 				<form action = "viewaccountdetails" method = "post" style="display:inline">
 		                                    		<input type="hidden" name="extUserID" value="${customerObj.id}">
+		                                    		<input type="hidden" name="userType" value="external">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
-		                                    	</form>
-		                                    	<form action = "viewtransaction" method = "post" style="display:inline">
-		                                    		<input type="hidden" name="extUserID" value="${customerObj.id}">
-		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-		                                    		<button type="submit" class="btn btn-sm btn-primary">View Transactions</button>
 		                                    	</form>
                                 			</td>
                                 		</tr>

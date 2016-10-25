@@ -4,6 +4,12 @@
 <%@include file="employeeHeader.jsp" %>
     <div class="content-wrapper">
         <div class="col-md-12" id="page-content">
+        	<c:if test="${not empty message}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${message}</strong>
+			</div>
+			</c:if>
             <form action = "externalRegistration" method = "post" style="float:right;">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
@@ -11,7 +17,7 @@
             </form>
             <h3>User Management</h3>
             <form class="form-margin" action = "searchexternaluser" method = "post">
-            	<div class="col-md-3">
+            	<div class="col-md-3" style="padding-left:0px;">
             		<input class="form-control" type="text" name="customerID" placeholder="Customer ID">
             	</div>
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
@@ -45,6 +51,7 @@
                                 			<td style="text-align:center">
                                 				<form action = "viewaccountdetails" method = "post" style="display:inline">
 		                                    		<input type="hidden" name="extUserID" value="${customerObj.id}">
+		                                    		<input type="hidden" name="userType" value="external">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
 		                                    	</form>
@@ -64,7 +71,7 @@
                 </div>
             </div>
             <h3>Authorization Management</h3>
-            <p>${message}</p>
+            
             <br>
             <div class="panel panel-primary">
                 <div class="panel-heading">

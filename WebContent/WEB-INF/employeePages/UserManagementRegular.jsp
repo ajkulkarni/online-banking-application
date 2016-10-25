@@ -103,6 +103,7 @@
 		                                    <c:if test="${authorization.auth_Type == 'account'}">
 		                                    	<td style="text-align:center">
 			                                    	<form action = "viewaccountdetails" method = "post">
+			                                   			<input type="hidden" name="userType" value="external">
 			                                    		<input type="hidden" name="extUserID" value="${authorization.external_userID}">
 			                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 			                                    		<button type="submit" class="btn btn-sm btn-primary">View Account</button>
