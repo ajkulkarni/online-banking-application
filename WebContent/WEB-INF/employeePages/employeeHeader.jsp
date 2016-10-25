@@ -67,5 +67,8 @@
 					<a href="systemlogs">System Logs</a>
 				</li>
 				</c:if>
+				<li>
+					<a href="loginmanagement">Login Management</a>
+				</li>
 			</ul>
 		</nav>

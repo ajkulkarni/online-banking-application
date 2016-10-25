@@ -7,16 +7,16 @@
 	<meta http-equiv="Content-Type" content="text/html" charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="<c:url value="/resources/img/asu.png"/>">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />"> <!-- Resource style -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="<c:url value="/resources/js/jquery.menu-aim.js" />"></script>
 	<script src="<c:url value="/resources/js/main.js" />"></script>
 	<title>Home</title>
 	<link href="resources/css/jquery-ui.css" rel="stylesheet">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
-	<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
+	<script src="https://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
 
 	<!-- keyboard widget css & script (required) -->
 	<link href="resources/css/keyboard.css" rel="stylesheet">
@@ -51,17 +51,17 @@
 <body>
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
-		<a href="/cs445-ss" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
+		<a href="/" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
 						 style="vertical-align:top;"
 						 width="35px" height="65px" alt="Sparky"></a>
-		<a href="/cs445-ss"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
+		<a href="/"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
 													style="padding: 7px 0 7px 0"
 													width="200px" height="65px" alt="Devil's Vault"></a>
 
 	</header> <!-- .cd-main-header -->
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
-			<div class="col-md-12" id="page-content">
+			<div class="col-md-12" id="page-content" style="width: 70%;margin: 0 25%;">
 				<h3>Login Page</h3>
 				  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
       				<font color="red">
@@ -70,28 +70,25 @@
         			<%-- <h2>${msg}</h2> --%>
       				</font>
     			  </c:if>
-    			  <h2>${msg}</h2>
-				 <div id="errorBox"></div>
-					
+    			  <h2>${msg}</h2>					
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
-				<br/>
-				   Username: <input path="username" type="email" name="username" value=""  class="email" id="userEmail" required />
-									  
-				   Password: <input id = "password" path="password" type="password" name="password" value="" required/>
-				    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-				    <br>
-				    <br>
-				    
-			<!-- 	    <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
-			 -->	    <br>
-				    <br>
-				    <input type="submit" value="Login" class="btn" id="submit"/>
+      				<label for="username" class="col-lg-1 control-label no-padding">Username</label>
+      				<div class="col-lg-11 form-margin no-padding">
+        				<input type="email" class="form-control no-padding" name="username" id="userEmail" placeholder="Username" required>
+      				</div>
+      				<label for="password" class="col-lg-1 control-label no-padding">Password</label>
+      				<div class="col-lg-11 form-margin no-padding">
+        				<input type="password" class="form-control no-padding" name="password" id="password" placeholder="Password" required>
+      				</div>
+      				<!-- <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div><br> -->
+      				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+				    <input type="submit" class="btn btn-primary" value="Login" class="btn" id="submit"/>
 				    <br>
 				    <br>
 				</form>
 				
 				<script src='https://www.google.com/recaptcha/api.js'></script>
-				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgot.html';"></p>
+				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgotpassword';"></p>
 			</div>
 	
 		</div> <!-- .content-wrapper -->
