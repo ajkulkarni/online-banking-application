@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 
+
 public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 
 	@Override
@@ -18,6 +19,9 @@ public class CreditCardAccMapper implements RowMapper<CreditAccount>  {
 		obj.setDueDateTimestamp(rs.getDate("due_date"));
 		obj.setApr(rs.getFloat("apr"));
 		obj.setAccountNumber(rs.getInt("account_number"));
+		obj.setCycleDate(rs.getDate("cycle_date"));
+		obj.setCurrentDueAmount(rs.getInt("current_due_amt"));
+		obj.setCreditLimit(rs.getInt("credit_limit"));
 		return obj;
 	}
 
