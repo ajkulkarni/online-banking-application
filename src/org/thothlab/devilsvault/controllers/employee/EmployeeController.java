@@ -44,6 +44,7 @@ public class EmployeeController {
 		role = (String) request.getSession().getAttribute("role");
 		userID = (int) request.getSession().getAttribute("userID");
 		username = (String) request.getSession().getAttribute("username");
+		
 	}
 	
 	@RequestMapping(value="/employee/home", method=RequestMethod.GET)
