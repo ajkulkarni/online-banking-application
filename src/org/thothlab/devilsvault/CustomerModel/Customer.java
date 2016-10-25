@@ -11,12 +11,13 @@ public class Customer {
     private String country;
     private String pincode;
     private String phone;
+    private String merchant_secret;
     
 
     public Customer()
     {}
     public Customer(String name,String designation, String email, String address, String telephone,
-    		String city,String state,String country, String pin) {
+    		String city,String state,String country, String pin, String merchant_secret) {
         this.name = name;
         this.designation = designation;
         this.email = email;
@@ -26,6 +27,7 @@ public class Customer {
         this.country = country;
         this.pincode = pin;
         this.phone = telephone;
+        this.merchant_secret = merchant_secret;
     }
 
 	public int getID() {
@@ -106,6 +108,14 @@ public class Customer {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public String getMerchant_secret() {
+		return merchant_secret;
+	}
+
+	public void setMerchant_secret(String merchant_secret) {
+		this.merchant_secret = merchant_secret;
 	}
 
 }
