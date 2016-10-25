@@ -3,7 +3,6 @@ package org.thothlab.devilsvault.CustomerModel;
 import java.util.Date;
 
 
-
 public class CreditAccount extends BankAccount {
 	
 	private int Id;
@@ -14,6 +13,11 @@ public class CreditAccount extends BankAccount {
 	private double lastBillAmount;
 	private Date dueDateTimestamp;
 	private float apr;
+	
+	private Date cycleDate;
+	private int currentDueAmount;
+	private int creditLimit;
+	
 	
 	public int getInterset() {
 		return interset;
@@ -76,6 +80,31 @@ public class CreditAccount extends BankAccount {
 	public void setApr(float apr) {
 		this.apr = apr;
 	}
+
+	public Date getCycleDate() {
+		return cycleDate;
+	}
+
+	public void setCycleDate(Date cycleDate) {
+		this.cycleDate = cycleDate;
+	}
+
+	public int getCurrentDueAmount() {
+		return currentDueAmount;
+	}
+
+	public void setCurrentDueAmount(int currentDueAmount) {
+		this.currentDueAmount = currentDueAmount;
+	}
+
+	public int getCreditLimit() {
+		return creditLimit;
+	}
+
+	public void setCreditLimit(int creditLimit) {
+		this.creditLimit = creditLimit;
+	}
+	
 	
 	
 

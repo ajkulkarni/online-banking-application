@@ -20,41 +20,28 @@
 				</div>
 
 				<div class="row">
-					<div class="col-sm-3">Last Payment Amount:</div>
-					<div class="col-sm-3">${creditAccount.lastBillAmount}</div>
-				</div>
-
-				<div class="row">
 					<div class="col-sm-3">Out Standing Balance:</div>
 					<div class="col-sm-3">${creditAccount.availBalance}</div>
 				</div>
 
 				<div class="row">
-					<div class="col-sm-3">Available Credit:</div>
-					<div class="col-sm-3">${creditAccount.availBalance}</div>
-				</div>
-
-
-
-				<div class="row">
-					<div class="col-sm-3">Cash Advance Balance:</div>
-					<div class="col-sm-3">NA</div>
+					<div class="col-sm-3">Credit Limit:</div>
+					<div class="col-sm-3">${creditAccount.creditLimit}</div>
 				</div>
 
 
 				<div class="row">
-					<div class="col-sm-3">Cash Advance Limit:</div>
-					<div class="col-sm-3">NA</div>
+					<div class="col-sm-3">Current Due Amount:</div>
+					<div class="col-sm-3">${creditAccount.currentDueAmount}</div>
 				</div>
 
-
-
 				<div class="row">
-					<div class="col-sm-3">Now:</div>
-					<div class="col-sm-3">${creditAccount.apr}</div>
+					<div class="col-sm-3">Cycle Date:</div>
+					<div class="col-sm-3">${creditAccount.cycleDate}</div>
 				</div>
+
 				<div class="row">
-					<div class="col-sm-3">Cash APR:</div>
+					<div class="col-sm-3">APR:</div>
 					<div class="col-sm-3">${creditAccount.apr}</div>
 				</div>
 			</div>
@@ -64,16 +51,23 @@
 			role="button">Make payment</a>
 
 		<h1>Credit Card Statement</h1>
-	<form class="form-horizontal" action="getTransactions" method='POST' onSubmit="return checkInputOr()">
-		<select class="form-control" name="monthPicker">
-			<option>Last one month</option>
-			<option>Last 3 months</option>
-			<option>Last 6 months</option>
+		<form class="form-horizontal" action="getTransactions" method='POST'
+			onSubmit="return checkInputOr()">
+			<select class="form-control" name="monthPicker">
 
-		</select>
-		
- 		 <button type="submit" class="btn btn-primary">Submit</button>
-	</form>
+				<c:forEach var="month" items="${months}" varStatus="loop">
+				<option>${month}</option>
+					<%-- <c:if test=${month}.equals(${electedMonth})>
+						<option selected="selected">${month}</option>
+					</c:if>
+					<c:otherwise>
+						<option>${month}</option>
+					</c:otherwise> --%>
+				</c:forEach>
+			</select>
+
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -95,7 +89,8 @@
 						<th scope="row">${loop.index + 1}</th>
 						<td>${trans.description}</td>
 						<td>${trans.payee_id}</td>
-						<td>${trans.payer_id}</th>
+						<td>${trans.payer_id}
+						</th>
 						<td>${trans.amount}</td>
 						<td>${trans.timestamp_updated}</td>
 						<td>${trans.pendingStrg}</td>
@@ -112,16 +107,9 @@
 </main>
 
 <script type="text/javascript">
-
-
 	$(document).ready(function() {
 		sideNavigationSettings();
 	});
-	
-	
-	
-	
-
 </script>
 
 </body>
