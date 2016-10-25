@@ -11,12 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
-/**
- * Reference org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl
- * 
- * @author mkyong
- * 
- */
 public class CustomUserDetailsService extends JdbcDaoImpl {
 
 	@Override

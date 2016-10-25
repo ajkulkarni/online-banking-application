@@ -229,20 +229,33 @@ public class EmployeeController {
 	    return model;
     }
 		
-    @RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
-		public ModelAndView viewExtAccountDetails(RedirectAttributes redir, HttpServletRequest request,@RequestParam("extUserID") String extuserID, @RequestParam("userType") String userType) {
-    	setGlobals(request);
-    	String msg="";
-    	if(role.equalsIgnoreCase("ROLE_MANAGER") || role.equalsIgnoreCase("ROLE_REGULAR")){
-    		if (!userType.equalsIgnoreCase("external")){
-    			msg = "You are only authorized to view customer accounts !!";
-    			ModelAndView model = new ModelAndView();
-    			model.setViewName("redirect:/employee/management");
-    			redir.addFlashAttribute("message",msg);
-    			return model;
-    		}
-    	}
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	@RequestMapping(value="/employee/viewaccountdetails", method = RequestMethod.POST)
+	public ModelAndView viewExtAccountDetails(RedirectAttributes redir, HttpServletRequest request,@RequestParam("extUserID") String extuserID, @RequestParam("userType") String userType) {
+	setGlobals(request);
+	String msg="";
+	if(role.equalsIgnoreCase("ROLE_MANAGER") || role.equalsIgnoreCase("ROLE_REGULAR")){
+		if (!userType.equalsIgnoreCase("external")){
+			msg = "You are only authorized to view customer accounts !!";
+			ModelAndView model = new ModelAndView();
+			model.setViewName("redirect:/employee/management");
+			redir.addFlashAttribute("message",msg);
+			return model;
+		}
+	}
+	ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+	if(userType.equalsIgnoreCase("internal"))
+	{
+		InternalUserDaoImpl internaluserdeoimpl = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
+		InternalUser employee = internaluserdeoimpl.getUserById(Integer.parseInt(extuserID));
+		if(employee == null)
+		{
+			employee = new InternalUser();
+		}
+		model.addObject("extUserObj",employee);		
+	}
+	else
+	{
 		CustomerDAO customerdao = ctx.getBean("customerDAO",CustomerDAO.class);
 		BankAccountDaoImpl bankaccountdaoimpl = ctx.getBean("bankAccountDao",BankAccountDaoImpl.class);
 		List <BankAccountDB> account_list_new = bankaccountdaoimpl.getAccountDetailsById(Integer.parseInt(extuserID));
@@ -251,17 +264,17 @@ public class EmployeeController {
 			account_list_new = new ArrayList<BankAccountDB>(); 
 		}
 		Customer customer = customerdao.getCustomer(Integer.parseInt(extuserID));
-		ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
-		model.addObject("userType", userType);
 		model.addObject("extUserObj",customer);
 		model.addObject("account_list",account_list_new);
-		ctx.close();
-		return model;
 	}
+	model.addObject("userType", userType);
+	ctx.close();
+	return model;
+}
 	
-	@RequestMapping(value="/employee/addrequest", method = RequestMethod.POST)
-    public ModelAndView modifyDetails(@RequestParam("userID") String userID ,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("userType") String userType,@RequestParam("newValue") String newValue) {
-		ModelAndView model = new ModelAndView("employeePages/ExtAccountDetails");
+    @RequestMapping(value="/employee/addrequest", method = RequestMethod.POST)
+    public ModelAndView modifyDetails(RedirectAttributes redir,@RequestParam("userID") String userID ,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("userType") String userType,@RequestParam("newValue") String newValue) {
+		ModelAndView model = new ModelAndView();
 		if(userType.equalsIgnoreCase("external"))
 		{
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -274,19 +287,34 @@ public class EmployeeController {
 	    ctx.close();
 	    model = new ModelAndView("employeePages/ExtAccountDetails");
         model.addObject("extUserObj",customer);
+        model.addObject("userType",userType);
 		}
 		else if(userType.equalsIgnoreCase("internal"))
 		{
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 			InternalUserDaoImpl internalDao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
 			InternalRequestDaoImpl internalrequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
-			InternalUser internaluser = internalDao.getUserById(Integer.parseInt(userID));
-			setGlobals(request);
-			Integer internalUserID= this.userID;
-			internalrequestDao.raiseInternalPersonalRequest(internaluser, requestType, newValue,internalUserID, role);
-		    ctx.close();
-		    model = new ModelAndView("employeePages/employeeUserDetails");
-	        model.addObject("user",internaluser);
+			InternalUser internaluser = new InternalUser();
+			if(role.equals("ROLE_REGULAR") || role.equals("ROLE_MANAGER"))
+			{
+				internaluser  = internalDao.getUserById(Integer.parseInt(userID));
+				setGlobals(request);
+				Integer internalUserID= this.userID;
+				internalrequestDao.raiseInternalPersonalRequest(internaluser, requestType, newValue,internalUserID, role);
+				model.setViewName("redirect:/employee/userdetails");
+    			redir.addFlashAttribute("user",internaluser);
+    			redir.addFlashAttribute("userType",userType);
+			}
+			else
+			{
+				internalrequestDao.update("internal_user", requestType, newValue, "id", userID);
+				internaluser  = internalDao.getUserById(Integer.parseInt(userID));
+				model = new ModelAndView("employeePages/ExtAccountDetails");
+		        model.addObject("extUserObj",internaluser);
+		        model.addObject("userType",userType);
+
+			}
+			ctx.close();
 		}
         return model;
 

@@ -5,6 +5,34 @@ public class UserAuthentication {
 	private String password;
 	private String enabled;
 	private String role;
+	private int accountNonExpired;
+	private int accountNonLocked;
+	private int credentialsNonExpired;
+	private int otpNonLocked;
+	public int getAccountNonExpired() {
+		return accountNonExpired;
+	}
+	public void setAccountNonExpired(int accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+	public int getAccountNonLocked() {
+		return accountNonLocked;
+	}
+	public void setAccountNonLocked(int accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+	public int getCredentialsNonExpired() {
+		return credentialsNonExpired;
+	}
+	public void setCredentialsNonExpired(int credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+	public int getOtpNonLocked() {
+		return otpNonLocked;
+	}
+	public void setOtpNonLocked(int otpNonLocked) {
+		this.otpNonLocked = otpNonLocked;
+	}
 	public String getUsername() {
 		return username;
 	}
