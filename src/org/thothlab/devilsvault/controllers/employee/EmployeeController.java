@@ -129,8 +129,8 @@ public class EmployeeController {
 		InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
 		
 		
-		//Integer payerID = Integer.parseInt(extuserID);
-		int payerID = 1;
+		Integer payerID = Integer.parseInt(extuserID);
+		//int payerID = 1;
 		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 		List<Integer> currentUserAccounts  = transferDAO.getMultipleAccounts(payerID);
 		List<String> userAccounts=new ArrayList<>();
@@ -141,7 +141,8 @@ public class EmployeeController {
 		request.getSession().setAttribute("userAccounts", userAccounts);
 			
 		List<Integer> extuserIDs = new ArrayList<Integer>();
-		extuserIDs.add(Integer.parseInt(extuserID));
+		//extuserIDs.add(Integer.parseInt(extuserID));
+		extuserIDs.add(1);
 		List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
 		for(Integer acc: accountNos){
 			System.out.println("Account : " + acc);
@@ -163,20 +164,56 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/employee/processAccTransaction", method = RequestMethod.POST)
 	public ModelAndView processAccTransactions(@RequestParam("transactionID") String transactionID,
-			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID) {
+			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
+		setGlobals(request);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
+				InternalTransactionDaoImpl.class);
+		
+		
+		//Fetch transaction from transaction_pending
+		Transaction transaction = transactionDao.getById(Integer.parseInt(transactionID), "transaction_pending").get(0);
+		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		transaction.setApprover(""+userID);
+		transaction.setStatus(requestType);
+		transaction.setTimestamp_created(createdDateTime);
+		transaction.setTimestamp_updated(createdDateTime);
+		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
+		System.out.println("Transaction : " + transactionSaved + "-" +transaction.getId() + "-" + transaction.getApprover() + "-" + transaction.getStatus() + "-" + transaction.getAmount());
+		
+		if(!transactionSaved){
+			ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+			model.addObject("error_msg", "Transaction could not be processed!");
+			ctx.close();
+			return model;
+		}
+		
+		//update amount
+		if(requestType.equalsIgnoreCase("Approve")){
+			transactionDao.updatePayerBalance(transaction.getPayer_id(), transaction.getAmount());
+			transactionDao.updatePayeeBalance(transaction.getPayee_id(), transaction.getAmount());
+			transactionDao.updateHold(transaction.getPayer_id(), transaction.getAmount());
+		}
+		else if(requestType.equalsIgnoreCase("Reject"))
+			transactionDao.updateHold(transaction.getPayer_id(), transaction.getAmount());
+		
+		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
+		System.out.println(" Dletion : " + transactionDeleted);
+		
 		InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
 		List<Integer> extuserIDs = new ArrayList<Integer>();
-		extuserIDs.add(Integer.parseInt(extuserID));
+		//extuserIDs.add(Integer.parseInt(extuserID));
+		extuserIDs.add(1);
 		System.out.println(transactionID);
 		System.out.println(requestType);
 		List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
-		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
-				InternalTransactionDaoImpl.class);
+		
 		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
 		ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
 		model.addObject("transactionList", transactionList);
 		model.addObject("extUserID", extuserID);
+		model.addObject("error_msg", "Transaction processed successfully!");
+		model.addObject("success", true);
 		ctx.close();
 		return model;
 	}
@@ -185,7 +222,7 @@ public class EmployeeController {
 	public ModelAndView newAccTransactions(@RequestParam("accountNo") String accountNo,
 			@RequestParam("receiverAccount") String receiverAccount, @RequestParam("amount") String amount,
 			@RequestParam("extUserID") String extuserID, HttpServletRequest request) throws ParseException {
-	
+		setGlobals(request);
 		List<String> userAccounts = (List<String>) request.getSession().getAttribute("userAccounts");
 
 		System.out.println("extUSERID"+extuserID);
@@ -214,7 +251,7 @@ public class EmployeeController {
 		System.out.println(receiverAccountExists);
 		if(!(userAccounts.contains(payerAccountNumber+":"+payerAccountType) )){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid payer account chosen!");
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid payer account chosen!");
 			ctx.close();
 			return model;
 		}	
@@ -223,14 +260,15 @@ public class EmployeeController {
 
 		if(!receiverAccountExists){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid payee account chosen!");
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid payee account chosen!");
 			ctx.close();
 			return model;			
 		}
 		
 		if(!(amount.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount.isEmpty()){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid Amount!");
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid Amount!");
+			ctx.close();
 			return model;
 			
 		}
@@ -238,7 +276,7 @@ public class EmployeeController {
 		if(!amountValid){
 			System.out.println("Inadequate balance!");
 			model.addObject("success", false);
-			model.addObject("error_msg", "Insufficient balance!");
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Insufficient balance!");
 			ctx.close();
 //			return model;
 		}
@@ -248,11 +286,22 @@ public class EmployeeController {
 		String description = "Transferred "+amount+"$ from Account:"+payerAccountNumber+" to Account:"+receiverAcountNumber+"";
 		
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber,amountSent,receiverAcountNumber, description, "Employee Generated");
-		extTransactionDAO.save(extTransferTrans, "transaction_completed");
+		extTransferTrans.setApprover(""+userID);
+		
+		//save to pending first
+		extTransactionDAO.save(extTransferTrans, "transaction_pending");
+		
+		//save to completed now
+		extTransactionDAO.saveToCompleted(extTransferTrans, "transaction_completed");
+		
+		//delete from pending
+		extTransactionDAO.deleteById(extTransferTrans.getId(), "transaction_pending");
+		
 		transferDAO.updateHold(payerAccountNumber,amountSent);
 	
 		model.addObject("transactionList", transactionList);
 		model.addObject("extUserID", extuserID);
+		model.addObject("error_msg", "Your payment was successful!");
 		model.addObject("success", true);
 		ctx.close();
 		return model;

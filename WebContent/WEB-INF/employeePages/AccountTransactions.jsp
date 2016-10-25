@@ -8,7 +8,7 @@
 			<div class="container col-lg-12" " id="transferRejected">
 				<div class="alert alert-dismissible alert-warning col-lg-8">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<strong>Sorry! Your payment was rejected. ${error_msg}</strong>
+					<strong>${error_msg}</strong>
 				</div>
 			</div>
 		</c:if>
@@ -16,7 +16,7 @@
 			<div class="container col-lg-12" id="transferSuccess">
 				<div class="alert alert-dismissible alert-success col-lg-6">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<strong>Your payment was successful!</strong>
+					<strong>${error_msg}</strong>
 				</div>
 			</div>
 		</c:if>

@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -122,5 +123,23 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
     query += ") AND critical='1'";
         List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         return transactionList;
-    }	
+    }
+    
+    public void updatePayerBalance(int payerAccountNumber, BigDecimal amount){
+		String updateStmt = "Update bank_accounts set balance = balance - ? where account_number = ?";
+		jdbcTemplate.update(updateStmt, new Object[] {amount, payerAccountNumber});
+	}
+    
+    public void updatePayeeBalance(int payeeAccountNumber, BigDecimal amount){
+		String updateStmt = "Update bank_accounts set balance = balance + ? where account_number = ?";
+		jdbcTemplate.update(updateStmt, new Object[] {amount, payeeAccountNumber});
+	}
+    
+    public void updateHold(int payerAccountNumber, BigDecimal amount){
+		String updateStmt = "Update bank_accounts set hold = hold - ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, payerAccountNumber});
+	}
+    
+    	
 }

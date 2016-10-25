@@ -79,7 +79,7 @@ public class TransferDAO {
 	 */
 	public void getRelatedAccounts(int payerID, List<String> populatedPayeeAccounts) {
 
-		String query = "select payee_id from transaction_completed WHERE transaction_type = \'external\' AND payer_id =" + payerID;
+		String query = "select payee_id from transaction_completed WHERE transaction_type = \'externalFundTfr\' AND payer_id =" + payerID;
 
 		System.out.println(query);
 		List<Integer> relatedAccounts = jdbcTemplate.query(query, new AccountsMapper());

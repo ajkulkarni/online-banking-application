@@ -47,9 +47,6 @@ public class TransactionDaoImpl implements TransactionDao {
 
 		extTransfer.setHashvalue("");
 
-		if(transactionType.contains("Internal")){
-			extTransfer.setStatus("completed");
-		}
 		extTransfer.setStatus("pending");
 		extTransfer.setApprover("");
 		if(amount.compareTo(new BigDecimal("1000")) == 1){
@@ -134,5 +131,44 @@ public class TransactionDaoImpl implements TransactionDao {
 		}
 		return true;
 	}
+	
+	public Boolean saveToCompleted(Transaction transaction, String type) {
+		String query = "insert into " + type
+				+ "(id,payer_id,payee_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(query);
+			ps.setInt(1, transaction.getId());
+			ps.setInt(2, transaction.getPayer_id());
+			ps.setInt(3, transaction.getPayee_id());
+			ps.setBigDecimal(4, transaction.getAmount());
+			ps.setString(5, transaction.getHashvalue());
+			ps.setString(6, transaction.getTransaction_type());
+			ps.setString(7, transaction.getDescription());
+			ps.setString(8, transaction.getStatus());
+			ps.setString(9, transaction.getApprover());
+			ps.setBoolean(10, transaction.isCritical());
+			ps.setTimestamp(11, transaction.getTimestamp_created());
+			ps.setTimestamp(12, transaction.getTimestamp_updated());
+			int out = ps.executeUpdate();
+			if (out != 0) {
+				return true;
+			} else
+				return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 
 }

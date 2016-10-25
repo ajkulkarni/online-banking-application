@@ -168,26 +168,42 @@ public class CustomerTransferFundsController {
 		System.out.println("------------");
 		// TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 		// System.out.println(request.getParameter("etpdatetimepicker_result"));
 		String amount_str = request.getParameter("etpinputAmount");
 		
 		//Check if amount is valid Bigdecimal
 		if(!(amount_str.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount_str.isEmpty()){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid Amount Co!");
+			model.addObject("error_msg", "Invalid Amount!");
 			return model;
 		}
 		
-
+		//Check if payee account input is in the expected format
+		String payeeAccount_str = request.getParameter("etpselectPayeeAccount");
+		if(!payeeAccount_str.matches("/w+/s*\\:/d+")){
+			model.addObject("success", false);
+			model.addObject("error_msg", " Invalid Credentials!");
+			ctx.close();
+			return model;
+		}
+		
+		//Check if payer account input is in the expected format
+		String payerAccount_str = request.getParameter("etpselectPayerAccount");
+		if(!payerAccount_str.matches("/d+\\:[CHECKING|SAVINGS]")){
+			model.addObject("success", false);
+			model.addObject("error_msg", " Invalid Credentials!");
+			ctx.close();
+			return model;
+		}
 		
 		BigDecimal amount = new BigDecimal(amount_str);
 		int payerAccountNumber = Integer.parseInt(request.getParameter("etpselectPayerAccount").split(":")[0]);
 		String payerAccountType = request.getParameter("etpselectPayerAccount").split(":")[1];
 		int payeeAccountNumber = -1;
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 		
-		if(request.getParameter("etpselectPayeeAccount").contains(":")){
+		if(payeeAccount_str.contains(":")){
 			payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
 			String payeeName = request.getParameter("etpselectPayeeAccount").split(":")[0];
 			if(!(populatedPayeeAccounts.contains(payeeName+":"+payeeAccountNumber) 
@@ -220,14 +236,11 @@ public class CustomerTransferFundsController {
 			ctx.close();
 			return model;
 		}
-		// ExternalTransactionDAO extTransactionDAO =
-		// CustomerDAOHelper.extTransactionDAO();
-		// ClassPathXmlApplicationContext ctx = new
-		// ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+
 		TransactionDaoImpl extTransactionDAO = ctx.getBean("TransactionDao", TransactionDaoImpl.class);
 
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber, amount,
-				payeeAccountNumber, description, "external");
+				payeeAccountNumber, description, "externalFundTfr");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		transferDAO.updateHold(payerAccountNumber, amount);
 		model.addObject("success", true);
@@ -242,8 +255,8 @@ public class CustomerTransferFundsController {
 
 		List<String> userAccounts = (List<String>) request.getSession().getAttribute("userAccounts");
 		ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
-		
-		
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 		
 		setGlobals(request);
 		System.out.println("------------");
@@ -254,19 +267,36 @@ public class CustomerTransferFundsController {
 		//Check if amount is valid Bigdecimal
 		if(!(amount_str.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount_str.isEmpty()){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid Amount Co!");
+			model.addObject("error_msg", "Invalid Amount!");
 			return model;
 		}
-		BigDecimal amount = new BigDecimal(amount_str);
-				
+		
+		//Check if payer account input is in the expected format
+		String payerAccount_str = request.getParameter("itpselectPayerAccount");
+		if(!payerAccount_str.matches("/d+\\:[CHECKING|SAVINGS]")){
+			System.out.println("YAYYYYYYYYYYYYYYYYYYY");
+			model.addObject("success", false);
+			model.addObject("error_msg", " Invalid Credentials!");
+			ctx.close();
+			return model;
+		}
+		
+		//Check if payee account input is in the expected format
+		String payeeAccount_str = request.getParameter("itpselectPayeeAccount");
+		if(!payeeAccount_str.matches("/d+\\:[CHECKING|SAVINGS]")){
+			model.addObject("success", false);
+			model.addObject("error_msg", " Invalid Credentials!");
+			ctx.close();
+			return model;
+		}
+		
+		BigDecimal amount = new BigDecimal(amount_str);	
 		int payerAccountNumber = Integer.parseInt(request.getParameter("itpselectPayerAccount").split(":")[0]);
 		String payerAccountType = request.getParameter("itpselectPayerAccount").split(":")[1];
 		int payeeAccountNumber = Integer.parseInt(request.getParameter("itpselectPayeeAccount").split(":")[0]);
 		String payeeAccountType = request.getParameter("itpselectPayeeAccount").split(":")[1];
 		String description = request.getParameter("itpTextArea");
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
-
+		
 		if(!(userAccounts.contains(payerAccountNumber+":"+payerAccountType) && userAccounts.contains(payeeAccountNumber+":"+payeeAccountType)) ){
 			model.addObject("success", false);
 			model.addObject("error_msg", " Invalid Request!");
@@ -284,7 +314,6 @@ public class CustomerTransferFundsController {
 		
 		
 		boolean amountValid = transferDAO.validateAmount(payerAccountNumber, amount);
-		//Check if amount_str follows the format NUMBER.NUMBER (eg.34.23)
 		
 		if (!amountValid) {
 
@@ -301,7 +330,7 @@ public class CustomerTransferFundsController {
 		TransactionDaoImpl extTransactionDAO = ctx.getBean("TransactionDao", TransactionDaoImpl.class);
 
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber, amount,
-				payeeAccountNumber, description, "internal");
+				payeeAccountNumber, description, "internalFundTfr");
 		extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		transferDAO.updateHold(payerAccountNumber, amount);
 		model.addObject("success", true);
@@ -344,7 +373,7 @@ public class CustomerTransferFundsController {
 		//Check if amount is valid Bigdecimal    [0-9]*\\.?[0-9]+
 		if(!(amount_str.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount_str.isEmpty()){
 			model.addObject("success", false);
-			model.addObject("error_msg", "Invalid Amount Co!");
+			model.addObject("error_msg", "Invalid Amount!");
 			ctx.close();
 			return model;
 		}
@@ -368,7 +397,7 @@ public class CustomerTransferFundsController {
 			TransactionDaoImpl extTransactionDAO = ctx.getBean("TransactionDao", TransactionDaoImpl.class);
 
 			Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber, amount,
-					PayeeAccountNumber, description, "EmailPhone");
+					PayeeAccountNumber, description, "emailphoneFundTfr");
 			extTransactionDAO.save(extTransferTrans, "transaction_pending");
 			transferDAO.updateHold(payerAccountNumber, amount);
 			model.addObject("success", true);
