@@ -26,7 +26,8 @@ public class TestTransactions {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
 		String type = "transaction_pending";
-		java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
+		//java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
+		java.sql.Timestamp sqlDate = new java.sql.Timestamp(new Date().getTime());
 		Transaction transaction = new Transaction();
 		transaction.setId(1);
 		transaction.setPayee_id(1);

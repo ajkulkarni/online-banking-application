@@ -3,9 +3,11 @@ package org.thothlab.devilsvault.dao.transaction;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -14,10 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.thothlab.devilsvault.dao.transaction.TransactionDao;
 import org.thothlab.devilsvault.db.model.Transaction;
 
-@Repository ("TransactionDao")
+@Repository("TransactionDao")
 public class TransactionDaoImpl implements TransactionDao {
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
@@ -26,15 +27,58 @@ public class TransactionDaoImpl implements TransactionDao {
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(dataSource);		
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	public Transaction createExternalTransaction(int payerAccountNumber, BigDecimal amount, int payeeAccountNumber,
+			String description, String transactionType) throws ParseException{
+		Transaction extTransfer = new Transaction();
+
+		extTransfer.setPayer_id(payerAccountNumber);
+		extTransfer.setPayee_id(payeeAccountNumber);
+		extTransfer.setAmount(amount);
+		extTransfer.setDescription(description);
+		extTransfer.setTransaction_type(transactionType);
+
+		/*
+		 * eptpModeOfTransfer eptpinputMode eptpselectPayerAccount
+		 * eptpinputAmount
+		 */
+
+		extTransfer.setHashvalue("");
+
+		if(transactionType.contains("Internal")){
+			extTransfer.setStatus("completed");
+		}
+		extTransfer.setStatus("pending");
+		extTransfer.setApprover("");
+		if(amount.compareTo(new BigDecimal("1000")) == 1){
+			extTransfer.setCritical(true);			
+		}
+		else{
+			extTransfer.setCritical(false);
+		}
+		
+		/*java.util.Date currentDateTime = new java.util.Date();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = df.format(currentDateTime);*/
+		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		extTransfer.setTimestamp_created(createdDateTime);
+		extTransfer.setTimestamp_updated(createdDateTime);
+
+		return extTransfer;
+	}
+
+	
+	
+	
 	@Override
 	public Boolean save(Transaction transaction, String type) {
-		String query = "insert into "+type+"(payer_id,payee_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?)";
+		String query = "insert into " + type
+				+ "(payer_id,payee_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?)";
 		Connection con = null;
 		PreparedStatement ps = null;
-		try{
+		try {
 			con = dataSource.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, transaction.getPayer_id());
@@ -46,15 +90,16 @@ public class TransactionDaoImpl implements TransactionDao {
 			ps.setString(7, transaction.getStatus());
 			ps.setString(8, transaction.getApprover());
 			ps.setBoolean(9, transaction.isCritical());
-			ps.setDate(10, transaction.getTimestamp_created());
-			ps.setDate(11, transaction.getTimestamp_updated());
+			ps.setTimestamp(10, transaction.getTimestamp_created());
+			ps.setTimestamp(11, transaction.getTimestamp_updated());
 			int out = ps.executeUpdate();
-			if(out !=0){
+			if (out != 0) {
 				return true;
-			}else return false;
-		}catch(SQLException e){
+			} else
+				return false;
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				ps.close();
 				con.close();
@@ -67,30 +112,27 @@ public class TransactionDaoImpl implements TransactionDao {
 
 	@Override
 	public List<Transaction> getById(int id, String table) {
-        String query = "SELECT * FROM "+ table +" WHERE id = "+id;
-        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
-        return transactionList;
-    }
-	
+		String query = "SELECT * FROM " + table + " WHERE id = " + id;
+		List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper(Transaction.class));
+		return transactionList;
+	}
+
 	@Override
 	public void update(Transaction employer) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public boolean deleteById(int id, String type) {
-        Object[] parameters = { id };
-        int[] queryType = {Types.INTEGER };
-        String query = "DELETE FROM " + type+ " WHERE id = ?";
-        int i = jdbcTemplate.update(query, parameters, queryType);
-        if(i <= 0)
-        {
-            return false;
-        }
-            return true;
-    }
+		Object[] parameters = { id };
+		int[] queryType = { Types.INTEGER };
+		String query = "DELETE FROM " + type + " WHERE id = ?";
+		int i = jdbcTemplate.update(query, parameters, queryType);
+		if (i <= 0) {
+			return false;
+		}
+		return true;
+	}
 
-
-	
 }

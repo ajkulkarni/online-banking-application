@@ -59,13 +59,8 @@
 				</li>
 
 				<li class="has-children">
-					<a href="#0">Transfer Money</a>
+					<a href="transferfunds">Transfer Money</a>
 					
-					<ul>
-						<li><a href="#0">Email/Telephone</a></li>
-						<li><a href="#0">Within Account</a></li>
-						<li><a href="#0">Someone's Account</a></li>
-					</ul>
 				</li>
 			</ul>
 		</nav>
