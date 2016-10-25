@@ -35,7 +35,7 @@ public class OtpDaoImpl implements OtpDao{
 		List<UserAuthentication> userList = jdbcTemplate.query(query, new BeanPropertyRowMapper<UserAuthentication>(UserAuthentication.class));
 		if (userList.size() == 0)
 			return "Invalid User";
-		if(userList.get(0).getAccountNonLocked() == 0)
+		if(userList.get(0).getOtpNonLocked() == 0)
 			return "Account Locked";
 		//Make a call to process OTP
 		return processOTP(userList.get(0).getUsername());
