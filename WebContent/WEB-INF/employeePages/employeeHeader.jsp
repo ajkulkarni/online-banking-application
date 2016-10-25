@@ -31,12 +31,11 @@
 			<ul class="cd-top-nav">
 				<li class="has-children account">
 					<a href="#0">
-						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>UserID</a>
+						<i style="padding-right: 10px" class="fa fa-user" aria-hidden="true"></i>${username}</a>
 					<ul>
 
-						<li><a href="#0">My Account</a></li>
-						<li><a href="#0">Edit Account</a></li>
-						<li><a href="#0">Logout</a></li>
+						<li><a href="userdetails">My Account</a></li>
+						<li><a href="<c:url value="/logout" />">Logout</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -46,14 +45,24 @@
 		<nav class="cd-side-nav is-fixed">
 			<ul>
 				<li>
-					<a href="#0">User Management</a>
+					<a href="management">Management</a>
 				</li>
+				<li class="has-children">
+					<a href="#0">Request</a>
+					<ul>
+						<li><a href="pendingrequest">Pending</a></li>
+						<li><a href="completedrequest">Completed</a></li>
+					</ul>
+				</li>
+				<c:if test="${role == 'ROLE_MANAGER' }">
 				<li>
-					<a href="#0">Request<span class="count">3</span></a>
+					<a href="transaction">Transaction<span class="count">${transaction_count}</span></a>
 				</li>
-
+				</c:if>
+				<c:if test="${role == 'ROLE_ADMIN' }">
 				<li>
-					<a href="#0">Admin Options</a>
+					<a href="systemlogs">System Logs</a>
 				</li>
+				</c:if>
 			</ul>
 		</nav>

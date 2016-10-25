@@ -655,3 +655,46 @@ Sidebar
     visibility: visible;
   }
 }
+
+.no-padding{
+	padding:0px;
+}
+
+.no-margin{
+	margin:0px;
+}
+
+table#content-table{
+    width:100%;
+    max-width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+table#content-table td, table#content-table th{
+    border: 1px solid #bfbfbf;
+    border-collapse: collapse;
+}
+
+table#content-table th{
+    text-align: center;
+
+}
+table#content-table td{
+    padding-left: 5px;
+
+}
+
+table#content-table th.active, table#content-table td.active{
+    background-color: #e0e0e0;
+}
+
+
+table#content-table td.full-row{
+    background-color: #2196f3;
+    color: #fff;
+    padding-left: 15px;
+}
+
+.form-margin{
+	margin-bottom:15px;
+}

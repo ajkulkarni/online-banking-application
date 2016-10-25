@@ -128,3 +128,7 @@ function sideNavigationSettings(){
 	// 	scrolling = false;
 	// }
 }
+
+function EnableRegistration(){
+	$('#newregisterButton').show();
+}

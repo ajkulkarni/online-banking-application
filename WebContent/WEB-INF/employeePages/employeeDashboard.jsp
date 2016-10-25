@@ -6,29 +6,154 @@
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
-			<h1>Employee DashBoard</h1>
-			<div class="panel panel-warning">
+			<h3>Employee DashBoard</h3>
+			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Panel warning</h3>
+					<h3 class="panel-title">Pending requests statistics</h3>
 				</div>
-				<div class="panel-body">
-					Panel content
+				<div class="panel-body no-padding">
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">Requests</th>
+								<th class="active">Count</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:if test="${role == 'ROLE_MANAGER'}">
+							<tr>
+								<td>Internal User Requests</td>
+								<td>${internal_count}</td>
+							</tr>
+							</c:if>
+							<tr>
+								<td>External User Requests</td>
+								<td>${external_count}</td>
+							</tr>
+							<tr>
+								<td>Transaction Requests</td>
+								<td>${transaction_count}</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<div class="panel panel-success">
-				<div class="panel-heading">
-					<h3 class="panel-title">Panel success</h3>
+			<c:if test="${role == 'ROLE_MANAGER'}">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Pending Internal Requests</h3>
+					</div>
+					<div class="panel-body no-padding">
+						<table id="content-table">
+							<thead>
+								<tr>
+									<th class="active">ID</th>
+									<th class="active">Type</th>
+									<th class="active">Current Value</th>
+									<th class="active">Requested Value</th>
+									<th class="active">Creation Time</th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:choose>
+                        		<c:when test="${empty internal_list}">
+                        			<tr>
+                                    	<td colspan="5">No Internal Request Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${internal_list}" var="request">
+										<tr>
+											<td>${request.id}</td>
+											<td>${request.request_type}</td>
+											<td>${request.current_value}</td>
+											<td>${request.requested_value}</td>
+											<td>${request.timestamp_created}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="panel-body">
-					Panel content
+			</c:if>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Pending External Request</h3>
+				</div>
+				<div class="panel-body no-padding">
+					
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">ID</th>
+								<th class="active">Type</th>
+								<th class="active">Current Value</th>
+								<th class="active">Requested Value</th>
+								<th class="active">Creation Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+                        		<c:when test="${empty external_list}">
+                        			<tr>
+                                    	<td colspan="5">No External Request Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${external_list}" var="request">
+										<tr>
+											<td>${request.id}</td>
+											<td>${request.request_type}</td>
+											<td>${request.current_value}</td>
+											<td>${request.requested_value}</td>
+											<td>${request.timestamp_created}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>	
+						</tbody>
+					</table>
+				
 				</div>
 			</div>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Panel success</h3>
+					<h3 class="panel-title">Pending Transactions</h3>
 				</div>
-				<div class="panel-body">
-					Panel content
+				<div class="panel-body no-padding">
+					
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">ID</th>
+								<th class="active">Sender Account</th>
+								<th class="active">Receiver Account</th>
+								<th class="active">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+                        		<c:when test="${empty transaction_list}">
+                        			<tr>
+                                    	<td colspan="5">No Transaction Pending</td>
+                                	</tr>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<c:forEach items="${transaction_list}" var="transaction">
+										<tr>
+											<td>${transaction.id}</td>
+											<td>${transaction.payer_id}</td>
+											<td>${transaction.payee_id}</td>
+											<td>${transaction.amount}</td>
+										</tr>
+									</c:forEach>
+                        		</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+				
 				</div>
 			</div>
 		</div>

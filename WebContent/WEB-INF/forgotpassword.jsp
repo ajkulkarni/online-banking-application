@@ -53,7 +53,7 @@
 				
 			</div>
 			
-		<form class="jotform-form" action="backtologin.html" method="post" name="form_62831368525157" id="62831368525157" accept-charset="utf-8">
+		<form class="jotform-form" action="verifyOTP.html" method="post" name="form_62831368525157" id="62831368525157" accept-charset="utf-8">
 		  <input type="hidden" name="formID" value="62831368525157" />
 		  <div class="form-all">
 		    <ul class="form-section page-section">
@@ -69,7 +69,7 @@
 		        </div>
 		      </li>
 		      <br>
-		      <li class="form-line" data-type="control_button" id="id_19">
+		    
 		        <div id="cid_19" class="form-input-wide">
 		          <div style="margin-left:156px" class="form-buttons-wrapper">
 		            <button id="input_19" type="submit" class="form-submit-button form-submit-button-simple_orange">
@@ -77,7 +77,7 @@
 		            </button>
 		          </div>
 		        </div>
-		      </li>
+		     
 		      
 		    </ul>
 		  </div>
@@ -86,9 +86,10 @@
 		  <script type="text/javascript">
 		  document.getElementById("si" + "mple" + "_spc").value = "62831368525157-62831368525157";
 		  </script>
+		  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 							
-					
+		
 		
 		</div> <!-- .content-wrapper -->
 	
