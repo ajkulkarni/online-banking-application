@@ -11,6 +11,7 @@ import org.thothlab.devilsvault.CustomerModel.BankAccount;
 import org.thothlab.devilsvault.CustomerModel.CreditAccount;
 import org.thothlab.devilsvault.CustomerModel.Customer;
 import org.thothlab.devilsvault.CustomerModel.TransactionModel;
+import org.thothlab.devilsvault.db.model.Transaction;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardAccMapper;
 import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CreditCardTransMapper;
 
@@ -42,7 +43,7 @@ public class CreditCardDOA extends CustomerDOAImpl {
 				+ " cc.last_bill_amount last_bill_amount, cc.due_date due_date, cc.apr apr,cc.account_number account_number, "
 				+ "cc.cycle_date cycle_date, cc.current_due_amt current_due_amt, cc.credit_limit credit_limit "
 				+ "from credit_card_account_details cc INNER JOIN bank_accounts bk where bk.account_number = cc.account_number  "
-				+ "AND bk.external_users_id= 101 AND bk.account_type='cc' ";//+customer.getID();
+				+ "AND bk.external_users_id= 134 AND bk.account_type='CREDIT' ";//+customer.getID();
 		
 		System.out.println(query);
 		List<CreditAccount> creditcard_details= jdbcTemplate.query(query,new CreditCardAccMapper());
@@ -156,6 +157,7 @@ public class CreditCardDOA extends CustomerDOAImpl {
 		
 		return creditaccount;
 	}
+	
 	
 	
 	
