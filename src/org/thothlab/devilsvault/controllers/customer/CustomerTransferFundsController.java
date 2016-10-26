@@ -2,7 +2,6 @@ package org.thothlab.devilsvault.controllers.customer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-//import org.thothlab.devilsvault.jdbccontrollers.customerdoa.CustomerDAOHelper;
-//import org.thothlab.devilsvault.jdbccontrollers.customerdoa.ExternalTransactionDAO;
+import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
 import org.thothlab.devilsvault.dao.userauthentication.OtpDaoImpl;
-import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
-//import org.thothlab.devilsvault.db.model.ExternalUser;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 @Controller
@@ -40,7 +36,6 @@ public class CustomerTransferFundsController {
 	@RequestMapping("/customer/transferfunds")
 	public ModelAndView initializeTransferFunds(HttpServletRequest request) throws IOException {
 		ModelAndView model = new ModelAndView("customerPages/transferFunds");
-		// model.addObject("displayPanel","Hello Gaurav");
 		return model;
 	}
 
@@ -181,11 +176,33 @@ public class CustomerTransferFundsController {
 
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccountNumber, amount,
 				payeeAccountNumber, description, "externalFundTfr");
-		extTransactionDAO.save(extTransferTrans, "transaction_pending");
-		transferDAO.updateHold(payerAccountNumber, amount);
-		model.addObject("success", true);
-		model.addObject("payer_info", payerAccountNumber + "-" + payerAccountType);
-		model.addObject("Amount", amount);
+		String inputMode = Integer.toString(extTransferTrans.getPayee_id());
+		BigDecimal lessThan1k = new BigDecimal(1000);
+		if(extTransferTrans.getAmount().compareTo(lessThan1k) == -1) {
+			extTransactionDAO.save(extTransferTrans, "transaction_pending");
+			transferDAO.updateHold(payerAccountNumber, amount);
+			model.addObject("success", true);
+			model.addObject("payee_info", inputMode);
+			model.addObject("payer_info", payerAccountNumber + "-" + payerAccountType);
+			model.addObject("Amount", amount);
+			ctx.close();
+			return model;
+		}
+		
+		model = new ModelAndView("customerPages/transferOTP");
+		OtpDaoImpl otpdao = ctx.getBean("OtpDaoImpl", OtpDaoImpl.class);
+		String email = username;
+		String message = otpdao.processOTP(email);
+		
+		if(message.equals("Account Locked")) {
+			model = new ModelAndView("customerPages/transferConfirmation");
+			model.addObject("success", false);
+			model.addObject("error_msg", "OTP Locked");
+		} else {
+			request.getSession().setAttribute("transaction", extTransferTrans);
+			request.getSession().setAttribute("inputMode",inputMode); 
+			request.getSession().setAttribute("eptpselectPayerAccount",payerAccountType);
+		}
 		ctx.close();
 		return model;
 	
@@ -208,6 +225,7 @@ public class CustomerTransferFundsController {
 		if (!(amount_str.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount_str.isEmpty()) {
 			model.addObject("success", false);
 			model.addObject("error_msg", "Invalid Amount!");
+			ctx.close();
 			return model;
 		}
 
