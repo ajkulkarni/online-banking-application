@@ -78,5 +78,12 @@ public class ExternalRequestDaoImpl extends RequestDaoImpl {
 		// TODO Auto-generated method stub
 		super.rejectRequest(id, type, approver);
 	}
+	
+	public List<Request> getAllRequestToApprove(Integer userId)
+    {
+        String query = "SELECT * FROM external_request_pending where approver='" + userId + "';";
+        List<Request> requestList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Request>(Request.class));
+        return requestList;
+    }
 
 }

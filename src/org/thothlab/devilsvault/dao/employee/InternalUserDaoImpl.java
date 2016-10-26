@@ -1,5 +1,9 @@
 package org.thothlab.devilsvault.dao.employee;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.thothlab.devilsvault.dao.employee.InternalUserDao;
 import org.thothlab.devilsvault.db.model.InternalUser;
 
 @Repository ("EmployeeDAOForInternal")
@@ -47,5 +50,51 @@ public class InternalUserDaoImpl implements InternalUserDao {
 	        String email = jdbcTemplate.queryForList(query, String.class).get(0);
 	        return email;
 	}
+	
+	public InternalUser setInternalUser(String name,String designation,String address,Integer phone,String email, Date date_of_birth,String ssn)
+    {
+        InternalUser userDetails = new InternalUser();
+        userDetails.setName(name);
+        userDetails.setDesignation(designation);
+        userDetails.setAddress(address);
+        userDetails.setDate_of_birth(date_of_birth);
+        userDetails.setEmail(email);
+        userDetails.setPhone(phone);
+        userDetails.setSsn(ssn);
+        return userDetails;
+    }
+	
+	public Boolean save(InternalUser userdetails)
+    {
+        String query = "INSERT INTO internal_user ( id , name , designation , address , phone , email , date_of_birth , ssn ) VALUES (?,?,?,?,?,?,?,?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, userdetails.getId());
+            ps.setString(2, userdetails.getName());
+            ps.setString(3, userdetails.getDesignation());
+            ps.setString(4, userdetails.getAddress());
+            ps.setInt(5, userdetails.getPhone());
+            ps.setString(6, userdetails.getEmail());
+            ps.setDate(7, userdetails.getDate_of_birth());
+            ps.setString(8, userdetails.getSsn());
+            int out = ps.executeUpdate();
+            if(out !=0){
+                return true;
+            }else return false;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 
 }

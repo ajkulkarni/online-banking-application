@@ -9,7 +9,7 @@ public interface UserAuthenticationDao {
 	
 	public void setDataSource(DataSource dataSource);
 	
-	public Boolean save(Request request, String type);
+	public Boolean save(UserAuthentication userdetails);
 	
 	public String changePassword(String oldPassword,String newPassword,String confirmPassword,Integer userID);
 	

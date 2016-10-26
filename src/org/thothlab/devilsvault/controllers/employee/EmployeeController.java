@@ -852,7 +852,7 @@ public class EmployeeController {
 	@RequestMapping(value="/employee/loginmanagement")
 	public ModelAndView LoginManagement() {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-        LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+        
         ModelAndView model = new ModelAndView("employeePages/employeeLoginManagement");
         ctx.close();
         return model;

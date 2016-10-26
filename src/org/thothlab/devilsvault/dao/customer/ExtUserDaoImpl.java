@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.customer;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -74,4 +75,54 @@ public class ExtUserDaoImpl{
 		}
 		return balance;
      }
+	
+	public Customer setExternalUser(String name,String address,Integer phone,String email, Date date_of_birth,String ssn)
+    {
+        Customer userDetails = new Customer();
+        userDetails.setName(name);
+        userDetails.setAddress(address);
+        userDetails.setDate_of_birth(date_of_birth);
+        userDetails.setEmail(email);
+        userDetails.setPhone(phone);
+        userDetails.setSsn(ssn);
+        return userDetails;
+    }
+	
+	public Integer createUser(Customer userdetails)
+    {
+        String query = "INSERT INTO external_users ( id , name , address ,city,state,country,pincode, phone , email , date_of_birth , ssn ) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, userdetails.getId());
+            ps.setString(2, userdetails.getName());
+            ps.setString(3, userdetails.getAddress());
+            ps.setString(4, "sdsdsad");
+            ps.setString(5, "sdsdsad");
+            ps.setString(6, "sdsdsad");
+            ps.setInt(7, 123);
+            ps.setInt(8, userdetails.getPhone());
+            ps.setString(9, userdetails.getEmail());
+            ps.setDate(10, userdetails.getDate_of_birth());
+            ps.setString(11, userdetails.getSsn());
+            int out = ps.executeUpdate();
+            if(out !=0){
+                 String queryID = "SELECT id from external_users where email= '" + userdetails.getEmail() + "'"; 
+                    Integer id = jdbcTemplate.queryForList(queryID, Integer.class).get(0);
+                    return id;
+            }else return 0;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
 }
