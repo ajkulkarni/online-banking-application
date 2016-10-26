@@ -1,7 +1,13 @@
 package org.thothlab.devilsvault.dao.transaction;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -215,4 +221,172 @@ public class TransferDAO {
 		// AccountsMapper()).get(0);
 		jdbcTemplate.update(updateStmt, new Object[] { amount, payerAccountNumber });
 	}
+	
+	public List<String> getUserAccounts(int merchantID) throws SQLException {
+
+		Connection con = dataSource.getConnection();
+		PreparedStatement ps = null;
+		Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+
+
+		String queryName = "select id, name from external_users where id in (select external_user_id from authorized_merchants_users where merchant_id = " + merchantID + ")";
+		System.out.println(queryName);
+		List<String> userAccounts = new ArrayList<>();
+		ResultSet rs = st.executeQuery(queryName);
+		while (rs.next()) {
+			userAccounts.add(rs.getString(2) + ":" + rs.getInt(1));
+		}
+
+		for (int i = 0; i < userAccounts.size(); i++) {
+			System.out.println(userAccounts.get(i));
+		}
+		return userAccounts;
+
+	}
+	
+	public HashMap<String,String> processPayment(int merchantID, int sentAmount, int userID) throws SQLException {
+
+		HashMap<String,String> sendToController = new HashMap<>();
+
+			String query = "select account_number from bank_accounts where external_users_id = " + userID + " and account_type = \"CREDIT\"";
+
+			System.out.println(query+"fhsdkhfksd");
+
+			Connection con = dataSource.getConnection();
+			Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
+
+			ResultSet rs = st.executeQuery(query);
+			int accountNumber = -1;
+			rs.first();
+			accountNumber = rs.getInt("account_number");
+			System.out.println(accountNumber);
+			System.out.println("found acocunt number"+accountNumber);
+
+
+
+			//getting MinimumValidAmount
+			if((accountNumber==-1) ){
+				sendToController.put("userAccount","-1");
+			}
+			else{
+				sendToController.put("userAccount",""+accountNumber);
+			}
+			String getMinimumValidAmount = "select (credit_limit - available_balance) as balance from credit_card_account_details where account_number = " + accountNumber;
+
+			System.out.println(getMinimumValidAmount);
+			rs = st.executeQuery(getMinimumValidAmount);
+			int minimumBalance=-1;
+			rs.first();
+			minimumBalance = rs.getInt("balance");
+			if(sentAmount > minimumBalance){
+				sendToController.put("accepted","-1");
+				return sendToController;
+			}
+			sendToController.put("accepted","+1");
+
+			System.out.println("minimumBalance"+minimumBalance);
+
+			String getMerchantCheckingsAccount = "select account_number from bank_accounts where external_users_id ="+ merchantID+" and account_type in ( \"CHECKINGS\",\"CHECKING\") ";
+
+			System.out.println("getting merchant checking accounts:"+getMerchantCheckingsAccount);
+			rs = st.executeQuery(getMerchantCheckingsAccount);
+			int merchantAccountNumber = -1;
+			rs.next();
+			merchantAccountNumber = rs.getInt("account_number");
+			System.out.println("merchant Account Number:"+merchantAccountNumber);
+
+
+
+			if((merchantAccountNumber==-1)){
+				sendToController.put("merchantCheckingAccount","-1");
+			}
+			else{
+				sendToController.put("merchantCheckingAccount",""+merchantAccountNumber);
+			}
+			return sendToController;
+		}
+	
+	public List<String> getNewMerchantAccounts(int userID) throws SQLException {
+
+		Connection con = dataSource.getConnection();
+		PreparedStatement ps = null;
+		Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+
+//		String queryName = "select name,id from external_users where merchant =1 and id not in (select merchant_id from authorized_merchants_users where external_user_id = "+userID+")";
+
+		String queryName = "SELECT external_users.id, external_users.name\n" +
+				"FROM external_users\n" +
+				"INNER JOIN users\n" +
+				"ON external_users.email=users.username and users.role = \"ROLE_MERCHANT\" and (id not in (select merchant_id from authorized_merchants_users where external_user_id = " + userID + "))";
+		System.out.println(queryName);
+		List<String> merchantAccounts = new ArrayList<>();
+		ResultSet rs = st.executeQuery(queryName);
+		while (rs.next()) {
+			merchantAccounts.add(rs.getString(2) + ":" + rs.getInt(1));
+		}
+
+		for (int i = 0; i < merchantAccounts.size(); i++) {
+			System.out.println(merchantAccounts.get(i));
+		}
+		return merchantAccounts;
+	}
+	
+	public boolean addMerchantToUser(int merchantID, int userID) throws SQLException {
+
+		String query = "insert into authorized_merchants_users values(" + merchantID + "," + userID + ")";
+		System.out.println(query);
+		Connection con = dataSource.getConnection();
+		Statement st = con.createStatement();
+		int i = st.executeUpdate(query);
+		if (i == 1) {
+			return true;
+		}
+		System.out.println(i);
+		return false;
+	}
+	
+	public boolean deleteMerchantConnection(int userID, int merchantID) throws SQLException {
+
+
+		String query = "delete from authorized_merchants_users where merchant_id = " + merchantID + " and external_user_id = " + userID;
+		System.out.println(query);
+		Connection con = dataSource.getConnection();
+		Statement st = con.createStatement();
+		int i = st.executeUpdate(query);
+		if (i == 1) {
+			return true;
+		}
+		System.out.println("deleted ");
+		return false;
+	}
+	
+	public List<String> getExistingMerchantAccounts(int userID) throws SQLException {
+		Connection con = dataSource.getConnection();
+		PreparedStatement ps = null;
+		Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_UPDATABLE);
+
+//		String queryName = "select merchant_id,NAME from authorized_merchants_users where external_user_id = "+userID;
+
+		String queryName = "(SELECT external_users.id, external_users.name\n" +
+				"FROM external_users\n" +
+				"INNER JOIN users\n" +
+				"ON external_users.email=users.username and users.role = \"ROLE_MERCHANT\" and external_users.id in (select merchant_id from authorized_merchants_users where external_user_id = " + userID + "))";
+		System.out.println(queryName);
+		List<String> merchantAccounts = new ArrayList<>();
+		ResultSet rs = st.executeQuery(queryName);
+		while (rs.next()) {
+			merchantAccounts.add(rs.getString(2) + ":" + rs.getInt(1));
+		}
+
+		for (int i = 0; i < merchantAccounts.size(); i++) {
+			System.out.println("Existing merchants" + merchantAccounts.get(i));
+		}
+		return merchantAccounts;
+	}
+
+
 }
