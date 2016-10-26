@@ -33,8 +33,8 @@ public class CreditCardDashboardController {
 	
 	
 	@RequestMapping("/customer/credithome")
-	public ModelAndView showCreditHome(){
-		
+	public ModelAndView showCreditHome(HttpServletRequest request){
+		setGlobals(request);
 		
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 		
@@ -67,10 +67,10 @@ public class CreditCardDashboardController {
 
 	
 
-	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
-	public ModelAndView getTransactionsBasedOnInterval(@RequestParam("monthPicker") String interval) {
+	@RequestMapping(value="/customer/getTransactions", method = RequestMethod.POST)
+	public ModelAndView getTransactionsBasedOnInterval(HttpServletRequest request,@RequestParam("monthPicker") String interval) {
 
-	
+		setGlobals(request);
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 		
 		CreditAccount account = getCreditInfoForUser (userID);

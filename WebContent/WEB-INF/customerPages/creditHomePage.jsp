@@ -65,7 +65,7 @@
 					</c:otherwise> --%>
 				</c:forEach>
 			</select>
-
+			<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 		<table class="table table-striped">

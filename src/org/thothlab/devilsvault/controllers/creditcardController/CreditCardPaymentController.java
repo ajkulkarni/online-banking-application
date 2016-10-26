@@ -14,8 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.creditcard.CreditCardDOA;
 import org.thothlab.devilsvault.dao.creditcard.CustomerDAOHelper;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
+import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.ExternalTransactionDAO;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
+import org.thothlab.devilsvault.db.model.BankAccountExternal;
 import org.thothlab.devilsvault.db.model.CreditAccount;
 import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.Transaction;
@@ -36,7 +38,8 @@ public class CreditCardPaymentController {
 	}
 	
 	@RequestMapping("/customer/creditPayment")
-	public ModelAndView showCreditPaymentPage(){
+	public ModelAndView showCreditPaymentPage(HttpServletRequest request){
+		setGlobals(request);
 		ModelAndView model = new ModelAndView("customerPages/creditPaymentPage");
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
@@ -49,18 +52,39 @@ public class CreditCardPaymentController {
 	}
 	
 	@RequestMapping(value="/customer/makePayement", method = RequestMethod.POST)
-	public ModelAndView makePayment(@RequestParam("inputAmountField") String amount) throws ParseException {
+	public ModelAndView makePayment(HttpServletRequest request, @RequestParam("inputAmountField") String amount) throws ParseException {
 		
 		boolean success = false;
+		setGlobals(request); 
 		
 		ModelAndView model = new ModelAndView("customerPages/creditPaymentPage");
 		BigDecimal amt = new BigDecimal(amount);
 		
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-				
+		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
+		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
+		BankAccountExternal checkingAccount = new BankAccountExternal();
+		Customer customer = cust_dao.getCustomer(userID);
+		
+		CreditAccount account = doa.getCreditAccount(customer);
+		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
+		checkingAccount = CustomerDAO.getAccount(customer, checkingAccount,"CHECKING");
+		
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
+		boolean amountValid = transferDAO.validateAmount(checkingAccount.getAccount_number(), amt);
+
+		if (!amountValid) {
+
+			System.out.println("Inadequate balance!");
+			model.addObject("paymentResult", "0");
+			ctx.close();
+			return model;
+		}
 		ExternalTransactionDAO extTransactionDAO = ctx.getBean("extTransactionDAO",ExternalTransactionDAO.class);
-		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(1, amt, 1, "Credit Card payment", "external");
+		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(checkingAccount.getAccount_number(), amt, account.getAccountNumber(), "Credit Card payment", "external");
 		success = extTransactionDAO.save(extTransferTrans, "transaction_pending");
+		
+		
 		
 		if (success) {
 			model.addObject("paymentResult", "1");
