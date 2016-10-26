@@ -351,7 +351,6 @@ public class CustomerTransferFundsController {
 		setGlobals(request);
 		String modeOfTransfer = request.getParameter("eptpModeOfTransfer");
 		String inputMode = request.getParameter("eptpinputMode");
-		System.out.println(request.getParameter("eptpselectPayerAccount") + "here");
 		// TransferDAO transferDAO = CustomerDAOHelper.transferDAO();
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);

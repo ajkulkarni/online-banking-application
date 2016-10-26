@@ -1,7 +1,6 @@
 package org.thothlab.devilsvault.db.model;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Transaction {
