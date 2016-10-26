@@ -46,7 +46,8 @@ callServlet();
 });
 });
 </script>
-
+   <div class="content-wrapper">
+        <div class="col-md-12" id="page-content">
 <form class="form-horizontal" action="merchantpayment"
       method='POST' <%--onsubmit="return validateExternal()"--%> >
     <fieldset>
@@ -132,7 +133,16 @@ callServlet();
         </div>
     </fieldset>
 </form>
+</div>
+</div>
+</main>
 
+<!-- .content-wrapper -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        sideNavigationSettings();
+    });
+</script>
 
 </body>
 </html>

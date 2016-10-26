@@ -4,7 +4,8 @@
 
 <%@include file="customerHeader.jsp" %>
 
-
+   <div class="content-wrapper">
+        <div class="col-md-12" id="page-content">
 
 <form class="form-horizontal" action="authorizemerchants"
       method='POST' <%--onsubmit="return validateExternal()"--%> >
@@ -52,7 +53,7 @@
         </div>
     </fieldset>
 </form>
-
+</div>
 
 <div class="content-wrapper">
     <div class="col-md-12" id="page-content">
@@ -95,7 +96,8 @@
         </div>
     </div>
 </div>
-
+</div>
+</main>
 
 <!-- .content-wrapper -->
 <script type="text/javascript">

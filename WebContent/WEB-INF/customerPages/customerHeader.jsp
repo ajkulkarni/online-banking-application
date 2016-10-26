@@ -66,5 +66,15 @@
 						<li><a href="externalFundTransfer">Someone's Account</a></li>
 					</ul>
 				</li>
+				<c:if test="${role == 'ROLE_CUSTOMER' }">
+					<li>
+						<a href="authorizemerchants">Merchant Panel</a>
+					</li>
+				</c:if>
+				<c:if test="${role == 'ROLE_MERCHANT' }">
+					<li>
+						<a href="merchantpayment">Merchant Panel</a>
+					</li>
+				</c:if>
 			</ul>
 		</nav>
