@@ -93,7 +93,7 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 		}
 		else if(requestType.equalsIgnoreCase("phone"))
 		{
-			request.setCurrent_value(Integer.toString(customer.getPhone()));
+			request.setCurrent_value(customer.getPhone().toString());
 		}
 		else
 		{
@@ -122,7 +122,7 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 		}
 		else if(requestType.equalsIgnoreCase("phone"))
 		{
-			request.setCurrent_value(Integer.toString(internaluser.getPhone()));
+			request.setCurrent_value(internaluser.getPhone().toString());
 		}
 		else
 		{
@@ -140,5 +140,35 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
 		super.saveRaisedRequest(request, "internal_request_pending");
 		
 	}
+	
+	public void raiseInternalRequest(Customer customer, String requestType, String newValue, Integer internalUserID)
+    {
+        Request request = new Request();
+        request.setRequesterid(customer.getId());
+        request.setRequest_type(requestType);
+        if(requestType.equalsIgnoreCase("email"))
+        {
+            request.setCurrent_value(customer.getEmail());
+        }
+        else if(requestType.equalsIgnoreCase("phone"))
+        {
+            request.setCurrent_value(customer.getPhone().toString());
+        }
+        else
+        {
+            request.setCurrent_value(customer.getAddress());
+        }
+        request.setRequested_value(newValue);
+        request.setStatus("Pending");
+        request.setApprover(Integer.toString(0));
+        request.setDescription("Request to change " + requestType);
+        Date utilDate = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        request.setTimestamp_created(sqlDate);
+        request.setTimestamp_updated(sqlDate);
+        request.setRole("ROLE_CUSTOMER");
+        super.saveRaisedRequest(request, "external_request_pending");
+        
+    }
 
 }

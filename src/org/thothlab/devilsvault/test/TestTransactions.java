@@ -20,30 +20,30 @@ public class TestTransactions {
 		transactionDAO.createTransaction();
 		ctx.close();
 	}
-	@Test
-	public void testSave()
-	{
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
-		InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
-		String type = "transaction_pending";
-		java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
-		Transaction transaction = new Transaction();
-		transaction.setId(1);
-		transaction.setPayee_id(1);
-		transaction.setPayer_id(1);
-		transaction.setAmount(new BigDecimal(10000));
-		transaction.setHashvalue("Testing");
-		transaction.setApprover("");
-		transaction.setCritical(false);
-		transaction.setDescription("hsgdhashdgdhagsdhgsdhgh");
-		transaction.setStatus("approved");
-		transaction.setTransaction_type("nothing");
-		transaction.setTimestamp_created(sqlDate);
-		transaction.setTimestamp_updated(sqlDate);
-		transactionDAO.save(transaction, type);
-		ctx.close();
-
-	}
+//	@Test
+//	public void testSave()
+//	{
+//		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+//		InternalTransactionDaoImpl transactionDAO = ctx.getBean("TransactionSpecificDao", InternalTransactionDaoImpl.class);
+//		String type = "transaction_pending";
+//		java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
+//		Transaction transaction = new Transaction();
+//		transaction.setId(1);
+//		transaction.setPayee_id(1);
+//		transaction.setPayer_id(1);
+//		transaction.setAmount(new BigDecimal(10000));
+//		transaction.setHashvalue("Testing");
+//		transaction.setApprover("");
+//		transaction.setCritical(false);
+//		transaction.setDescription("hsgdhashdgdhagsdhgsdhgh");
+//		transaction.setStatus("approved");
+//		transaction.setTransaction_type("nothing");
+//		transaction.setTimestamp_created(sqlDate);
+//		transaction.setTimestamp_updated(sqlDate);
+//		transactionDAO.save(transaction, type);
+//		ctx.close();
+//
+//	}
 	@Test
 	public void testgetById()
 	{

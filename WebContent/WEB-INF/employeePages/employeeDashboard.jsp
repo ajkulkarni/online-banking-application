@@ -20,12 +20,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:if test="${role == 'ROLE_MANAGER'}">
+							<c:if test="${role == 'ROLE_MANAGER' || role == 'ROLE_ADMIN'}">
 							<tr>
 								<td>Internal User Requests</td>
 								<td>${internal_count}</td>
 							</tr>
 							</c:if>
+							<c:if test="${role != 'ROLE_ADMIN'}">
 							<tr>
 								<td>External User Requests</td>
 								<td>${external_count}</td>
@@ -34,11 +35,12 @@
 								<td>Transaction Requests</td>
 								<td>${transaction_count}</td>
 							</tr>
+							</c:if>
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<c:if test="${role == 'ROLE_MANAGER'}">
+			<c:if test="${role == 'ROLE_MANAGER' || role == 'ROLE_ADMIN'}">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Pending Internal Requests</h3>
@@ -76,6 +78,7 @@
 					</div>
 				</div>
 			</c:if>
+			<c:if test="${role != 'ROLE_ADMIN'}">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending External Request</h3>
@@ -152,6 +155,7 @@
 				
 				</div>
 			</div>
+			</c:if>
 		</div>
 	</div> <!-- .content-wrapper -->
 	
