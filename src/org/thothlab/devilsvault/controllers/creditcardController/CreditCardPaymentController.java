@@ -84,7 +84,7 @@ public class CreditCardPaymentController {
 		Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(checkingAccount.getAccount_number(), amt, account.getAccountNumber(), "Credit Card payment", "external");
 		success = extTransactionDAO.save(extTransferTrans, "transaction_pending");
 		
-		
+		transferDAO.updateHold(checkingAccount.getAccount_number(), amt);
 		
 		if (success) {
 			model.addObject("paymentResult", "1");
