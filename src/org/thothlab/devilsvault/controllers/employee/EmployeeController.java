@@ -889,23 +889,23 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value="/employee/unblocklogin", method = RequestMethod.POST)
-	   public ModelAndView unBlockLogin(@RequestParam("username") String username){
+	   public ModelAndView unBlockLogin(@RequestParam("username") String username, RedirectAttributes redir){
 	      ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 	      UserLoginManagementDaoImpl usermanagementDao = ctx.getBean("UserLoginManagementDao", UserLoginManagementDaoImpl.class);
 	      usermanagementDao.unlockUserAccount(username, "account");
 	      ModelAndView model = new ModelAndView("redirect:/employee/loginmanagement");
-	      model.addObject("error_msg","Account Unblocked!!");
+	      redir.addFlashAttribute("error_msg","Account Unblocked!!");
 	      ctx.close();
 	      return model;
 	   }
 	    
 	    @RequestMapping(value="/employee/unblockotp", method = RequestMethod.POST)
-	   public ModelAndView unBlockOtp(@RequestParam("username") String username){
+	   public ModelAndView unBlockOtp(@RequestParam("username") String username,RedirectAttributes redir){
 	         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 	         UserLoginManagementDaoImpl usermanagementDao = ctx.getBean("UserLoginManagementDao", UserLoginManagementDaoImpl.class);
 	         usermanagementDao.unlockUserAccount(username, "otp");
 	         ModelAndView model = new ModelAndView("redirect:/employee/loginmanagement");
-	        model.addObject("error_msg","Account Unblocked!!");
+	         redir.addFlashAttribute("error_msg","Account Unblocked!!");
 	         ctx.close();
 	         return model;
 	   }

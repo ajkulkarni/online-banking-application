@@ -72,7 +72,7 @@
 										<tr>
 											<td>${otp.username}</td>
 											<td>
-											<form action = "unblocklogin" method = "post">
+											<form action = "unblockotp" method = "post">
 		                                  		<input type="hidden" name="username" value="${otp.username}">
 		                                  		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                  		<button type="submit" class="btn btn-xs btn-primary">Unblock</button>

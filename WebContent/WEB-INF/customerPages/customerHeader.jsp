@@ -48,8 +48,8 @@
 					<a href="#0">Accounts</a>
 					
 					<ul>
-						<li><a href="#0">Checking</a></li>
-						<li><a href="#0">Savings</a></li>
+						<li><a href="/CSE545-SS/customer/CheckingAccount?checkingPicker='last month'">Checking</a></li>
+						<li><a href="/CSE545-SS/customer/SavingsAccount?savingsPicker='last month'">Savings</a></li>
 						<li><a href="credithome">Credit Card</a></li>
 					</ul>
 				</li>

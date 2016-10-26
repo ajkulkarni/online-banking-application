@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.db.model.BankAccountExternal;
 import org.thothlab.devilsvault.db.model.Customer;
 @Repository ("ExtUserDaoImpl")
 public class ExtUserDaoImpl{
@@ -22,6 +23,36 @@ public class ExtUserDaoImpl{
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
+	public BankAccountExternal getAccount(Customer user,BankAccountExternal bankAccount,String accountType)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql ="SELECT * FROM  bank_accounts WHERE external_users_id="+user.getId()+" and account_type='"+accountType+"'";
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next())
+			{
+				bankAccount.setAccount_number(rs.getInt("account_number"));
+				bankAccount.setAccount_type(rs.getString("account_type"));
+				bankAccount.setBalance(rs.getFloat("balance"));
+				bankAccount.setExternal_users_id(rs.getInt("external_users_id"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bankAccount;
+     }
 	public Double getSavingsBalance(Customer user)
 	{
 		Connection con = null;
