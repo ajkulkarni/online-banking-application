@@ -3,6 +3,8 @@ package org.thothlab.devilsvault.controllers.creditcardController;
 import java.math.BigDecimal;
 import java.text.ParseException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,15 +21,26 @@ import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 
+
 @Controller
 public class CreditCardPaymentController {
 
+	String role;
+	int userID;
+	String username;
+	
+	public void setGlobals(HttpServletRequest request){
+		role = (String) request.getSession().getAttribute("role");
+		userID = (int) request.getSession().getAttribute("userID");
+		username = (String) request.getSession().getAttribute("username");	
+	}
+	
 	@RequestMapping("/customer/creditPayment")
 	public ModelAndView showCreditPaymentPage(){
 		ModelAndView model = new ModelAndView("customerPages/creditPaymentPage");
 		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
 		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
-		Customer cust = cust_dao.getCustomer(100);
+		Customer cust = cust_dao.getCustomer(userID);
 		
 		CreditAccount account = doa.getCreditAccount(cust);
 		
