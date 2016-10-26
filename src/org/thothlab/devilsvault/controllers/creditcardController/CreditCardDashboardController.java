@@ -73,7 +73,7 @@ public class CreditCardDashboardController {
 	
 		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 		
-		CreditAccount account = getCreditInfoForUser (100);
+		CreditAccount account = getCreditInfoForUser (userID);
 		
 		model.addObject("creditAccount",account);
 		
