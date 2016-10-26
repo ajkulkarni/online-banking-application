@@ -54,7 +54,7 @@ public class OtpDaoImpl implements OtpDao{
         if (userList.size() == 0)
             return "Invalid User";
         if(userList.get(0).getOtpNonLocked() == 0)
-            return "Account Locked";
+            return "Cannot generate more OTP, Contact Support !!";
         //Make a call to process OTP
         return processOTP(userList.get(0).getUsername());
     }

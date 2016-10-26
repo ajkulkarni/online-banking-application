@@ -24,34 +24,49 @@ public class ForgotPasswordController {
 		
 	}
 		
-	@RequestMapping(value="/forgotpassword")
+	@RequestMapping(value="forgotpassword")
 	public ModelAndView ForgotPassword() {
         ModelAndView model = new ModelAndView("ForgotPassword");
         return model;
 	}
 	
-	@RequestMapping(value="/verifyemail", method = RequestMethod.POST)
+	@RequestMapping(value="verifyemail", method = RequestMethod.POST)
 	public ModelAndView VerifyEmail(HttpServletRequest request, @RequestParam("Email") String email) {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		OtpDaoImpl otpdao = ctx.getBean("OtpDaoImpl",OtpDaoImpl.class);
 		String message = otpdao.verifyEmail(email);
-        ModelAndView model = new ModelAndView("ForgotPassword");
-        request.getSession().removeAttribute("forgotpassemail");
-        request.getSession().setAttribute("forgotpassemail", email);
-        model.addObject("message", message);
-        ctx.close();
-        return model;
+		if (message.equalsIgnoreCase("Cannot generate more OTP, Contact Support !!")){
+			ModelAndView model = new ModelAndView("ForgotPassword");
+			 model.addObject("message", message);
+		        ctx.close();
+	        return model;
+		}else{
+	        ModelAndView model = new ModelAndView("ForgotPasswordOTP");
+	        request.getSession().removeAttribute("forgotpassemail");
+	        request.getSession().setAttribute("forgotpassemail", email);
+	        model.addObject("message", message);
+	        ctx.close();
+	        return model;
+		}
 	}
 	
-	@RequestMapping(value="/verifyotp", method = RequestMethod.POST)
+	@RequestMapping(value="verifyotp", method = RequestMethod.POST)
 	public ModelAndView VerifyOTP(HttpServletRequest request, @RequestParam("otp") String otp) {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		OtpDaoImpl otpdao = ctx.getBean("OtpDaoImpl",OtpDaoImpl.class);
 		String email = (String) request.getSession().getAttribute("forgotpassemail");
 		String message = otpdao.verifyOTP(otp, email);
-        ModelAndView model = new ModelAndView("ForgotPassword");
-        model.addObject("message", message);
-        ctx.close();
-        return model;
+		if(message.equalsIgnoreCase("Incorrect OTP") || message.equalsIgnoreCase("Error in verifying OTP")){
+			ModelAndView model = new ModelAndView("ForgotPasswordOTP");
+			model.addObject("message", message);
+			ctx.close();
+			return model;
+		}else{
+			ModelAndView model = new ModelAndView("ChangePassword");
+	        model.addObject("message", message);
+	        ctx.close();
+	        return model;
+		}
+        
 	}
 }

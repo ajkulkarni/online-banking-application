@@ -6,10 +6,10 @@
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
-			<c:if test="${not empty message}">
+			<c:if test="${not empty msg}">
 			<div class="alert alert-dismissible alert-success">
   				<button type="button" class="close" data-dismiss="alert">&times;</button>
-  				<strong>${message}</strong>
+  				<strong>${msg}</strong>
 			</div>
 			</c:if>
 			<c:if test="${role != 'ROLE_ADMIN' }">

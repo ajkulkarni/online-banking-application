@@ -6,6 +6,12 @@
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
+			<c:if test="${not empty msg}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${msg}</strong>
+			</div>
+			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Customer Details</h3>
@@ -31,7 +37,7 @@
 							</tr>	
 							<tr>
 								<td class="active">Address</td>
-								<td>${extUserObj.address} ${extUserObj.city} ${extUserObj.state} ${extUserObj.country} ${extUserObj.pincode}</td>
+								<td>${extUserObj.address}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -103,7 +109,6 @@
        								<select class="form-control" name="requestType" required>
        									<option value="">Select Type</option>
           								<option value="phone">Phone Change</option>
-          								<option value="email">Email Change</option>
           								<option value="address">Address Change</option>
        								</select>
        							</div>

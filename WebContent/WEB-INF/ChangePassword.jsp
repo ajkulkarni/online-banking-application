@@ -33,12 +33,12 @@
 			
 		$(document).ready(function(){
 		$('#submit').click(function(){
-		var userEmail=$('#userEmail').val();	
+		var userEmail=$('#inputEmail').val();	
 		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		if(!filter.test(userEmail))
 		{
-			$("#userEmail").focus();
-	    	$("#errorBox").html("Please Enter a Valid Email Address");
+			$("#inputEmail").focus();
+	    	alert("Please Enter a Valid Email Address");
 			return false;
 		}
 		
@@ -62,42 +62,32 @@
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
 			<div class="col-md-12" id="login-page">
-				<h3>Login Page</h3>
-				  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-      				<font color="red">
-        				Your login attempt was not successful due to <br/><br/>
-        			<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
-        			<%-- <h2>${msg}</h2> --%>
-      				</font>
-    			  </c:if>
-    			  <c:if test="${not empty exception_message}">
-					<div class="alert alert-dismissible alert-danger">
-  					<button type="button" class="close" data-dismiss="alert">&times;</button>
-  					<strong>${exception_message}</strong>
+				<%-- <c:if test="${not empty verifyemail}"> --%>
+					<c:if test="${not empty message}">
+					<div class="alert alert-dismissible alert-success">
+		  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  				<strong>${message}</strong>
 					</div>
-				</c:if>
-				<form action="<c:url value='j_spring_security_check' />" method='POST'>
-      				<label for="username" class="col-lg-2 control-label no-padding">Username</label>
-      				<div class="col-lg-10 form-margin no-padding">
-        				<input type="email" class="form-control no-padding" name="username" id="userEmail" placeholder="Username" required>
-      				</div>
-      				<label for="password" class="col-lg-2 control-label no-padding">Password</label>
-      				<div class="col-lg-10 form-margin no-padding">
-        				<input type="password" class="form-control no-padding" name="password" id="password" placeholder="Password" required>
-      				</div>
-     				<div class="col-lg-12 form-margin no-padding">
-      				<div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
-      				</div>
-      				<div class="col-lg-12 form-margin no-padding">
-      				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-				    <input type="submit" class="btn btn-primary" value="Login" class="btn" id="submit"/>
-				    </div>
-				    <br>
-				    <br>
-				</form>
-				
-				<script src='https://www.google.com/recaptcha/api.js'></script>
-				<p>Forgot your password? <input type = "submit" class = "myButton" value = "Click Here!" onclick="location.href='forgotpassword';"></p>
+					</c:if>					
+					<form class="form-horizontal" action="changepassword" method="POST">
+				    		<div class="form-group">
+      							<label for="newpassword" class="col-lg-3 control-label">New Password</label>
+      							<div class="col-lg-9 form-margin">
+        							<input type="password" class="form-control" name="newpassword" placeholder="New Password" required>
+      							</div>
+      							<label for="confirmpassword" class="col-lg-3 control-label">Confirm</label>
+      							<div class="col-lg-9 form-margin">
+        							<input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" required>
+      							</div>
+       							<input type="hidden" name="userID" value="${userID}">					
+       							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+       							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
+			        				<button style="margin-right:15px;" type="submit" class="btn btn-primary">Submit</button>
+      							</div>
+				    		</div>
+				    </form>
+				<%-- </c:if> --%>
+					
 			</div>
 	
 		</div> <!-- .content-wrapper -->
