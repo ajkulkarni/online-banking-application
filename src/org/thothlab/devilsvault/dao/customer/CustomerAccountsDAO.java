@@ -11,12 +11,13 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.dao.databaseMappers.BankAccountMapper;
+import org.thothlab.devilsvault.db.model.BankAccount;
 import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 @Repository ("CustomerAccountsDAO")
 public class CustomerAccountsDAO{
-	@SuppressWarnings("unused")
 	private JdbcTemplate jdbcTemplate;
 	private DataSource dataSource;
 	@Autowired
@@ -62,6 +63,14 @@ public class CustomerAccountsDAO{
 			}
 		}
 		return TransactionLines;
-     }     
+     }
+	
+	public BankAccount getAccount(int accountNumber) {
+		String query = "SELECT * FROM bank_accounts where account_number = " + accountNumber;
+		List<Object> accList =  jdbcTemplate.query(query, new BankAccountMapper());
+		return (BankAccount) accList.get(0);
+	
+     }
+	
 }
 

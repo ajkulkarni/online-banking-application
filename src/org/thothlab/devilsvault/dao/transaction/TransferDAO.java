@@ -24,7 +24,6 @@ import org.thothlab.devilsvault.dao.databaseMappers.*;
 @Repository("transferDAO")
 public class TransferDAO {
 
-	@SuppressWarnings("unused")
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
 
