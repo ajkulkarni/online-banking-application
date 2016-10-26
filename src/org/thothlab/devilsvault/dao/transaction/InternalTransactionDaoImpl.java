@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -90,6 +91,13 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
         return transactionList;
     }
 	
+	public List <Transaction> getTransactionById(int id, String table)
+    {
+        String query = "select *from " + table + " where id = '" + id + "'";
+        List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
+        return transactionList;
+    }
+	
     public void approveTransaction(int id, String type) {
         // TODO Auto-generated method stub
         String query = "SELECT * FROM "+ type +" WHERE id =" + id;
@@ -120,8 +128,14 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
         else
             query += "payer_id = '" + accoNos.get(i) + "'";
     }
-    query += ") AND critical='1'";
+    query += ") AND critical='0'";
         List<Transaction> transactionList = jdbcTemplate.query(query, new BeanPropertyRowMapper<Transaction>(Transaction.class));
         return transactionList;
-    }	
+    }
+    
+    public void updateHold(int payerAccountNumber, BigDecimal amount){
+		String updateStmt = "Update bank_accounts set hold = hold - ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, payerAccountNumber});
+	}
 }

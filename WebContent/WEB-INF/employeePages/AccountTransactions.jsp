@@ -4,6 +4,22 @@
 <%@include file="employeeHeader.jsp" %>
     <div class="content-wrapper">
         <div class="col-md-12" id="page-content">
+		<c:if test="${ success == false }">
+			<div class="container col-lg-12" " id="transferRejected">
+				<div class="alert alert-dismissible alert-warning col-lg-8">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>${error_msg}</strong>
+				</div>
+			</div>
+		</c:if>
+		<c:if test="${success ==true }">
+			<div class="container col-lg-12" id="transferSuccess">
+				<div class="alert alert-dismissible alert-success col-lg-6">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>${error_msg}</strong>
+				</div>
+			</div>
+		</c:if>
             <h3>Accounts Transactions</h3>
             <a href="#newRequest" data-toggle="modal" class="btn btn-sm btn-primary">Add Transaction</a>
             <br><br>
@@ -15,7 +31,7 @@
                     <table id="content-table">
                         <thead>
                             <tr>
-								<th class="active">ID</th>
+								<th class="active">Transaction ID</th>
 								<th class="active">Sender</th>
 								<th class="active">Receiver</th>
 								<th class="active">Amount</th>
@@ -26,7 +42,7 @@
                         	<c:choose>
                         		<c:when test="${empty transactionList}">
                         			<tr>
-                                    	<td colspan="2">No Pending Transaction</td>
+                                    	<td colspan="5">No Pending Transaction</td>
                                 	</tr>
                         		</c:when>
                         		<c:otherwise>
@@ -73,10 +89,9 @@
 				    			<label for="accountNo" class="col-lg-3 control-label">Account</label>
 			    				<div class="col-lg-9 form-margin">
        								<select class="form-control" id="accountNo" name="accountNo" required>
-       									<option value="">Select Type</option>
-          								<option value="account">Account Details</option>
-          								<option value="transaction">Transaction Access</option>
-          								<option value="registration">New Registration</option>
+       									<c:forEach items="${userAccounts}" var="item">
+													<option value="${item}">${item}</option>
+												</c:forEach>
        								</select>
        							</div>
        							<label for="receiverAccount" class="col-lg-3 control-label">Receiver Account</label>
