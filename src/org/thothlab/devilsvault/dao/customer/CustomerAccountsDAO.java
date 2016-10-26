@@ -71,6 +71,11 @@ public class CustomerAccountsDAO{
 		return (BankAccount) accList.get(0);
 	
      }
-	
+	public String getEmailID(Integer userID)
+	{
+		 String query = "SELECT email from external_users where id= '" + userID + "'"; 
+	        String email = jdbcTemplate.queryForList(query, String.class).get(0);
+	        return email;
+	}
 }
 

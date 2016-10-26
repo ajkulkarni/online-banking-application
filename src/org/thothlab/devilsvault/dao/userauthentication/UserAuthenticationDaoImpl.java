@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.userauthentication;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.dao.customer.CustomerAccountsDAO;
 import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 import org.thothlab.devilsvault.db.model.UserAuthentication;
 
@@ -42,13 +44,22 @@ public class UserAuthenticationDaoImpl implements UserAuthenticationDao {
 	}
 
 	@Override
-	public String changePassword(String oldPassword, String newPassword, String confirmPassword, Integer userID) {
+	public String changePassword(String oldPassword, String newPassword, String confirmPassword, Integer userID,String role) {
 		String message ="";
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		if(newPassword.equals(confirmPassword))
 		{
+			CustomerAccountsDAO customeraccDao = ctx.getBean("CustomerAccountsDAO", CustomerAccountsDAO.class);
 			InternalUserDaoImpl internaluserdao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
-			String email = internaluserdao.getEmailID(userID);
+			String email;
+			if(role.equals("ROLE_CUSTOMER") || role.equals("ROLE_MERCHENT"))
+			{
+				email = customeraccDao.getEmailID(userID);
+			}
+			else
+			{
+				email = internaluserdao.getEmailID(userID);
+			}
 			UserAuthentication userdetails = getUserDetails(email);
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			if(passwordEncoder.matches(oldPassword,userdetails.getPassword()))
@@ -76,9 +87,9 @@ public class UserAuthenticationDaoImpl implements UserAuthenticationDao {
 		return userDetails.get(0);
 	}
 	
-	public Boolean validateuserDetails(String username,Integer phone,String table)
+	public Boolean validateuserDetails(String username,BigInteger phone,String table)
     {
-        String queryInternal = "SELECT COUNT(*) FROM " + table +" WHERE email ='" + username + "' OR phone='" + phone + "';";
+        String queryInternal = "SELECT COUNT(*) FROM " + table +" WHERE email ='" + username + "' OR phone='" + phone.toString() + "';";
         Integer countinternal = jdbcTemplate.queryForObject(queryInternal,Integer.class);
         String queryUser = "SELECT COUNT(*) FROM users WHERE username ='" + username + "';";
         Integer countuser = jdbcTemplate.queryForObject(queryUser,Integer.class);

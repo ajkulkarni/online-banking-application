@@ -31,10 +31,10 @@
                         		<c:otherwise>
                         			<c:forEach items="${login_list}" var="login">
 										<tr>
-											<td>${login}</td>
+											<td>${login.username}</td>
 											<td>
 											<form action = "unblocklogin" method = "post">
-		                                  		<input type="hidden" name="username" value="${login}">
+		                                  		<input type="hidden" name="username" value="${login.username}">
 		                                  		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                  		<button type="submit" class="btn btn-xs btn-primary">Unblock</button>
 		                                 	</form>
@@ -70,10 +70,10 @@
                         		<c:otherwise>
                         			<c:forEach items="${otp_list}" var="otp">
 										<tr>
-											<td>${otp}</td>
+											<td>${otp.username}</td>
 											<td>
 											<form action = "unblocklogin" method = "post">
-		                                  		<input type="hidden" name="username" value="${otp}">
+		                                  		<input type="hidden" name="username" value="${otp.username}">
 		                                  		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		                                  		<button type="submit" class="btn btn-xs btn-primary">Unblock</button>
 		                                 	</form>

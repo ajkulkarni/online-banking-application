@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thothlab.devilsvault.dao.customer.CustomerAccountsDAO;
+import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
+import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
 import org.thothlab.devilsvault.db.model.BankAccount.AccountType;
 import org.thothlab.devilsvault.db.model.CreditAccount;
 import org.thothlab.devilsvault.db.model.Customer;
@@ -116,7 +118,7 @@ public class CustomerAccountsController {
         setGlobals(request);
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
        ExternalRequestDaoImpl externalRequestDao = ctx.getBean("externalRequestDao", ExternalRequestDaoImpl.class);
-       ModelAndView model = new ModelAndView("employeePages/PendingRequest");
+       ModelAndView model = new ModelAndView("customerPages/PendingRequest");
        List<Request> external_list =externalRequestDao.getAllRequestToApprove(userID);
        if(external_list.size() < 1)
        {
@@ -126,4 +128,18 @@ public class CustomerAccountsController {
        ctx.close();
        return model;
     }
+    
+    @RequestMapping(value="/customer/addrequest", method = RequestMethod.POST)
+    public ModelAndView modifyDetails(RedirectAttributes redir,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("newValue") String newValue) {
+         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+         CustomerDAO customerDAO = ctx.getBean("customerDAO", CustomerDAO.class);
+         InternalRequestDaoImpl internalrequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
+         Customer customer = customerDAO.getCustomer(this.userID);
+         setGlobals(request);
+         internalrequestDao.raiseInternalRequest(customer, requestType, newValue,this.userID);
+          ModelAndView model = new ModelAndView("redirect:/customer/userdetails");
+          redir.addFlashAttribute("error_msg","Request Raised !!");
+          ctx.close();
+          return model;
+         }
 }

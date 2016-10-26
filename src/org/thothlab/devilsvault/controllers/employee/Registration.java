@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.controllers.employee;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -36,7 +37,7 @@ public class Registration {
 		String username = "abcd@gmail.com";
         String role = "ROLE_MANAGER";
         String address = "hsgdhagdjhsdgdjhgsdjfhgsdjfhgjh123";
-        Integer phone = 9999997;
+        BigInteger phone = new BigInteger("4805167889");
         Date date = new Date();
         java.sql.Date date_of_birth = new java.sql.Date(date.getTime());
         String ssn ="67634756756214";
@@ -67,7 +68,7 @@ public class Registration {
 		String username = "ab80@gmail.com";
         String role = "ROLE_CUSTOMER";
         String address = "hsgdhagdjhsdgdjhgsdjfhgsdjfhgjh123";
-        Integer phone = 9973467;
+        BigInteger phone = new BigInteger("4890123651");
         Date date = new Date();
         java.sql.Date date_of_birth = new java.sql.Date(date.getTime());
         String ssn ="67634756756214";

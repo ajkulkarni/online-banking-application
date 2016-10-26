@@ -29,7 +29,7 @@ public class MerchantPaymentController {
         username = (String) request.getSession().getAttribute("username");
     }
 
-    @RequestMapping("customer/merchantpayment")
+    @RequestMapping("/customer/merchantpayment")
     public ModelAndView merchantPayToUser(HttpServletRequest request) throws SQLException, ParseException {
         ModelAndView model = new ModelAndView("customerPages/merchantMakePayment");
 

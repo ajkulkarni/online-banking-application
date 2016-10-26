@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.employee;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -51,7 +52,7 @@ public class InternalUserDaoImpl implements InternalUserDao {
 	        return email;
 	}
 	
-	public InternalUser setInternalUser(String name,String designation,String address,Integer phone,String email, Date date_of_birth,String ssn)
+	public InternalUser setInternalUser(String name,String designation,String address,BigInteger phone,String email, Date date_of_birth,String ssn)
     {
         InternalUser userDetails = new InternalUser();
         userDetails.setName(name);
@@ -76,7 +77,7 @@ public class InternalUserDaoImpl implements InternalUserDao {
             ps.setString(2, userdetails.getName());
             ps.setString(3, userdetails.getDesignation());
             ps.setString(4, userdetails.getAddress());
-            ps.setInt(5, userdetails.getPhone());
+            ps.setLong(5, userdetails.getPhone().longValue());
             ps.setString(6, userdetails.getEmail());
             ps.setDate(7, userdetails.getDate_of_birth());
             ps.setString(8, userdetails.getSsn());

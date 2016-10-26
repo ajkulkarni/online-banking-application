@@ -29,6 +29,7 @@ import org.thothlab.devilsvault.dao.transaction.InternalTransactionDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
 import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
+import org.thothlab.devilsvault.dao.userauthentication.UserLoginManagementDaoImpl;
 import org.thothlab.devilsvault.db.model.Authorization;
 import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
@@ -36,6 +37,7 @@ import org.thothlab.devilsvault.db.model.DatabaseLog;
 import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
+import org.thothlab.devilsvault.db.model.UserAuthentication;
 
 @Controller
 public class EmployeeController {
@@ -610,7 +612,7 @@ public class EmployeeController {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		setGlobals(request);
 		UserAuthenticationDaoImpl userauthenticationDao = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
-		String message = userauthenticationDao.changePassword(oldPassword, newPassword, confirmPassword, userID);
+		String message = userauthenticationDao.changePassword(oldPassword, newPassword, confirmPassword, userID,role);
 		ctx.close();
 		model.setViewName("redirect:/employee/userdetails");
         redir.addFlashAttribute("message",message);
@@ -850,11 +852,61 @@ public class EmployeeController {
 	   }
 	
 	@RequestMapping(value="/employee/loginmanagement")
-	public ModelAndView LoginManagement() {
+	public ModelAndView LoginManagement(HttpServletRequest request) {
+		setGlobals(request);
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        UserLoginManagementDaoImpl loginDao = ctx.getBean("UserLoginManagementDao", UserLoginManagementDaoImpl.class);
+        List<UserAuthentication> login_list = new ArrayList<UserAuthentication>();
+        List<UserAuthentication> otp_list = new ArrayList<UserAuthentication>();
+        if(role.equalsIgnoreCase("ROLE_REGULAR")){
+        	List<String> roles = new ArrayList<String>();
+        	roles.add("ROLE_CUSTOMER");
+        	roles.add("ROLE_MERCHANT");
+        	login_list = loginDao.getLockedUsers(roles);
+        	otp_list = loginDao.getOtpLockedUsers(roles);
+        }else if (role.equalsIgnoreCase("ROLE_MANAGER")){
+        	List<String> roles = new ArrayList<String>();
+        	roles.add("ROLE_CUSTOMER");
+        	roles.add("ROLE_MERCHANT");
+        	roles.add("ROLE_REGULAR");
+        	login_list = loginDao.getLockedUsers(roles);
+        	otp_list = loginDao.getOtpLockedUsers(roles);
+        }else{
+        	List<String> roles = new ArrayList<String>();
+        	roles.add("ROLE_CUSTOMER");
+        	roles.add("ROLE_MERCHANT");
+        	roles.add("ROLE_REGULAR");
+        	roles.add("ROLE_MANAGER");
+        	otp_list = loginDao.getOtpLockedUsers(roles);
+        	login_list = loginDao.getLockedUsers(roles);
+        }
         
         ModelAndView model = new ModelAndView("employeePages/employeeLoginManagement");
+        model.addObject("login_list",login_list);
+        model.addObject("otp_list",otp_list);
         ctx.close();
         return model;
 	}
+	
+	@RequestMapping(value="/employee/unblocklogin", method = RequestMethod.POST)
+	   public ModelAndView unBlockLogin(@RequestParam("username") String username){
+	      ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	      UserLoginManagementDaoImpl usermanagementDao = ctx.getBean("UserLoginManagementDao", UserLoginManagementDaoImpl.class);
+	      usermanagementDao.unlockUserAccount(username, "account");
+	      ModelAndView model = new ModelAndView("redirect:/employee/loginmanagement");
+	      model.addObject("error_msg","Account Unblocked!!");
+	      ctx.close();
+	      return model;
+	   }
+	    
+	    @RequestMapping(value="/employee/unblockotp", method = RequestMethod.POST)
+	   public ModelAndView unBlockOtp(@RequestParam("username") String username){
+	         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	         UserLoginManagementDaoImpl usermanagementDao = ctx.getBean("UserLoginManagementDao", UserLoginManagementDaoImpl.class);
+	         usermanagementDao.unlockUserAccount(username, "otp");
+	         ModelAndView model = new ModelAndView("redirect:/employee/loginmanagement");
+	        model.addObject("error_msg","Account Unblocked!!");
+	         ctx.close();
+	         return model;
+	   }
 }

@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.db.model;
 
+import java.math.BigInteger;
 import java.sql.Date;
 
 public class Customer {
@@ -19,7 +20,7 @@ public class Customer {
     private String state;
     private String country;
     private int pincode;
-    private int phone;
+    private BigInteger phone;
     
     public int getId() {
         return id;
@@ -63,10 +64,10 @@ public class Customer {
     public void setPincode(int pincode) {
         this.pincode = pincode;
     }
-    public int getPhone() {
+    public BigInteger getPhone() {
         return phone;
     }
-    public void setPhone(int phone) {
+    public void setPhone(BigInteger phone) {
         this.phone = phone;
     }
     public String getSsn() {
