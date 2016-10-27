@@ -156,9 +156,5 @@ public class CreditCardDOA {
 		return creditaccount;
 	}
 	
-	
-	
-	
-	
 
 }

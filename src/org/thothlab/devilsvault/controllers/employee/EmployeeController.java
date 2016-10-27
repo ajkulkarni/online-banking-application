@@ -10,13 +10,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thothlab.devilsvault.controllers.security.ExceptionHandlerClass;
@@ -234,15 +232,67 @@ public class EmployeeController {
 	
 	@RequestMapping(value = "/employee/processAccTransaction", method = RequestMethod.POST)
 	public ModelAndView processAccTransactions(@RequestParam("transactionID") String transactionID,
-			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
-		setGlobals(request);
+			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, @RequestParam("payeeID") String payeeID, @RequestParam("amount") String amount, HttpServletRequest request) {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
 				InternalTransactionDaoImpl.class);
-		
+		ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
+		BigDecimal amountSent = new BigDecimal(amount.replaceAll(",", ""));
+		boolean receiverAccountExists = transferDAO.checkAccountExists(Integer.parseInt(payeeID));
 		
 		//Fetch transaction from transaction_pending
 		Transaction transaction = transactionDao.getById(Integer.parseInt(transactionID), "transaction_pending").get(0);
+		if(!receiverAccountExists){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid payee account chosen!");
+			model.addObject("success", false);
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid payee account chosen!");
+			ctx.close();
+			return model;			
+		}
+		transaction.setPayee_id(Integer.parseInt(payeeID));
+		
+		
+		if(!(amount.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount.isEmpty()){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid Amount!");
+			model.addObject("success", false);
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid Amount!");
+			ctx.close();
+			return model;
+		}
+		
+		if(amountSent.compareTo(new BigDecimal("1000")) == 1){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Payment should not exceed $1000!");
+			model.addObject("success", false);
+			model.addObject("error_msg", "Sorry! Payment should not exceed $1000!");
+			ctx.close();	
+			return model;
+		}
+		
+		BigDecimal originalAmount = transaction.getAmount();
+		System.out.println("New amt : " + amountSent + "--old = " + originalAmount);
+		boolean amountValid = transferDAO.validateAmount(transaction.getPayer_id(),amountSent.subtract(originalAmount));
+		if(amountSent.compareTo(originalAmount) == -1)
+			amountValid = true;	
+			
+		System.out.println("Amt valid : " + amountValid);
+		if(!amountValid){
+			System.out.println("Inadequate balance!");
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Insufficient balance!");
+			model.addObject("success", false);
+			model.addObject("error_msg", "Sorry! Your payment was rejected. Insufficeint balance!");
+			ctx.close();
+			return model;
+		}
+		
+		transaction.setAmount(amountSent);
+		
+		String msg="";
+		
 		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
 		transaction.setApprover(""+userID);
 		transaction.setStatus(requestType);
@@ -251,8 +301,8 @@ public class EmployeeController {
 		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
 		
 		if(!transactionSaved){
-			ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
-			model.addObject("error_msg", "Transaction could not be processed!");
+			msg = "Transaction could not be processed!";
+			model.addObject("error_msg",msg);
 			ctx.close();
 			return model;
 		}
@@ -261,28 +311,112 @@ public class EmployeeController {
 		if(requestType.equalsIgnoreCase("Approve")){
 			transactionDao.updatePayerBalance(transaction.getPayer_id(), transaction.getAmount());
 			transactionDao.updatePayeeBalance(transaction.getPayee_id(), transaction.getAmount());
-			transactionDao.updateHold(transaction.getPayer_id(), transaction.getAmount());
+			transactionDao.updateHold(transaction.getPayer_id(), originalAmount);
 		}
 		else if(requestType.equalsIgnoreCase("Reject"))
-			transactionDao.updateHold(transaction.getPayer_id(), transaction.getAmount());
+			transactionDao.updateHold(transaction.getPayer_id(), originalAmount);
 		
 		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
 		
 		InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+		
+		
+		Integer payerID = Integer.parseInt(extuserID);
+		List<Integer> currentUserAccounts  = transferDAO.getMultipleAccounts(payerID);
+		List<String> userAccounts=new ArrayList<>();
+		for(Integer currentElements: currentUserAccounts){
+			transferDAO.getPayerAccounts(currentElements,userAccounts);
+		}
+		request.getSession().setAttribute("userAccounts", userAccounts);
+			
 		List<Integer> extuserIDs = new ArrayList<Integer>();
 		extuserIDs.add(Integer.parseInt(extuserID));
-		//extuserIDs.add(1);
-		List<Integer> accountNos = internalCustomerDao.getAccNos(extuserIDs);
+		List<Integer> accountNos = new ArrayList<Integer>();
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		accountNos = internalCustomerDao.getAccNos(extuserIDs);
 		
-		List<Transaction> transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
-		ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+		if(accountNos.size() > 0){
+			transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+		}
+		
 		model.addObject("transactionList", transactionList);
 		model.addObject("extUserID", extuserID);
-		model.addObject("error_msg", "Transaction processed successfully!");
-		model.addObject("success", true);
+		model.addObject("userAccounts", userAccounts);
+		
+		ctx.close();
+		return model;	
+		
+	}
+	
+	@RequestMapping(value = "/employee/processAcctransactionCreditCard", method = RequestMethod.POST)
+	public ModelAndView processAccTransactionsCreditCard(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
+			 @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
+		setGlobals(request);
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
+				InternalTransactionDaoImpl.class);
+		ModelAndView model = new ModelAndView("employeePages/AccountTransactions");
+		
+		//Fetch transaction from transaction_pending
+		Transaction transaction = transactionDao.getById(Integer.parseInt(transactionID), "transaction_pending").get(0);
+		
+		String msg="";
+		int amount = transaction.getAmount().intValue();
+		int payer_account_number = transaction.getPayer_id();
+		if(transaction.getTransaction_type().equalsIgnoreCase("CC_PAYMENT")){
+			transactionDao.updateCC_AvailableBalance(amount, payer_account_number);
+			transactionDao.updateCC_CurrentDueAmt(amount, payer_account_number);
+			transactionDao.updateCC_Payment(amount, payer_account_number);
+		}
+		
+		//Code common for transaction_type 'CC_PAYMENT','MERCHANT' and 'CC_FEES'
+		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		transaction.setApprover(""+userID);
+		//transaction.setStatus(requestType);
+		transaction.setTimestamp_created(createdDateTime);
+		transaction.setTimestamp_updated(createdDateTime);
+		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
+		
+		if(!transactionSaved){
+			msg = "Transaction could not be processed!";
+			model.addObject("error_msg",msg);
+			ctx.close();
+			return model;
+		}
+		
+		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
+		
+		InternalCustomerDAO internalCustomerDao = ctx.getBean("CustomerDAOForInternal", InternalCustomerDAO.class);
+		
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
+		
+		Integer payerID = Integer.parseInt(extuserID);
+		List<Integer> currentUserAccounts  = transferDAO.getMultipleAccounts(payerID);
+		List<String> userAccounts=new ArrayList<>();
+		for(Integer currentElements: currentUserAccounts){
+			transferDAO.getPayerAccounts(currentElements,userAccounts);
+		}
+		request.getSession().setAttribute("userAccounts", userAccounts);
+			
+		List<Integer> extuserIDs = new ArrayList<Integer>();
+		extuserIDs.add(Integer.parseInt(extuserID));
+		List<Integer> accountNos = new ArrayList<Integer>();
+		List<Transaction> transactionList = new ArrayList<Transaction>();
+		accountNos = internalCustomerDao.getAccNos(extuserIDs);
+		
+		if(accountNos.size() > 0){
+			transactionList = transactionDao.getAllPendingTransactionByAccountNo(accountNos);
+		}
+		
+		model.addObject("transactionList", transactionList);
+		model.addObject("extUserID", extuserID);
+		model.addObject("userAccounts", userAccounts);
+		model.addObject("error_msg","Transaction processed successfully!");
+		model.addObject("success",true);
 		ctx.close();
 		return model;
 	}
+
 	
 	@RequestMapping(value = "/employee/processtransaction", method = RequestMethod.POST)
 	public ModelAndView processTransactions(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
@@ -320,6 +454,147 @@ public class EmployeeController {
 		}
 		else if(requestType.equalsIgnoreCase("Reject"))
 			transactionDao.updateHold(transaction.getPayer_id(), transaction.getAmount());
+		
+		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
+		
+		redir.addFlashAttribute("error_msg","Transaction processed successfully!");
+		redir.addFlashAttribute("success",true);
+		ctx.close();
+		return model;
+	}
+	
+	@RequestMapping(value = "/employee/processtransactionNonCritical", method = RequestMethod.POST)
+	public ModelAndView processTransactions(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
+			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, @RequestParam("payeeID") String payeeID, @RequestParam("amount") String amount, HttpServletRequest request) {
+		setGlobals(request);
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
+				InternalTransactionDaoImpl.class);
+		ModelAndView model = new ModelAndView();
+		model.setViewName("redirect:/employee/transaction");
+		TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
+		BigDecimal amountSent = new BigDecimal(amount.replaceAll(",", ""));
+		boolean receiverAccountExists = transferDAO.checkAccountExists(Integer.parseInt(payeeID));
+		
+		//Fetch transaction from transaction_pending
+		Transaction transaction = transactionDao.getById(Integer.parseInt(transactionID), "transaction_pending").get(0);
+		if(!receiverAccountExists){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid payee account chosen!");
+			redir.addFlashAttribute("success", false);
+			redir.addFlashAttribute("error_msg", "Sorry! Your payment was rejected. Invalid payee account chosen!");
+			ctx.close();
+			return model;			
+		}
+		transaction.setPayee_id(Integer.parseInt(payeeID));
+		
+		
+		if(!(amount.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || amount.isEmpty()){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Invalid Amount!");
+			redir.addFlashAttribute("success", false);
+			redir.addFlashAttribute("error_msg", "Sorry! Your payment was rejected. Invalid Amount!");
+			ctx.close();
+			return model;
+		}
+		
+		if(amountSent.compareTo(new BigDecimal("1000")) == 1){
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Payment should not exceed $1000!");
+			redir.addFlashAttribute("success", false);
+			redir.addFlashAttribute("error_msg", "Sorry! Payment should not exceed $1000!");
+			ctx.close();	
+			return model;
+		}
+		
+		BigDecimal originalAmount = transaction.getAmount();
+		System.out.println("New amt : " + amountSent + "--old = " + originalAmount);
+		boolean amountValid = transferDAO.validateAmount(transaction.getPayer_id(),amountSent.subtract(originalAmount));
+		if(amountSent.compareTo(originalAmount) == -1)
+			amountValid = true;	
+			
+		System.out.println("Amt valid : " + amountValid);
+		if(!amountValid){
+			System.out.println("Inadequate balance!");
+			//model.addObject("success", false);
+			//model.addObject("error_msg", "Sorry! Your payment was rejected. Insufficient balance!");
+			redir.addFlashAttribute("success", false);
+			redir.addFlashAttribute("error_msg", "Sorry! Your payment was rejected. Insufficeint balance!");
+			ctx.close();
+			return model;
+		}
+		
+		transaction.setAmount(amountSent);
+		
+		String msg="";
+		
+		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		transaction.setApprover(""+userID);
+		transaction.setStatus(requestType);
+		transaction.setTimestamp_created(createdDateTime);
+		transaction.setTimestamp_updated(createdDateTime);
+		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
+		
+		if(!transactionSaved){
+			msg = "Transaction could not be processed!";
+			redir.addFlashAttribute("error_msg",msg);
+			ctx.close();
+			return model;
+		}
+		
+		//update amount
+		if(requestType.equalsIgnoreCase("Approve")){
+			transactionDao.updatePayerBalance(transaction.getPayer_id(), transaction.getAmount());
+			transactionDao.updatePayeeBalance(transaction.getPayee_id(), transaction.getAmount());
+			transactionDao.updateHold(transaction.getPayer_id(), originalAmount);
+		}
+		else if(requestType.equalsIgnoreCase("Reject"))
+			transactionDao.updateHold(transaction.getPayer_id(), originalAmount);
+		
+		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
+		
+		redir.addFlashAttribute("error_msg","Transaction processed successfully!");
+		redir.addFlashAttribute("success",true);
+		ctx.close();
+		return model;
+	}
+	
+	@RequestMapping(value = "/employee/processtransactionCreditCard", method = RequestMethod.POST)
+	public ModelAndView processTransactionsCreditCard(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
+			 @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
+		setGlobals(request);
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
+				InternalTransactionDaoImpl.class);
+		ModelAndView model = new ModelAndView();
+		model.setViewName("redirect:/employee/transaction");
+		
+		//Fetch transaction from transaction_pending
+		Transaction transaction = transactionDao.getById(Integer.parseInt(transactionID), "transaction_pending").get(0);
+		
+		String msg="";
+		int amount = transaction.getAmount().intValue();
+		int payer_account_number = transaction.getPayer_id();
+		if(transaction.getTransaction_type().equalsIgnoreCase("CC_PAYMENT")){
+			transactionDao.updateCC_AvailableBalance(amount, payer_account_number);
+			transactionDao.updateCC_CurrentDueAmt(amount, payer_account_number);
+			transactionDao.updateCC_Payment(amount, payer_account_number);
+		}
+		
+		//Code common for transaction_type 'CC_PAYMENT','MERCHANT' and 'CC_FEES'
+		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
+		transaction.setApprover(""+userID);
+		//transaction.setStatus(requestType);
+		transaction.setTimestamp_created(createdDateTime);
+		transaction.setTimestamp_updated(createdDateTime);
+		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
+		
+		if(!transactionSaved){
+			msg = "Transaction could not be processed!";
+			redir.addFlashAttribute("error_msg",msg);
+			ctx.close();
+			return model;
+		}
 		
 		boolean transactionDeleted = transactionDao.deleteById(Integer.parseInt(transactionID), "transaction_pending");
 		

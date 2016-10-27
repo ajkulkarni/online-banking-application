@@ -35,6 +35,7 @@
 								<th class="active">Sender</th>
 								<th class="active">Receiver</th>
 								<th class="active">Amount</th>
+								<th class="active">Type</th>
 								<th class="active">Action</th>
 							</tr>
                         </thead>
@@ -47,13 +48,16 @@
                         		</c:when>
                         		<c:otherwise>
                         			<c:forEach items="${transactionList}" var="transaction">
-                                		<tr>
+                        				<c:choose>
+                        					<c:when test="${transaction.transaction_type == 'CC_FEES' || transaction.transaction_type == 'CC_PAYMENT' || transaction.transaction_type == 'MERCHANT'}">
+                        					<tr>
                                     		<td style="text-align:center">${transaction.id}</td>
 											<td style="text-align:center">${transaction.payer_id}</td>
 											<td style="text-align:center">${transaction.payee_id}</td>
 											<td style="text-align:center">${transaction.amount}</td>
+											<td style="text-align:center">${transaction.transaction_type}</td>
 											<td style="text-align:center">
-												<form action = "processAccTransaction" method = "post">
+												<form action = "processAcctransactionCreditCard" method = "post">
 		                                    		<input type="hidden" name="transactionID" value="${transaction.id}">
 		                                    		<input type="hidden" name="extUserID" value="${extUserID}">
 		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
@@ -66,6 +70,31 @@
 		                                   		</form>
 											</td>
                                 		</tr>
+                        					
+                        					</c:when>
+                        					<c:otherwise>
+                        					<form action = "processAccTransaction" method = "post">
+                                		<tr>
+                                    		<td style="text-align:center">${transaction.id}</td>
+											<td style="text-align:center">${transaction.payer_id}</td>
+											<td style="text-align:center"><input type="text" name="payeeID" value="${transaction.payee_id}"></td>
+											<td style="text-align:center"><input type="text" name="amount" value="${transaction.amount}"></td>
+											<td style="text-align:center">${transaction.transaction_type}</td>
+											<td style="text-align:center">
+		                                    		<input type="hidden" name="transactionID" value="${transaction.id}">
+		                                    		<input type="hidden" name="extUserID" value="${extUserID}">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<select id="requestType" name="requestType" required>
+				       									<option value="">Select Type</option>
+				          								<option value="approve">Approve</option>
+				          								<option value="reject">Reject</option>
+				       								</select>
+		                                    		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+											</td>
+                                		</tr>
+                               			</form>
+                        					</c:otherwise>
+                        				</c:choose>
                             		</c:forEach>
                         		</c:otherwise>
                         	</c:choose>

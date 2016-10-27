@@ -138,4 +138,25 @@ public class InternalTransactionDaoImpl extends TransactionDaoImpl {
 		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
 		jdbcTemplate.update(updateStmt, new Object[] {amount, payerAccountNumber});
 	}
+    
+    public void updateCC_AvailableBalance(int amount, int account_number){
+    	String updateStmt = "Update credit_card_account_details set available_balance = available_balance - ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, account_number});
+	
+    }
+    
+    public void updateCC_CurrentDueAmt(int amount, int account_number){
+    	String updateStmt = "Update credit_card_account_details set current_due_amt = current_due_amt - ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, account_number});
+	
+    }
+    
+    public void updateCC_Payment(int amount, int account_number){
+    	String updateStmt = "Update credit_card_account_details set payment = payment + ? where account_number = ?";
+		//int external_user_id = jdbcTemplate.query(updateHoldField, new AccountsMapper()).get(0);
+		jdbcTemplate.update(updateStmt, new Object[] {amount, account_number});
+	
+    }
 }

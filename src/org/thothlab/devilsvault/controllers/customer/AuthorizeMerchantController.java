@@ -1,8 +1,3 @@
-
-/**
- * Created by jaydatta on 10/24/16.
- */
-
 package org.thothlab.devilsvault.controllers.customer;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -25,9 +20,9 @@ public class AuthorizeMerchantController {
 
     public void setGlobals(HttpServletRequest request) {
         role = (String) request.getSession().getAttribute("role");
-        System.out.println(role + "role");
+        //System.out.println(role + "role");
         userID = (int) request.getSession().getAttribute("userID");
-        System.out.println("USER ID:" + userID);
+        //System.out.println("USER ID:" + userID);
 
 
 
@@ -39,11 +34,18 @@ public class AuthorizeMerchantController {
         setGlobals(request);
 
 
-        System.out.println(request.getSession().getAttribute("userID")+"sdfkjsdhfksdhf");
+        //System.out.println(request.getSession().getAttribute("userID")+"sdfkjsdhfksdhf");
 
+        ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
+           if(request.getSession().getAttribute("role").equals("ROLE_MERCHANT")){
+            return logoutModel;
+        }
 
-        System.out.println(request.getParameter("checkingPicker")+"checkingPicker");
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        Boolean result = false;
+        Boolean deleted = false;
+
+        //System.out.println(request.getParameter("checkingPicker")+"checkingPicker");
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("/jdbc/config/DaoDetails.xml");
         TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 
         int payerId = userID;
@@ -56,8 +58,6 @@ public class AuthorizeMerchantController {
         // Remind to check
 
         List<String> merchantAccounts = transferDAO.getNewMerchantAccounts(payerId);
-
-
         List<Integer> merchantNames = new ArrayList<>();
 
         for(int i=0; i < merchantAccounts.size();i++){
@@ -65,29 +65,52 @@ public class AuthorizeMerchantController {
         }
 
         if(request.getParameterMap().containsKey("checkingPicker")){
+
+            if(!(request.getParameter("checkingPicker").matches("[a-zA-Z ]+\\w\\s*:\\d+"))){
+                model.addObject("success", false);
+                model.addObject("error_msg", "Tampering Merchant Accounts!");
+                ctx.close();
+                return model;
+            }
+
             int merchantID = Integer.parseInt(request.getParameter("checkingPicker").split(":")[1]);
         if(!merchantNames.contains(merchantID)){
-         model.addObject("success", false);
-             model.addObject("error_msg", "Merchant not authorized!");
-         ctx.close();
+            model.addObject("success", false);
+            model.addObject("error_msg", "Merchant not authorized!");
+            ctx.close();
             return model;
-}
+            }
 
 
-            Boolean result = transferDAO.addMerchantToUser(merchantID,userID);
+            //System.out.println(merchantID);
+            result =  transferDAO.addMerchantToUser(merchantID,userID);
+
+            //System.out.println("result"+result);
         }
 
         if(request.getParameterMap().containsKey("removeMerchant")){
             int merchantID = Integer.parseInt(request.getParameter("removeMerchant").split(":")[1]);
-            Boolean deleted = transferDAO.deleteMerchantConnection(payerId,merchantID);
+            deleted = transferDAO.deleteMerchantConnection(payerId,merchantID);
+
+            //System.out.println(deleted+"deleted");
+
         }
 
 
 
+        ModelAndView newModel = new ModelAndView("redirect:" + "/customer/authorizemerchants");
         List<String> existingMerchants = transferDAO.getExistingMerchantAccounts(payerId);
+        if(result || deleted){
+            newModel.addObject("existingMerchants",existingMerchants);
+            newModel.addObject("merchantAccounts", merchantAccounts);
+            ctx.close();
+        return newModel;
+        }
         model.addObject("existingMerchants",existingMerchants);
         model.addObject("merchantAccounts", merchantAccounts);
         request.getSession().setAttribute("merchantAccounts", merchantAccounts);
+        ctx.close();
+
         return model;
     }
 }

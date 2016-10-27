@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class MerchantPaymentController {
@@ -24,71 +23,101 @@ public class MerchantPaymentController {
 
     public void setGlobals(HttpServletRequest request) {
         role = (String) request.getSession().getAttribute("role");
-        System.out.println(role + "role");
+        //System.out.println(role + "role");
         userID = (int) request.getSession().getAttribute("userID");
         username = (String) request.getSession().getAttribute("username");
     }
 
-    @RequestMapping("/customer/merchantpayment")
+    @RequestMapping("customer/merchantpayment")
     public ModelAndView merchantPayToUser(HttpServletRequest request) throws SQLException, ParseException {
         ModelAndView model = new ModelAndView("customerPages/merchantMakePayment");
-
-
         setGlobals(request);
 
-        System.out.println(request.getParameter("checkingPicker") + "checkingPicker");
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+
+        ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
+        if(request.getSession().getAttribute("role").equals("ROLE_CUSTOMER")){
+            return logoutModel;
+        }
+
+         //System.out.println(request.getParameter("checkingPicker") + "checkingPicker");
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("/jdbc/config/DaoDetails.xml");
         TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
         TransactionDaoImpl extTransactionDAO = ctx.getBean("TransactionDao", TransactionDaoImpl.class);
 
-        int merchantID = Integer.parseInt(request.getSession().getAttribute("userID").toString());
+        int merchantID = Integer.parseInt(request.
+                getSession().getAttribute("userID").toString());
 
         List<String> userAccounts = transferDAO.getUserAccounts(merchantID);
         model.addObject("userAccounts", userAccounts);
 
+        List<String> authorizedUserAccounts = new ArrayList<>();
+        for(int i=0 ; i < userAccounts.size();i++){
+            authorizedUserAccounts.add(userAccounts.get(i).split(":")[1].trim());
+        }
 
         int sentAmount = 0;
         if (request.getParameterMap().containsKey("etpinputAmount") && request.getParameterMap().containsKey("checkingPicker")) {
-            sentAmount = Integer.parseInt(request.getParameter("etpinputAmount").toString().trim());
+
+            if(!(request.getParameter("checkingPicker").matches("[a-zA-Z ]+\\w\\s*:\\d+"))){
+                model.addObject("success", false);
+                model.addObject("error_msg", "Tampering User Accounts!");
+                ctx.close();
+                return model;
+            }
+
+            String AmountSentString = request.getParameter("etpinputAmount").toString().trim();
+            if(!(AmountSentString.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || AmountSentString.isEmpty()){
+                model.addObject("success", false);
+                model.addObject("error_msg", "Invalid Amount Co!")  ;
+                ctx.close();
+                return model;
+            }
+            try {
+                sentAmount = Integer.parseInt(request.getParameter("etpinputAmount").toString().trim());
+            }
+            catch(Exception e){
+                model.addObject("success", false);
+                model.addObject("error_msg", " Send value not permissible");
+                ctx.close();
+                return model;
+            }
+
             if (!(request.getParameter("checkingPicker") == null)) {
-                String authorizedCustomerID = request.getParameter("checkingPicker").toString().split(":")[1];
-                String userName = request.getParameter("checkingPicker").toString().split(":")[0];
+                String authorizedCustomerID = request.getParameter("checkingPicker").toString().split(":")[1].trim();
+
+                if(!authorizedUserAccounts.contains(authorizedCustomerID)){
+                    model.addObject("success", false);
+                    model.addObject("error_msg", " Malicious Merchant Account Inserted");
+                    ctx.close();
+                    return model;
+                }
                 HashMap<String,String> returnedHmap = transferDAO.processPayment(merchantID, sentAmount,Integer.parseInt(authorizedCustomerID));
 
                 int accepted = Integer.parseInt(returnedHmap.get("accepted").trim());
 
-                System.out.println("succesValue / merchantAccountNumber"+returnedHmap.get("accepted"));
-                /*Boolean success = (accepted==-1)? false:true;
-                if (!success) {
-                    model.addObject("success", false);
-                    model.addObject("error_msg", " Transaction Denied / Failed");
-                    ctx.close();
-                    return model;
-                }
-*/
-                BigDecimal amount = new BigDecimal(sentAmount);
+            
+              
+                
                 int payerAccount = Integer.parseInt(returnedHmap.get("userAccount").trim());
                 int payeeAccountNumber = Integer.parseInt(returnedHmap.get("merchantCheckingAccount").trim());
                 String description = "Transferred "+sentAmount+"$ from Account:"+payerAccount+" to Account:"+payeeAccountNumber+"";
-
-                System.out.println(payerAccount+"sdhfksdhf"+payeeAccountNumber+"fhsdkhsf"+amount);
-
-
-
-
+                
+                BigDecimal amount = new BigDecimal(sentAmount);
+                //System.out.println(payerAccount+"sdhfksdhf"+payeeAccountNumber+"fhsdkhsf"+amount);
+                
                 if(!(payerAccount==-1) && !(payeeAccountNumber==-1) && !(accepted==-1)){
                     Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccount, amount, payeeAccountNumber, description, "MERCHANT");
                     extTransactionDAO.save(extTransferTrans, "transaction_pending");
                 }else{
                     model.addObject("success", false);
-                    model.addObject("error_msg", " Transaction Denied / Failed");
+                    model.addObject("error_msg", " No sufficient Balance");
                     ctx.close();
                     return model;
                 }
     model.addObject("success",true);
             }
         }
-
+        ctx.close();
         return model;
     }
 }

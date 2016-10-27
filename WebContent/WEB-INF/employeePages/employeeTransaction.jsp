@@ -63,7 +63,31 @@
                         		</c:when>
                         		<c:otherwise>
                         			<c:forEach items="${pending_list}" var="transaction">
-                        				<c:if test="${transaction.critical}">
+                        				<c:choose>
+                        				<c:when test="${transaction.transaction_type == 'CC_FEES' || transaction.transaction_type == 'CC_PAYMENT' || transaction.transaction_type == 'MERCHANT'}">
+                        					<tr>
+                                    		<td style="text-align:center">${transaction.id}</td>
+											<td style="text-align:center">${transaction.payer_id}</td>
+											<td style="text-align:center">${transaction.payee_id}</td>
+											<td style="text-align:center">${transaction.amount}</td>
+											<td style="text-align:center">${transaction.transaction_type}</td>
+											<td style="text-align:center">${transaction.critical}</td>
+											<td style="text-align:center">
+												<form action = "processtransactionCreditCard" method = "post">
+		                                    		<input type="hidden" name="transactionID" value="${transaction.id}">
+		                                    		<input type="hidden" name="extUserID" value="external">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<select id="requestType" name="requestType" required>
+				       									<option value="">Select Type</option>
+				          								<option value="approve">Approve</option>
+				          								<option value="reject">Reject</option>
+				       								</select>
+		                                    		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+		                                   		</form>
+											</td>
+                                		</tr>
+                        				</c:when>
+                        				<c:when test="${transaction.critical}">
                         					<tr>
                                     		<td style="text-align:center">${transaction.id}</td>
 											<td style="text-align:center">${transaction.payer_id}</td>
@@ -85,13 +109,13 @@
 		                                   		</form>
 											</td>
                                 		</tr>
-                        				</c:if>
-                                		<c:if test="${!transaction.critical}">
-												<form action = "processtransaction" method = "post">
+                        				</c:when>
+                        				<c:when test="${!transaction.critical}">
+                        					<form action = "processtransactionNonCritical" method = "post">
 	                        						<tr>
 			                                    		<td style="text-align:center">${transaction.id}</td>
 														<td style="text-align:center">${transaction.payer_id}</td>
-														<td style="text-align:center"><input type="text" name="amount" value="${transaction.payee_id}"></td>
+														<td style="text-align:center"><input type="text" name="payeeID" value="${transaction.payee_id}"></td>
 														<td style="text-align:center"><input type="text" name="amount" value="${transaction.amount}"></td>
 														<td style="text-align:center">${transaction.transaction_type}</td>
 														<td style="text-align:center">${transaction.critical}</td>
@@ -108,7 +132,8 @@
 														</td>
 		                                			</tr>
                         						</form>
-                        				</c:if>
+                        				</c:when>
+                        				</c:choose>
                             		</c:forEach>
                         		</c:otherwise>
                         	</c:choose>
