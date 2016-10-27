@@ -1,3 +1,5 @@
+
+
 package org.thothlab.devilsvault.controllers.customer;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -33,9 +35,6 @@ public class AuthorizeMerchantController {
     public ModelAndView addMerchants(HttpServletRequest request) throws SQLException {
         setGlobals(request);
 
-
-        //System.out.println(request.getSession().getAttribute("userID")+"sdfkjsdhfksdhf");
-
         ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
            if(request.getSession().getAttribute("role").equals("ROLE_MERCHANT")){
             return logoutModel;
@@ -44,7 +43,6 @@ public class AuthorizeMerchantController {
         Boolean result = false;
         Boolean deleted = false;
 
-        //System.out.println(request.getParameter("checkingPicker")+"checkingPicker");
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("/jdbc/config/DaoDetails.xml");
         TransferDAO transferDAO = ctx.getBean("transferDAO", TransferDAO.class);
 
@@ -110,7 +108,6 @@ public class AuthorizeMerchantController {
         model.addObject("merchantAccounts", merchantAccounts);
         request.getSession().setAttribute("merchantAccounts", merchantAccounts);
         ctx.close();
-
         return model;
     }
 }

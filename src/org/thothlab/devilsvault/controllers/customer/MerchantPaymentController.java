@@ -2,6 +2,7 @@ package org.thothlab.devilsvault.controllers.customer;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
@@ -28,12 +29,14 @@ public class MerchantPaymentController {
         username = (String) request.getSession().getAttribute("username");
     }
 
+
+
     @RequestMapping("customer/merchantpayment")
     public ModelAndView merchantPayToUser(HttpServletRequest request) throws SQLException, ParseException {
         ModelAndView model = new ModelAndView("customerPages/merchantMakePayment");
         setGlobals(request);
 
-
+        Boolean result = false;
         ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
         if(request.getSession().getAttribute("role").equals("ROLE_CUSTOMER")){
             return logoutModel;
@@ -55,6 +58,13 @@ public class MerchantPaymentController {
             authorizedUserAccounts.add(userAccounts.get(i).split(":")[1].trim());
         }
 
+
+        System.out.println("authorized user account");
+        for(String demo: authorizedUserAccounts){
+            System.out.println(demo);
+        }
+
+
         int sentAmount = 0;
         if (request.getParameterMap().containsKey("etpinputAmount") && request.getParameterMap().containsKey("checkingPicker")) {
 
@@ -69,7 +79,6 @@ public class MerchantPaymentController {
             if(!(AmountSentString.replaceAll(",", "").matches("^(\\d+\\.)?\\d+$")) || AmountSentString.isEmpty()){
                 model.addObject("success", false);
                 model.addObject("error_msg", "Invalid Amount Co!")  ;
-                ctx.close();
                 return model;
             }
             try {
@@ -91,31 +100,53 @@ public class MerchantPaymentController {
                     ctx.close();
                     return model;
                 }
+
+
+                String userName = request.getParameter("checkingPicker").toString().split(":")[0];
                 HashMap<String,String> returnedHmap = transferDAO.processPayment(merchantID, sentAmount,Integer.parseInt(authorizedCustomerID));
 
                 int accepted = Integer.parseInt(returnedHmap.get("accepted").trim());
 
-            
-              
+                Iterator myIterator= returnedHmap.entrySet().iterator();
+                while(myIterator.hasNext()){
+                    Map.Entry me = (Map.Entry)myIterator.next();
+                    //System.out.println(me.getKey()+"<-->"+me.getValue());
+                }
                 
                 int payerAccount = Integer.parseInt(returnedHmap.get("userAccount").trim());
                 int payeeAccountNumber = Integer.parseInt(returnedHmap.get("merchantCheckingAccount").trim());
                 String description = "Transferred "+sentAmount+"$ from Account:"+payerAccount+" to Account:"+payeeAccountNumber+"";
                 
                 BigDecimal amount = new BigDecimal(sentAmount);
-                //System.out.println(payerAccount+"sdhfksdhf"+payeeAccountNumber+"fhsdkhsf"+amount);
-                
                 if(!(payerAccount==-1) && !(payeeAccountNumber==-1) && !(accepted==-1)){
-                    Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccount, amount, payeeAccountNumber, description, "MERCHANT");
-                    extTransactionDAO.save(extTransferTrans, "transaction_pending");
+
+                    // reject Transaction if balance > 1000
+                    if(amount.compareTo(new BigDecimal("1000")) == 1){
+                        model.addObject("success", false);
+                        model.addObject("error_msg", " Transaction Amount cannot exceed $1000");
+                        ctx.close();
+                        return model;
+                    }
+                    else{
+                        Transaction extTransferTrans = extTransactionDAO.createExternalTransaction(payerAccount, amount, payeeAccountNumber, description, "MERCHANT");
+                        extTransactionDAO.save(extTransferTrans, "transaction_pending");
+                        result = transferDAO.updateAvailableBalance(amount,payerAccount);
+                    }
                 }else{
                     model.addObject("success", false);
                     model.addObject("error_msg", " No sufficient Balance");
                     ctx.close();
                     return model;
                 }
-    model.addObject("success",true);
+
             }
+        }
+
+        if(result){
+            model.addObject("success",true);
+        }
+        else{
+            model.addObject("success",false);
         }
         ctx.close();
         return model;

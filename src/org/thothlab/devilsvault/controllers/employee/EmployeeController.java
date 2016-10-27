@@ -349,8 +349,7 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value = "/employee/processAcctransactionCreditCard", method = RequestMethod.POST)
-	public ModelAndView processAccTransactionsCreditCard(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
-			 @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
+	public ModelAndView processAccTransactionsCreditCard(RedirectAttributes redir, @RequestParam("transactionID") String transactionID, @RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
 		setGlobals(request);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
@@ -375,6 +374,7 @@ public class EmployeeController {
 		//transaction.setStatus(requestType);
 		transaction.setTimestamp_created(createdDateTime);
 		transaction.setTimestamp_updated(createdDateTime);
+		transaction.setStatus(requestType);
 		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
 		
 		if(!transactionSaved){
@@ -561,7 +561,7 @@ public class EmployeeController {
 	
 	@RequestMapping(value = "/employee/processtransactionCreditCard", method = RequestMethod.POST)
 	public ModelAndView processTransactionsCreditCard(RedirectAttributes redir, @RequestParam("transactionID") String transactionID,
-			 @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
+			@RequestParam("requestType") String requestType, @RequestParam("extUserID") String extuserID, HttpServletRequest request) {
 		setGlobals(request);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		InternalTransactionDaoImpl transactionDao = ctx.getBean("TransactionSpecificDao",
@@ -587,6 +587,8 @@ public class EmployeeController {
 		//transaction.setStatus(requestType);
 		transaction.setTimestamp_created(createdDateTime);
 		transaction.setTimestamp_updated(createdDateTime);
+		transaction.setStatus(requestType);
+		
 		boolean transactionSaved = transactionDao.saveToCompleted(transaction, "transaction_completed");
 		
 		if(!transactionSaved){

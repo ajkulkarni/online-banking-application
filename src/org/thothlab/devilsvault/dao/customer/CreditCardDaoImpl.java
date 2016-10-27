@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.dao.customer;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -36,8 +37,8 @@ public class CreditCardDaoImpl {
 		java.sql.Date sqldateCycle = new java.sql.Date(cal.getTime().getTime());
 	    cal.set(year, month, 15);
 		java.sql.Date sqldateDue = new java.sql.Date(cal.getTime().getTime());
-		Long credit_card_number;
-		credit_card_number = Long.parseLong(CreditCardGenerator.generateMasterCardNumber().substring(0, 5));
+		BigInteger credit_card_number;
+		credit_card_number = new BigInteger(CreditCardGenerator.generateMasterCardNumber());
 		while(true)
 		{
 			String query = "SELECT COUNT(*) FROM credit_card_account_details WHERE credit_card_no ='" + credit_card_number + "';";
@@ -46,7 +47,7 @@ public class CreditCardDaoImpl {
 			{
 				break;
 			}
-			credit_card_number = Long.parseLong(CreditCardGenerator.generateMasterCardNumber().substring(0, 5));
+			credit_card_number = new BigInteger(CreditCardGenerator.generateMasterCardNumber());
 		}
 		CreditAccountDB creditaccount = new CreditAccountDB();
 		creditaccount.setAccount_number(accountNumber);
@@ -72,7 +73,7 @@ public class CreditCardDaoImpl {
 			con = dataSource.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1,creditaccount.getInterest());
-			ps.setLong(2, creditaccount.getCredit_card_number());
+			ps.setLong(2, creditaccount.getCredit_card_number().longValue());
 			ps.setInt(3, creditaccount.getAvailable_balance());
 			ps.setInt(4,creditaccount.getLast_bill_amount());
 			ps.setInt(7,creditaccount.getAccount_number());

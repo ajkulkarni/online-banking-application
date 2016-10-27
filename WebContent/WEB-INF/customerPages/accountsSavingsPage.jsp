@@ -6,15 +6,20 @@
 <script src="<c:url value="/resources/js/jspdf.table.js" />"></script>
     <div class="content-wrapper">
         <div class="col-md-12" id="page-content">
-            <h1>Savings Account</h1>
+            <div><p id="heading" style="font-size:30px; text-align:center">Savings Account</p></div>
             <div class="panel panel-warning">
                 <div class="panel-heading">
                     <h3 class="panel-title">ACCOUNT INFORMATION</h3>
                 </div>
                 <div class="panel-body">
+                  <div class="row">
+                        <div class="col-sm-2"><b>Account Number:</b></div>
+                        <div class="col-sm-3">${savingsAccount.account_number}</div>
+                                            
+                   </div>
                     <div class="row">
                         <div class="col-sm-2"><b>Account Balance:</b></div>
-                        <div class="col-sm-3">${SavingsAccBal}</div>
+                        <div class="col-sm-3">${savingsAccount.balance}</div>
                         <div class="col-sm-6"><a href="accountsBalance"><button type="button" class="btn btn-primary" style="float:right">Add/Withdraw Money</button></a></div>
                     </div>
                     <hr>
@@ -34,24 +39,58 @@
                         </div>
                         </form>
                     <hr>
-                    <div class="row">
-                        <table class="table table-fixed" id="trans-table">
-                            <thead>
+                    <div class="row" id="table-scroll" style="height:300px; overflow:scroll">
+                        <table class="table table-striped" id="trans-table">
+                            <thead>						
                                 <tr>
-                                    <th class="col-xs-2">#</th>
+                                    <th class="col-xs-1">#</th>
                                     <th class="col-xs-4">Description</th>
-                                    <th class="col-xs-3">Payee</th>
-                                    <th class="col-xs-3">Amount</th>         
-                                    <th class="col-xs-3">Date</th>      
+                                    <th class="col-xs-1">Transaction Type</th>
+                                    <th class="col-xs-1">Payee</th>
+                                    <th class="col-xs-2">Amount</th>
+                                    <th class="col-xs-2">Status</th>       
+                                    <th class="col-xs-3">Date</th>    
                                 </tr>
                             </thead>
+                                                   
                             <tbody>
                                 <c:forEach var="trans" items="${TransactionLines}" varStatus="loop">
                                     <tr>
                                         <th scope="row">${loop.index + 1}</th>
                                         <td>${trans.description}</td>
+                                       <c:set var="account_number" scope="session" value="${checkingAccount.account_number}"/>
+                                        <c:set var="description" scope="session" value="${trans.description}"/>                                     
+                                        <c:set var="payee_id" scope="session" value="${trans.payee_id}"/>
+                                        <c:set var="payer_id" scope="session" value="${trans.payer_id}"/>
+                                        <c:set var="depo_desc" scope="session" value="Deposit money to account"/>
+                                        <c:set var="with_desc" scope="session" value="Withdrawal of money from account"/> 
+                                                                               
+                                    	<c:choose>
+                                    		<c:when test="${payer_id!=payee_id }">
+                                    			<c:choose>
+  													<c:when test="${account_number==payee_id}">
+  														<td>CREDIT</td>
+  													</c:when>
+  													<c:otherwise>
+  														<td>DEBIT</td>
+  													</c:otherwise>
+  												</c:choose>
+  											</c:when>
+  											<c:otherwise>
+  												<c:choose>
+  													<c:when test="${description==depo_desc}">
+  														<td>CREDIT</td>
+													</c:when>
+													<c:otherwise>
+														<td>DEBIT</td>  
+													</c:otherwise>
+												</c:choose>														
+  											</c:otherwise>
+										</c:choose>
+                                    
                                         <td>${trans.payee_id}</td>
                                         <td>${trans.amount}</td>
+                                        <td>${trans.status}</td>
                                         <td>${trans.timestamp_updated}</td>
                                         
                                     </tr>
@@ -68,7 +107,7 @@
             
             
         </div>
-    </div> <!-- .content-wrapper -->
+    </div> <!-- .content-wrapper -->res.columns
     
 <script>
         function generatePDF() {    
@@ -76,7 +115,7 @@
             var elem = document.getElementById("trans-table");
             var res = doc.autoTableHtmlToJson(elem);
             doc.autoTable(res.columns, res.data);
-            doc.save("table.pdf");
+            doc.save("Transaction history.pdf");
         }
 </script>
 <script type="text/javascript">

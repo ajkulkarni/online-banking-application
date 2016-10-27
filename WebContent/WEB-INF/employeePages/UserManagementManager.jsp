@@ -10,7 +10,7 @@
   				<strong>${message}</strong>
 			</div>
 			</c:if>
-            <form action = "externalRegistration" method = "post" style="float:right;">
+            <form action = "externalregistrationform" method = "post" style="float:right;">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	       		<button type="submit" class="btn btn-sm btn-primary">New Registration</button>

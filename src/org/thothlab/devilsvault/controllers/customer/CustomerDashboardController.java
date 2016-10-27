@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.controllers.customer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.thothlab.devilsvault.dao.customer.CustomerAccountsDAO;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
-import org.thothlab.devilsvault.db.model.BankAccountExternal;
+import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.Transaction;
 
@@ -38,18 +39,22 @@ public class CustomerDashboardController {
 	public ModelAndView customerHome(HttpServletRequest request){
 		
 		setGlobals(request);
-		BankAccountExternal checkingAccount = new BankAccountExternal();
-		checkingAccount.setExternal_users_id(userID);
-		BankAccountExternal savingAccount = new BankAccountExternal();
-		savingAccount.setExternal_users_id(userID);
+		BankAccountDB checkingAccount = new BankAccountDB();
+		checkingAccount.setExternal_user_id(userID);
+		BankAccountDB savingsAccount = new BankAccountDB();
+		savingsAccount.setExternal_user_id(userID);
+		BankAccountDB creditCard = new BankAccountDB();
+		creditCard.setExternal_user_id(userID);
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		ExtUserDaoImpl CustomerDAO = ctx.getBean("ExtUserDaoImpl", ExtUserDaoImpl.class);
 		checkingAccount = CustomerDAO.getAccount(customer, checkingAccount, "CHECKING");
-		savingAccount = CustomerDAO.getAccount(customer, savingAccount, "SAVINGS");
-		Double SavingsAccBal = (double)savingAccount.getBalance();
-		Double CheckingAcctBal = (double)checkingAccount.getBalance();
+		savingsAccount = CustomerDAO.getAccount(customer, savingsAccount, "SAVINGS");
+		creditCard = CustomerDAO.getAccount(customer, creditCard, "CREDIT");
+		creditCard = CustomerDAO.getCreditCardBalance(creditCard);
+		BigDecimal SavingsAccBal = savingsAccount.getBalance();
+		BigDecimal CheckingAcctBal = checkingAccount.getBalance();
 		CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
 		List<Transaction> TransactionLines_checking = new ArrayList<Transaction>();
 		List<Transaction> TransactionLines_savings = new ArrayList<Transaction>();
@@ -57,23 +62,23 @@ public class CustomerDashboardController {
 		TransactionLines_checking = sAccountDAO.getTransactionLines(checkingAccount.getAccount_number(), 1);
 		if(TransactionLines_checking.size() >5)
 		TransactionLines_checking=TransactionLines_checking.subList(0, 5);
-		TransactionLines_savings = sAccountDAO.getTransactionLines(savingAccount.getAccount_number(), 1);
+		TransactionLines_savings = sAccountDAO.getTransactionLines(savingsAccount.getAccount_number(), 1);
 		if(TransactionLines_savings.size() > 5)
 		TransactionLines_savings=TransactionLines_savings.subList(0, 5);
-
-		//TransactionLines_credit = sAccountDAO.getTransactionLines(101, 1);
+		TransactionLines_credit = sAccountDAO.getTransactionLines(creditCard.getAccount_number(), 1);
+		if(TransactionLines_credit.size() > 5)
+			TransactionLines_credit=TransactionLines_credit.subList(0, 5);
 		ctx.close();
 		ModelAndView model = new ModelAndView("customerPages/customerDashboard");
 		model.addObject("Customer",customer);
 		model.addObject("checkingAccount", checkingAccount );
-		model.addObject("savingsAccount", savingAccount );
-		model.addObject("SavingsAccBal",SavingsAccBal);
-		model.addObject("CheckingAccBal", CheckingAcctBal);
+		model.addObject("savingsAccount", savingsAccount );
+		model.addObject("creditCardAccount", creditCard);
 		model.addObject("TransactionLinesCH", TransactionLines_checking);
 		model.addObject("TransactionLinesSV", TransactionLines_savings);
 		model.addObject("TransactionLinesCC", TransactionLines_credit);
 		return model;
-	}
+		}
 	
 	@RequestMapping("/customer/userdetails")
 	public ModelAndView UserDetailsContoller(HttpServletRequest request){

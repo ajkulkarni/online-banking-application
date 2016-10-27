@@ -13,7 +13,7 @@
 			</c:if>
             <c:if test="${role == 'ROLE_REGULAR'}">
             <a href="#newRequest" data-toggle="modal" class="btn btn-sm btn-primary">New Request</a>
-            <form action = "externalRegistration" method = "post" id="newregisterButton" style="float:right; display:none">
+            <form action = "externalregistrationform" method = "post" id="newregisterButton" style="float:right; display:none">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	       		<button type="submit" class="btn btn-sm btn-primary">New Registration</button>

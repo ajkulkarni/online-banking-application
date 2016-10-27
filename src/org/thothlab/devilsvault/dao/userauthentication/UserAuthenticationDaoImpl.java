@@ -107,7 +107,7 @@ public class UserAuthenticationDaoImpl implements UserAuthenticationDao {
         Long rawPassword = (long) (rand.nextInt(999999-100000) + 100000); 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(Long.toString(rawPassword));
-        passwords.put("rawPassowrd", Long.toString(rawPassword));
+        passwords.put("rawPassword", Long.toString(rawPassword));
         passwords.put("hashedPassword", hashedPassword);
         return passwords;
 
@@ -159,6 +159,24 @@ public class UserAuthenticationDaoImpl implements UserAuthenticationDao {
             }
         }
         return false;
+    }
+	
+    public String changeForgotPassword(String newPassword, String confirmPassword,String username) {
+        String message ="";
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        if(newPassword.equals(confirmPassword))
+        {
+            
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            updatePassword(passwordEncoder.encode(newPassword), username);
+            message = "Password changed successfully";
+        }
+        else
+        {
+            message = "confirm password doesn't match with the new password";
+        }
+        ctx.close();
+        return message;
     }
 
 }

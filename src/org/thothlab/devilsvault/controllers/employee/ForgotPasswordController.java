@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thothlab.devilsvault.dao.userauthentication.OtpDaoImpl;
+import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
 
 @Controller
 public class ForgotPasswordController {
@@ -69,4 +71,19 @@ public class ForgotPasswordController {
 		}
         
 	}
+	
+	@RequestMapping(value="/changepassword", method = RequestMethod.POST)
+	   public ModelAndView changePasswordInternal(RedirectAttributes redir, @RequestParam("oldpassword") String oldPassword, HttpServletRequest request, @RequestParam("newpassword") String newPassword,@RequestParam("confirmpassword") String confirmPassword) {
+	        String username = (String)request.getSession().getAttribute("forgotpassemail");
+	        ModelAndView model = new ModelAndView();
+	        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+	        UserAuthenticationDaoImpl userauthenticationDao = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
+	        String message = userauthenticationDao.changeForgotPassword(newPassword, confirmPassword, username);
+	        ctx.close();
+	        model.setViewName("redirect:/login");
+	       redir.addFlashAttribute("exception_message",message);
+	       return model;
+	        
+
+	   }
 }

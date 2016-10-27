@@ -372,6 +372,20 @@ public class TransferDAO {
 		}
 		return merchantAccounts;
 	}
+	
+	 public Boolean updateAvailableBalance(BigDecimal amount, int payerAccount) throws SQLException {
+		    String query = "update credit_card_account_details set available_balance = available_balance + "+amount+" where account_number = "+payerAccount+"";
+		        System.out.println(query);
+		        Connection con = dataSource.getConnection();
+		        Statement st = con.createStatement();
+		        int i = st.executeUpdate(query);
+		        System.out.println(i+"what it returns ");
+		        if (i == 1) {
+		            return true;
+		        }
+		        return false;
+		    }
+
 
 
 }

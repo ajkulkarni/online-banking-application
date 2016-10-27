@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.db.model;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 
@@ -7,7 +8,7 @@ public class CreditAccount extends BankAccount {
 	
 	private int Id;
 	private int interset;
-	private int credit_card_no;
+	private BigInteger credit_card_no;
 	
 	private double availBalance;
 	private double lastBillAmount;
@@ -35,16 +36,14 @@ public class CreditAccount extends BankAccount {
 		Id = id;
 	}
 
-	public int getCredit_card_no() {
+	public BigInteger getCredit_card_no() {
 		return credit_card_no;
 	}
 
-	public void setCredit_card_no(int credit_card_no) {
+	public void setCredit_card_no(BigInteger credit_card_no) {
 		this.credit_card_no = credit_card_no;
 	}
 
-
-	
 	public CreditAccount() {
 		this.setAccountType(AccountType.CREDIT);
 	}

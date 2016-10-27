@@ -1,5 +1,6 @@
 package org.thothlab.devilsvault.controllers.customer;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 import org.thothlab.devilsvault.dao.request.ExternalRequestDaoImpl;
 import org.thothlab.devilsvault.dao.request.InternalRequestDaoImpl;
-import org.thothlab.devilsvault.db.model.BankAccountExternal;
+import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.Customer;
 import org.thothlab.devilsvault.db.model.Request;
 import org.thothlab.devilsvault.db.model.Transaction;
@@ -41,8 +42,8 @@ public class CustomerAccountsController {
 	public ModelAndView SavingAccount(HttpServletRequest request,@RequestParam("savingsPicker") String interval)
 	{
 		setGlobals(request);
-		BankAccountExternal savingAccount = new BankAccountExternal();
-		savingAccount.setExternal_users_id(userID);
+		BankAccountDB savingAccount = new BankAccountDB();
+		savingAccount.setExternal_user_id(userID);
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -66,7 +67,7 @@ public class CustomerAccountsController {
 		ctx.close();
 		ModelAndView model = new ModelAndView("customerPages/accountsSavingsPage");
 		model.addObject("customer",customer);
-		model.addObject("savingAccount", savingAccount );
+		model.addObject("savingsAccount", savingAccount );
 		model.addObject("TransactionLines",TransactionLines);
 		return model;
 	}
@@ -74,7 +75,7 @@ public class CustomerAccountsController {
 	@RequestMapping("/customer/CheckingAccount")
 	public ModelAndView CheckingAccount(HttpServletRequest request,@RequestParam("checkingPicker") String interval){
 		setGlobals(request); 
-		BankAccountExternal checkingAccount = new BankAccountExternal();
+		BankAccountDB checkingAccount = new BankAccountDB();
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -99,17 +100,17 @@ public class CustomerAccountsController {
 		
 		ModelAndView model = new ModelAndView("customerPages/accountsCheckingsPage");
 		model.addObject("Customer",customer);
-		model.addObject("cAccount", checkingAccount );
+		model.addObject("checkingAccount", checkingAccount );
 		model.addObject("TransactionLines",TransactionLines);
 		return model;
 	}
 	
 	@RequestMapping(value ="/customer/addMoney")
-	public ModelAndView addMoney(HttpServletRequest request,@RequestParam("amount") double amount
+	public ModelAndView addMoney(HttpServletRequest request,@RequestParam("amount") BigDecimal amount
 	,@RequestParam("accountType") String accountType)throws SQLException
 	{
 		setGlobals(request);
-		BankAccountExternal account = new BankAccountExternal();
+		BankAccountDB account = new BankAccountDB();
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -117,7 +118,7 @@ public class CustomerAccountsController {
 		account = CustomerDAO.getAccount(customer, account,accountType);
 		String modelName = "";
 		String errorMessage = "";
-		if(amount <= 1000d)
+		if(amount.doubleValue() <= 1000d)
 		{
 			CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
 			boolean transactonstatus;
@@ -126,7 +127,7 @@ public class CustomerAccountsController {
 			if(transactonstatus == true)
 			{
 				modelName = "customerPages/accountssuccesspage";
-				errorMessage = "money added successfully";
+				errorMessage = "Amount deposited successfully";
 			}
 			else
 			{
@@ -137,7 +138,7 @@ public class CustomerAccountsController {
 		}
 		else
 		{
-			errorMessage = "amount exceeded limit";
+			errorMessage = "Deposit unsuccessful. Entered amount exceeded deposit limit ($1000)";
 			modelName = "customerPages/accountserrorpage";
 		}
 		ctx.close();
@@ -148,11 +149,11 @@ public class CustomerAccountsController {
 		return model;
 	}
 	@RequestMapping(value ="/customer/withdrawMoney")
-	public ModelAndView withdrawMoney(HttpServletRequest request,@RequestParam("amount") double amount
+	public ModelAndView withdrawMoney(HttpServletRequest request,@RequestParam("amount") BigDecimal amount
 	,@RequestParam("accountType") String accountType) throws SQLException
 	{
 		setGlobals(request);
-		BankAccountExternal account = new BankAccountExternal();
+		BankAccountDB account = new BankAccountDB();
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -162,7 +163,8 @@ public class CustomerAccountsController {
 		String modelName = "";
 		String errorMessage = "";
 		System.out.println("account type"+accountType);
-		if(amount < account.getBalance())
+		System.out.println("aaa"+amount.doubleValue());
+		if(amount.doubleValue() <= account.getBalance().doubleValue() && amount.doubleValue()<=1000)
 		{
 			CustomerAccountsDAO sAccountDAO = ctx.getBean("CustomerAccountsDAO",CustomerAccountsDAO.class);
 			boolean transactonstatus;
@@ -171,7 +173,7 @@ public class CustomerAccountsController {
 			if(transactonstatus == true)
 			{
 				modelName = "customerPages/accountssuccesspage";
-				errorMessage = "money withdrawn successfully";
+				errorMessage = "Money withdrawn successfully";
 			}
 			else
 			{
@@ -181,14 +183,17 @@ public class CustomerAccountsController {
 				
 		}
 		else
-		{
+		{	
+			if(amount.doubleValue()>1000)
+			errorMessage = "Withdraw unsuccessful. Entered amount exceeded withdrawal limit ($1000)";
+			else
 			errorMessage = "No sufficient balance";
 			modelName = "customerPages/accountserrorpage";
 		}
 		ctx.close();
 		ModelAndView model = new ModelAndView(modelName);
 		model.addObject("customer",customer);
-		model.addObject("savingAccount", account );
+		model.addObject("savingsAccount", account );
 		model.addObject("errorMessage", errorMessage );
 		return model;
 	}
@@ -196,10 +201,10 @@ public class CustomerAccountsController {
 	@RequestMapping("/customer/accountsBalance")
 	public ModelAndView helloworld(HttpServletRequest request){
 		setGlobals(request);
-		BankAccountExternal checkingAccount = new BankAccountExternal();
-		checkingAccount.setExternal_users_id(userID);
-		BankAccountExternal savingsAccount = new BankAccountExternal();
-		savingsAccount.setExternal_users_id(userID);
+		BankAccountDB checkingAccount = new BankAccountDB();
+		checkingAccount.setExternal_user_id(userID);
+		BankAccountDB savingsAccount = new BankAccountDB();
+		savingsAccount.setExternal_user_id(userID);
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -218,8 +223,8 @@ public class CustomerAccountsController {
 	public ModelAndView addMoneyHome(HttpServletRequest request)
 	{
 		setGlobals(request);
-		BankAccountExternal savingAccount = new BankAccountExternal();
-		BankAccountExternal checkingAccount = new BankAccountExternal();
+		BankAccountDB savingAccount = new BankAccountDB();
+		BankAccountDB checkingAccount = new BankAccountDB();
 		Customer customer = new Customer();
 		customer.setId(userID);
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
