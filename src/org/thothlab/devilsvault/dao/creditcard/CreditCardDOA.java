@@ -81,11 +81,11 @@ public class CreditCardDOA {
 		
 		String query ="select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated,isPending from  " 
 				+"(select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, False isPending from transaction_completed "
-				+" where (payee_id = "+ account.getAccountNumber() +" or payer_id = "+ account.getAccountNumber()+")"
+				+" where (payee_id = "+ account.getAccountNumber() +" or payer_id = "+ account.getAccountNumber()+") and (transaction_type in ('CC_FEES', 'CC_PAYMENT' , 'cc','ccpayment') or description in ('Credit Card payment')) "
 				+" and timestamp_updated between  STR_TO_DATE("+dateFormat+",'%Y-%m-%d') - INTERVAL 1 MONTH AND STR_TO_DATE("+dateFormat+",'%Y-%m-%d') "
 				+" union "
 				+" select id,payee_id,payer_id,amount,hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated, True isPending from transaction_completed "
-				+" where (payee_id = "+ account.getAccountNumber() +" or payer_id = "+ account.getAccountNumber()+")"
+				+" where (payee_id = "+ account.getAccountNumber() +" or payer_id = "+ account.getAccountNumber()+") and (transaction_type in ('CC_FEES', 'CC_PAYMENT' , 'cc','ccpayment') or description in ('Credit Card payment')) "
 				+" and timestamp_updated between STR_TO_DATE("+dateFormat+",'%Y-%m-%d') - INTERVAL 1 MONTH AND STR_TO_DATE("+dateFormat+",'%Y-%m-%d') "
 				+" ) transaction"
 				+" order by timestamp_updated desc ";
