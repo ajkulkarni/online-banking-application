@@ -211,8 +211,7 @@ public class OtpDaoImpl implements OtpDao {
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
 			message.setSubject("A critical transaction has been initiated");
 			{
-				message.setText("Transfer amount to: " + payeeid);
-				message.setText("Amount: " + amount);
+				message.setText("Transfer amount to: " + payeeid + "\n\nAmount: " + amount);
 			}
 			Transport.send(message);
 

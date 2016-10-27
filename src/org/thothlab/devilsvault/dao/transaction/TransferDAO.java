@@ -71,7 +71,7 @@ public class TransferDAO {
 
 	public List<Integer> getMultipleAccounts(Integer payerID) {
 
-		String query = "Select account_number from bank_accounts where external_users_id=" + payerID;
+		String query = "Select account_number from bank_accounts where account_type <> \'CREDIT\' AND external_users_id=" + payerID;
 		List<Integer> userMultipleAccounts = jdbcTemplate.query(query, new AccountsMapper());
 
 		return userMultipleAccounts;

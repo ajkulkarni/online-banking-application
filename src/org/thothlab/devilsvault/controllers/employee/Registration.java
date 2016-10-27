@@ -57,7 +57,7 @@ public class Registration {
         		InternalUser internaluser = internaluserDao.setInternalUser(name, role, address, phone, username, date_of_birth, ssn);
         		internaluserDao.save(internaluser);
         	}
-        	System.out.println("Password : " + passwords.get("rawPassword"));
+        	userauthenticationdaoimpl.sendEmailToUser(newuser.getEmail(), passwords.get("rawPassword"));
         }
         ModelAndView model = new ModelAndView();
         model.setViewName("redirect:/employee/management");
@@ -91,7 +91,8 @@ public class Registration {
         		Customer externaluser = externaluserDao.setExternalUser(name, address, phone, username, date_of_birth, ssn);
         		Integer userId = externaluserDao.createUser(externaluser);
         		Integer creditAccNo = bankaccountDao.CreateAndGetCreditAccountNo(userId);
-        		creditcardDao.createCreditAccount(creditAccNo);        		
+        		creditcardDao.createCreditAccount(creditAccNo); 
+        		userauthenticationdaoimpl.sendEmailToUser(newuser.getEmail(), passwords.get("rawPassword"));
         	}
         }
         ModelAndView model = new ModelAndView();
