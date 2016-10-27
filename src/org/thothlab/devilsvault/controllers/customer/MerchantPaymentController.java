@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
+import org.thothlab.devilsvault.dao.log.LogDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.TransactionDaoImpl;
+import org.thothlab.devilsvault.db.model.DatabaseLog;
 import org.thothlab.devilsvault.db.model.Transaction;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,10 @@ public class MerchantPaymentController {
     public ModelAndView merchantPayToUser(HttpServletRequest request) throws SQLException, ParseException {
         ModelAndView model = new ModelAndView("customerPages/merchantMakePayment");
         setGlobals(request);
+        ClassPathXmlApplicationContext ctx_log = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        LogDaoImpl logDao = ctx_log.getBean("DatabaseLogDao", LogDaoImpl.class);
+        DatabaseLog dblog = new DatabaseLog();
+
 
 
         ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
@@ -114,7 +120,12 @@ public class MerchantPaymentController {
                     ctx.close();
                     return model;
                 }
-    model.addObject("success",true);
+                model.addObject("success",true);
+                    dblog.setActivity("merchant payment from " + payerAccount + " to " + payeeAccountNumber);
+                    dblog.setDetails("merchant payment done by merchant");
+                    dblog.setUserid((int) request.getSession().getAttribute("userID"));
+                    logDao.save(dblog, "external_log");
+               
             }
         }
         ctx.close();

@@ -4,7 +4,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.thothlab.devilsvault.dao.log.LogDaoImpl;
 import org.thothlab.devilsvault.dao.transaction.TransferDAO;
+import org.thothlab.devilsvault.db.model.DatabaseLog;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
@@ -35,6 +37,9 @@ public class AuthorizeMerchantController {
 
 
         //System.out.println(request.getSession().getAttribute("userID")+"sdfkjsdhfksdhf");
+        ClassPathXmlApplicationContext ctx_log = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+        LogDaoImpl logDao = ctx_log.getBean("DatabaseLogDao", LogDaoImpl.class);
+        DatabaseLog dblog = new DatabaseLog();
 
         ModelAndView logoutModel = new ModelAndView("redirect:" + "/logout");
            if(request.getSession().getAttribute("role").equals("ROLE_MERCHANT")){
@@ -86,6 +91,12 @@ public class AuthorizeMerchantController {
             result =  transferDAO.addMerchantToUser(merchantID,userID);
 
             //System.out.println("result"+result);
+            if(result){
+                dblog.setActivity("added merchant" + merchantID);
+                dblog.setDetails("add merchant page visited by user");
+                dblog.setUserid((int) request.getSession().getAttribute("userID"));
+                logDao.save(dblog, "external_log");
+                }
         }
 
         if(request.getParameterMap().containsKey("removeMerchant")){
@@ -93,9 +104,16 @@ public class AuthorizeMerchantController {
             deleted = transferDAO.deleteMerchantConnection(payerId,merchantID);
 
             //System.out.println(deleted+"deleted");
+            if(deleted){
+                dblog.setActivity("removed merchant" + merchantID);
+                dblog.setDetails("add merchant page visited by user");
+                dblog.setUserid((int) request.getSession().getAttribute("userID"));
+                logDao.save(dblog, "external_log");
+            }
 
         }
-
+        
+       
 
 
         ModelAndView newModel = new ModelAndView("redirect:" + "/customer/authorizemerchants");
