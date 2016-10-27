@@ -45,8 +45,17 @@
 		});
 	});
 	</script>
-
-}
+	
+	<script>
+		window.onload = function() {
+		  var recaptcha = document.forms["myForm"]["g-recaptcha-response"];
+		  recaptcha.required = true;
+		  recaptcha.oninvalid = function(e) {
+		    // do something
+		    alert("Please complete the captcha");
+		  }
+		}	
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -86,7 +95,7 @@
         				<input type="password" class="form-control no-padding" name="password" id="password" placeholder="Password" required>
       				</div>
      				<div class="col-lg-12 form-margin no-padding">
-      				<div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div>
+      				<div class="g-recaptcha" data-sitekey="6LecawoUAAAAAGxDiLpqTZ9CZSr5I0QAyWEuXWRW"></div>
       				</div>
       				<div class="col-lg-12 form-margin no-padding">
       				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>

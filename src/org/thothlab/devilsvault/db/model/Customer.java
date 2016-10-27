@@ -10,7 +10,7 @@ public class Customer {
     private String city;
     private String email;
     private String ssn;
-    private Date date_of_birth;
+    private String date_of_birth;
     public String getEmail() {
         return email;
     }
@@ -76,10 +76,10 @@ public class Customer {
     public void setSsn(String ssn) {
         this.ssn = ssn;
     }
-    public Date getDate_of_birth() {
+    public String getDate_of_birth() {
         return date_of_birth;
     }
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 }

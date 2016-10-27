@@ -1,7 +1,6 @@
 package org.thothlab.devilsvault.db.model;
 
 import java.math.BigInteger;
-import java.sql.Date;
 
 public class InternalUser {
 
@@ -11,7 +10,7 @@ public class InternalUser {
     private String address;
     private String email;
     private BigInteger phone;
-    private Date date_of_birth;
+    private String date_of_birth;
     private String ssn;
     
     public int getId() {
@@ -50,10 +49,10 @@ public class InternalUser {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Date getDate_of_birth() {
+    public String getDate_of_birth() {
         return date_of_birth;
     }
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
     public String getSsn() {

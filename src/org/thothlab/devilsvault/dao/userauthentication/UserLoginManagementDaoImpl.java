@@ -22,11 +22,11 @@ public class UserLoginManagementDaoImpl {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	public List<UserAuthentication> getLockedUsers(List <String> roles) {
-		String query = "SELECT *from users where ";
+		String query = "SELECT *from users where (";
         for(int i =0;i < roles.size();i++)
         {
             if(i < roles.size() - 1)
-                query += "(role = '" + roles.get(i) + "' OR ";
+                query += "role = '" + roles.get(i) + "' OR ";
             else
                 query += "role = '" + roles.get(i) + "')";
         }
@@ -36,11 +36,11 @@ public class UserLoginManagementDaoImpl {
 	}
 	
 	public List<UserAuthentication> getOtpLockedUsers(List <String> roles) {
-		String query = "SELECT *from users where ";
+		String query = "SELECT *from users where (";
         for(int i =0;i < roles.size();i++)
         {
             if(i < roles.size() - 1)
-                query += "(role = '" + roles.get(i) + "' OR ";
+                query += "role = '" + roles.get(i) + "' OR ";
             else
                 query += "role = '" + roles.get(i) + "')";
         }

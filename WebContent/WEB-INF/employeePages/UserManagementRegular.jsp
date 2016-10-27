@@ -11,6 +11,12 @@
   				<strong>${message}</strong>
 			</div>
 			</c:if>
+			<c:if test="${not empty error_msg}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${message}</strong>
+			</div>
+			</c:if>
             <c:if test="${role == 'ROLE_REGULAR'}">
             <a href="#newRequest" data-toggle="modal" class="btn btn-sm btn-primary">New Request</a>
             <form action = "externalregistrationform" method = "post" id="newregisterButton" style="float:right; display:none">

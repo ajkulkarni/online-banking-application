@@ -6,10 +6,16 @@
 
 	<div class="content-wrapper">
 		<div class="col-md-12" id="page-content">
-			<c:if test="${not empty msg}">
+			<c:if test="${not empty message}">
 			<div class="alert alert-dismissible alert-success">
   				<button type="button" class="close" data-dismiss="alert">&times;</button>
-  				<strong>${msg}</strong>
+  				<strong>${message}</strong>
+			</div>
+			</c:if>
+			<c:if test="${not empty error_msg}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${error_msg}</strong>
 			</div>
 			</c:if>
 			<c:if test="${role != 'ROLE_ADMIN' }">
@@ -47,6 +53,27 @@
 								<td class="active">Address</td>
 								<td>${user.address}</td>
 							</tr>
+						</tbody>
+					</table>
+				</div>					
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">PII Information</h3>
+				</div>
+				<div class="panel-body no-padding">
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">SSN</th>
+								<th class="active">Date Of Birth</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>${user.ssn}</td>
+							<td>${user.date_of_birth}</td>
+						</tr>	
 						</tbody>
 					</table>
 				</div>					

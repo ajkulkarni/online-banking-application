@@ -52,7 +52,7 @@ public class InternalUserDaoImpl implements InternalUserDao {
 	        return email;
 	}
 	
-	public InternalUser setInternalUser(String name,String designation,String address,BigInteger phone,String email, Date date_of_birth,String ssn)
+	public InternalUser setInternalUser(String name,String designation,String address,BigInteger phone,String email, String date_of_birth,String ssn)
     {
         InternalUser userDetails = new InternalUser();
         userDetails.setName(name);
@@ -79,7 +79,7 @@ public class InternalUserDaoImpl implements InternalUserDao {
             ps.setString(4, userdetails.getAddress());
             ps.setLong(5, userdetails.getPhone().longValue());
             ps.setString(6, userdetails.getEmail());
-            ps.setDate(7, userdetails.getDate_of_birth());
+            ps.setString(7, userdetails.getDate_of_birth());
             ps.setString(8, userdetails.getSsn());
             int out = ps.executeUpdate();
             if(out !=0){

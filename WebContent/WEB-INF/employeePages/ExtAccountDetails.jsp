@@ -43,6 +43,29 @@
 					</table>
 				</div>					
 			</div>
+			<c:if test="${role == 'ROLE_ADMIN' }">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">PII Information</h3>
+				</div>
+				<div class="panel-body no-padding">
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">SSN</th>
+								<th class="active">Date Of Birth</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>${extUserObj.ssn}</td>
+							<td>${extUserObj.date_of_birth}</td>
+						</tr>	
+						</tbody>
+					</table>
+				</div>					
+			</div>
+			</c:if>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Account Details</h3>

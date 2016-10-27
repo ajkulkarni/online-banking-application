@@ -6,7 +6,7 @@
 
 <div class="content-wrapper">
 	<div class="col-md-12" id="page-content">
-		<h1>Credit Card DashBoard</h1>
+		<h3>Credit Card DashBoard</h3>
 
 		<div class="panel panel-warning">
 			<div class="panel-heading">
@@ -50,7 +50,7 @@
 		<a class="btn btn-primary bnt-lg pull-right" href="creditPayment"
 			role="button">Make payment</a>
 
-		<h1>Credit Card Statement</h1>
+		<h3>Credit Card Statement</h3>
 		<form class="form-horizontal" action="getTransactions" method='POST'
 			onSubmit="return checkInputOr()">
 			<select class="form-control" name="monthPicker">

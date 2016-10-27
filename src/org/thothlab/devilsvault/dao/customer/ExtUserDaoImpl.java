@@ -113,7 +113,7 @@ public class ExtUserDaoImpl{
 		return balance;
      }
 	
-	public Customer setExternalUser(String name,String address,BigInteger phone,String email, Date date_of_birth,String ssn)
+	public Customer setExternalUser(String name,String address,BigInteger phone,String email, String date_of_birth,String ssn)
     {
         Customer userDetails = new Customer();
         userDetails.setName(name);
@@ -142,7 +142,7 @@ public class ExtUserDaoImpl{
             ps.setInt(7, 123);
             ps.setLong(8, userdetails.getPhone().longValue());
             ps.setString(9, userdetails.getEmail());
-            ps.setDate(10, userdetails.getDate_of_birth());
+            ps.setString(10, userdetails.getDate_of_birth());
             ps.setString(11, userdetails.getSsn());
             int out = ps.executeUpdate();
             if(out !=0){

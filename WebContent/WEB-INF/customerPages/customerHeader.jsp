@@ -44,6 +44,9 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
+			<li>
+					<a href="home">Home</a>
+				</li>
 				<li class="has-children">
 					<a href="#0">Accounts</a>
 					

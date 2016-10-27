@@ -62,7 +62,7 @@ public class UserAuthenticationDaoImpl implements UserAuthenticationDao {
 			CustomerAccountsDAO customeraccDao = ctx.getBean("CustomerAccountsDAO", CustomerAccountsDAO.class);
 			InternalUserDaoImpl internaluserdao = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
 			String email;
-			if(role.equals("ROLE_CUSTOMER") || role.equals("ROLE_MERCHENT"))
+			if(role.equals("ROLE_CUSTOMER") || role.equals("ROLE_MERCHANT"))
 			{
 				email = customeraccDao.getEmailID(userID);
 			}

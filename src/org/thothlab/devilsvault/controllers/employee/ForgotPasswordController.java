@@ -4,11 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thothlab.devilsvault.controllers.security.ExceptionHandlerClass;
 import org.thothlab.devilsvault.dao.userauthentication.OtpDaoImpl;
 import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
 
@@ -25,15 +27,25 @@ public class ForgotPasswordController {
 		username = (String) request.getSession().getAttribute("username");
 		
 	}
+	
+	@ExceptionHandler(ExceptionHandlerClass.class)
+    public String handleResourceNotFoundException() {
+        return "redirect:/raiseexception";
+    }
 		
 	@RequestMapping(value="forgotpassword")
 	public ModelAndView ForgotPassword() {
+		try{
         ModelAndView model = new ModelAndView("ForgotPassword");
         return model;
+		}catch (Exception e){
+			throw new ExceptionHandlerClass(); 
+		}
 	}
 	
 	@RequestMapping(value="verifyemail", method = RequestMethod.POST)
 	public ModelAndView VerifyEmail(HttpServletRequest request, @RequestParam("Email") String email) {
+		try{
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		OtpDaoImpl otpdao = ctx.getBean("OtpDaoImpl",OtpDaoImpl.class);
 		String message = otpdao.verifyEmail(email);
@@ -50,10 +62,14 @@ public class ForgotPasswordController {
 	        ctx.close();
 	        return model;
 		}
+		}catch (Exception e){
+			throw new ExceptionHandlerClass(); 
+		}
 	}
 	
 	@RequestMapping(value="verifyotp", method = RequestMethod.POST)
 	public ModelAndView VerifyOTP(HttpServletRequest request, @RequestParam("otp") String otp) {
+		try{
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 		OtpDaoImpl otpdao = ctx.getBean("OtpDaoImpl",OtpDaoImpl.class);
 		String email = (String) request.getSession().getAttribute("forgotpassemail");
@@ -69,21 +85,27 @@ public class ForgotPasswordController {
 	        ctx.close();
 	        return model;
 		}
+		}catch (Exception e){
+			throw new ExceptionHandlerClass(); 
+		}
         
 	}
 	
 	@RequestMapping(value="/changepassword", method = RequestMethod.POST)
-	   public ModelAndView changePasswordInternal(RedirectAttributes redir, @RequestParam("oldpassword") String oldPassword, HttpServletRequest request, @RequestParam("newpassword") String newPassword,@RequestParam("confirmpassword") String confirmPassword) {
-	        String username = (String)request.getSession().getAttribute("forgotpassemail");
+	   public ModelAndView changePasswordInternal(RedirectAttributes redir, HttpServletRequest request, @RequestParam("newpassword") String newPassword,@RequestParam("confirmpassword") String confirmPassword) {
+	        try{
+			String username = (String)request.getSession().getAttribute("forgotpassemail");
 	        ModelAndView model = new ModelAndView();
 	        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
 	        UserAuthenticationDaoImpl userauthenticationDao = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
 	        String message = userauthenticationDao.changeForgotPassword(newPassword, confirmPassword, username);
 	        ctx.close();
 	        model.setViewName("redirect:/login");
-	       redir.addFlashAttribute("exception_message",message);
-	       return model;
-	        
+	        redir.addFlashAttribute("exception_message",message);
+	        return model;
+	        }catch (Exception e){
+				throw new ExceptionHandlerClass(); 
+			}
 
 	   }
 }

@@ -6,9 +6,12 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 import org.thothlab.devilsvault.db.model.Customer;
+import org.thothlab.devilsvault.db.model.InternalUser;
 
 @Repository ("CustomerDAOForInternal")
 public class InternalCustomerDAO extends CustomerDAO{
@@ -77,6 +80,21 @@ public class InternalCustomerDAO extends CustomerDAO{
 		}
 		deleteInTable("bank_accounts", "external_users_id", extUserID.toString());
 		
+    }
+    
+    public void deleteEmployee(String userID)
+    {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+         InternalUserDaoImpl internalCustomer = ctx.getBean("EmployeeDAOForInternal", InternalUserDaoImpl.class);
+         InternalUser employee = internalCustomer.getUserById(Integer.parseInt(userID));
+         deleteInTable("authorization_pending", "internal_userID", userID);
+         deleteInTable("authorization_completed", "internal_userID", userID);
+         deleteInTable("internal_log", "userid", userID);
+         deleteInTable("otp_table", "userEmail", employee.getEmail());
+         deleteInTable("user_attempts", "username", employee.getEmail());
+         deleteInTable("users", "username", employee.getEmail());
+         deleteInTable("internal_user", "id", userID.toString());
+         ctx.close();
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thothlab.devilsvault.controllers.security.Encryption;
 import org.thothlab.devilsvault.dao.customer.CustomerAccountsDAO;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
 import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
@@ -86,6 +87,11 @@ public class CustomerDashboardController {
 		CustomerDAO externalDao = ctx.getBean("customerDAO", CustomerDAO.class);
 		setGlobals(request);
 		Customer customer = externalDao.getCustomer(userID);
+		String crypt_ssn = customer.getSsn();
+		customer.setSsn(Encryption.Decode(crypt_ssn));
+		String crpyt_dob = customer.getDate_of_birth();
+		customer.setDate_of_birth(Encryption.Decode(crpyt_dob));
+		
 		ModelAndView model = new ModelAndView("customerPages/customerUserDetails");
 		model.addObject("user",customer);
 		ctx.close();

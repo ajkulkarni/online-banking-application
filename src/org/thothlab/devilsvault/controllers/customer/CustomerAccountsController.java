@@ -278,7 +278,7 @@ public class CustomerAccountsController {
     }
     
     @RequestMapping(value="/customer/addrequest", method = RequestMethod.POST)
-    public ModelAndView modifyDetails(RedirectAttributes redir,@RequestParam("requestType") String requestType, HttpServletRequest request, @RequestParam("userType") String userType,@RequestParam("newValue") String newValue) {
+    public ModelAndView modifyDetails(RedirectAttributes redir,@RequestParam("requestType") String requestType, HttpServletRequest request,@RequestParam("newValue") String newValue) {
          ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
          CustomerDAO customerDAO = ctx.getBean("customerDAO", CustomerDAO.class);
          InternalRequestDaoImpl internalrequestDao = ctx.getBean("internalRequestDao", InternalRequestDaoImpl.class);
