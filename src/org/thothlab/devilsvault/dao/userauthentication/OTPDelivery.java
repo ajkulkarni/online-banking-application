@@ -20,9 +20,9 @@ public class OTPDelivery {
 			prop.load(OTPDelivery.class.getClassLoader().getResourceAsStream("smtp.properties"));	
 			
 		} catch(FileNotFoundException fne) {
-			return "Failed OTP Generation "+fne;
+			return "Failed OTP Generation ";
 		} catch(IOException ioe) {
-			return "Failed OTP Generation "+ioe;
+			return "Failed OTP Generation ";
 		}
 		
 		final String username = prop.getProperty("username");
