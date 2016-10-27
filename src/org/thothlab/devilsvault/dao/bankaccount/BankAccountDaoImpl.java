@@ -67,7 +67,7 @@ public class BankAccountDaoImpl implements BankAccountDao {
 	}
 	
 	public Integer CreateAndGetCreditAccountNo(Integer UserID) {
-        String[] type = new String [] {"CHECKING","CREDIT","SAVING"};
+        String[] type = new String [] {"CHECKING","CREDIT","SAVINGS"};
         BankAccountDB bankDetails;
         for(int i = 0 ;i< type.length;i++ )
         {

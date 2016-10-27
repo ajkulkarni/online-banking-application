@@ -375,7 +375,7 @@ public class CustomerTransferFundsController {
 			String inputMode = (String)request.getSession().getAttribute("inputMode");
 			ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
 			otpdao.sendEmailToUser(email, inputMode, extTransferTrans.getAmount());
-			extTransactionDAO.save(extTransferTrans, "extTransferTrans");
+			extTransactionDAO.save(extTransferTrans, "transaction_pending");
 			transferDAO.updateHold(extTransferTrans.getPayer_id(), extTransferTrans.getAmount());
 			model.addObject("success", true);
 			model.addObject("payee_info", inputMode);
