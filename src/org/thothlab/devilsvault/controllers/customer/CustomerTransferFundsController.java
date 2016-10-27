@@ -372,11 +372,12 @@ public class CustomerTransferFundsController {
 		String email = username;
 		String message = otpdao.verifyOTP(otp, email);
 		if(message.equals("OTP Validated")) {
+			String inputMode = (String)request.getSession().getAttribute("inputMode");
 			ModelAndView model = new ModelAndView("customerPages/transferConfirmation");
+			otpdao.sendEmailToUser(email, inputMode, extTransferTrans.getAmount());
 			extTransactionDAO.save(extTransferTrans, "extTransferTrans");
 			transferDAO.updateHold(extTransferTrans.getPayer_id(), extTransferTrans.getAmount());
 			model.addObject("success", true);
-			String inputMode = (String)request.getSession().getAttribute("inputMode");
 			model.addObject("payee_info", inputMode);
 			String payerAccountType = (String)request.getSession().getAttribute("eptpselectPayerAccount");
 			model.addObject("payer_info", extTransferTrans.getPayer_id() + "-" + payerAccountType);
