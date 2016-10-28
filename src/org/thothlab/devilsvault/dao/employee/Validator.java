@@ -46,5 +46,20 @@ public class Validator implements InternalUserDao {
 		Matcher matcher = pattern.matcher(number);
 		return matcher.matches();
 	}
+	
+	public Boolean validatePassword(String password)
+	{
+		String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,16}$";
+		pattern = Pattern.compile(passwordPattern);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
+	}
+	public Boolean validateSSN(String ssn)
+	{
+		String passwordPattern = "^[0-9]{3}\\-?[0-9]{2}\\-?[0-9]{4}$";
+		pattern = Pattern.compile(passwordPattern);
+		Matcher matcher = pattern.matcher(ssn);
+		return matcher.matches();
+	}
 
 }

@@ -1,7 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-
 <%@include file="customerHeader.jsp" %>
 <<script type="text/javascript">
 $(function () {
@@ -13,14 +12,12 @@ var month = $("#etpinputMonth").val();
 var year = $("#etpinputYear").val();
 var merchant_secret = $("#ms").attr("data");
 var myData = {
-
 "card_no": card,
 "amount" : amount,
 "descripton" : "merchant payment",
 "month": month,
 "year" : year,
 "merchant_secret" : merchant_secret
-
 };
 $.ajax({
 headers: {
@@ -39,17 +36,13 @@ alert("Invalid")
 }
 });
 }
-
 $('#calcBtn').click(function() {
 event.preventDefault();
 callServlet();
 });
 });
 </script>
-   <div class="content-wrapper">
-        <div class="col-md-12" id="page-content">
-        
-        <form class="form-horizontal" action="merchantpayment"
+<form class="form-horizontal" action="merchantpayment"
       method='POST' <%--onsubmit="return validateExternal()"--%> >
     <fieldset>
         <input type="hidden" name="${_csrf.parameterName}"
@@ -58,7 +51,7 @@ callServlet();
             <div class="col-md-12" id="page-content">
             <div class="panel panel-warning">
                 <div class="panel-heading">
-                    <h3 class="panel-title">PAY TO USER</h3>
+                    <h3 class="panel-title">PAY ON BEHALF OF USER</h3>
                 </div>
                 <c:if test="${ success == false }">
                 <div class="container col-lg-12"
@@ -128,16 +121,5 @@ callServlet();
         </div>
     </fieldset>
 </form>
-		</div>
-	</div>
-</main>
-
-<!-- .content-wrapper -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        sideNavigationSettings();
-    });
-</script>
-
 </body>
 </html>

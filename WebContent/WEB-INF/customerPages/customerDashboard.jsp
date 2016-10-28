@@ -6,7 +6,7 @@
 
 <div class="content-wrapper">
 	<div class="col-md-12" id="page-content">
-		<!-- <h1>Customer DashBoard</h1> -->
+		<!-- <h1>Customer DashBoard</h1>--> 
 		<div class="panel panel-warning">
 			<div class="panel-heading">
 				<h3 class="panel-title">Checking Account</h3>

@@ -45,7 +45,7 @@
                         <tbody>
                         	<tr>
                         		<c:choose>
-	                        		<c:when test="${empty employeeObj}">
+	                        		<c:when test="${employeeObj.id == 0 || empty employeeObj}">
 	                        			<tr>
 	                                    	<td colspan="3">No Results</td>
 	                                	</tr>
@@ -96,7 +96,7 @@
                         <tbody>
                         	<tr>
                         		<c:choose>
-	                        		<c:when test="${empty customerObj}">
+	                        		<c:when test="${customerObj.id == 0 || empty customerObj}">
 	                        			<tr>
 	                                    	<td colspan="3">No Results</td>
 	                                	</tr>

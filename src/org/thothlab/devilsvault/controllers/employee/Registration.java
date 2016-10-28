@@ -20,8 +20,10 @@ import org.thothlab.devilsvault.dao.customer.CreditCardDaoImpl;
 import org.thothlab.devilsvault.dao.customer.ExtUserDaoImpl;
 import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 import org.thothlab.devilsvault.dao.employee.Validator;
+import org.thothlab.devilsvault.dao.log.LogDaoImpl;
 import org.thothlab.devilsvault.dao.userauthentication.UserAuthenticationDaoImpl;
 import org.thothlab.devilsvault.db.model.Customer;
+import org.thothlab.devilsvault.db.model.DatabaseLog;
 import org.thothlab.devilsvault.db.model.InternalUser;
 import org.thothlab.devilsvault.db.model.InternalUserRegister;
 import org.thothlab.devilsvault.db.model.UserAuthentication;
@@ -47,6 +49,8 @@ public class Registration {
 	@RequestMapping(value="/employee/internalregister", method = RequestMethod.POST)
     public ModelAndView registerInternal(@ModelAttribute("user1") InternalUserRegister newuser,RedirectAttributes redir ) {
 		try{
+		
+	
         String name = newuser.getName();
 		String username = newuser.getEmail();
         String role = newuser.getDesignation();
@@ -66,7 +70,7 @@ public class Registration {
             {
                 if(validate.validateNumber(phone.toString()))
                 {
-                    if(validate.validateNumber(ssn))
+                    if(validate.validateSSN(ssn))
                     {
                         isValidated = true;
                     }
@@ -105,16 +109,32 @@ public class Registration {
         		internaluserDao.save(internaluser);
         	}
         	userauthenticationdaoimpl.sendEmailToUser(newuser.getEmail(), passwords.get("rawPassword"));
+        	ClassPathXmlApplicationContext ctx_log = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
+            LogDaoImpl logDao = ctx_log.getBean("DatabaseLogDao", LogDaoImpl.class);
+            DatabaseLog dblog = new DatabaseLog();
+
+            dblog.setActivity("Internal Registration for " + username);
+    	                    dblog.setDetails("Registration Successful");
+    	                    dblog.setUserid(userID);
+    	                    logDao.save(dblog, "internal_log");
         	redir.addFlashAttribute("error_msg","Registration successful. Password sent to" + newuser.getEmail());
         }else
         {
+        	
+            LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+            DatabaseLog dblog = new DatabaseLog();
+
+            dblog.setActivity("Internal Registration for " + username);
+    	                    dblog.setDetails("Registration Failed as Email or phone number already exists");
+    	                    dblog.setUserid(userID);
+    	                    logDao.save(dblog, "internal_log");
         	redir.addFlashAttribute("error_msg","Email or phone number already exists. Please use different credentials and register again");
         }
         }
 	
         ModelAndView model = new ModelAndView();
         model.setViewName("redirect:/employee/management");
-	    ctx.close();
+  	    ctx.close();
 	    return model;
 		}catch (Exception e){
 			throw new ExceptionHandlerClass(); 
@@ -145,7 +165,7 @@ public class Registration {
             {
                 if(validate.validateNumber(phone.toString()))
                 {
-                    if(validate.validateNumber(ssn))
+                    if(validate.validateSSN(ssn))
                     {
                         isValidated = true;
                     }
@@ -186,11 +206,25 @@ public class Registration {
         		Integer creditAccNo = bankaccountDao.CreateAndGetCreditAccountNo(userId);
         		creditcardDao.createCreditAccount(creditAccNo); 
         		userauthenticationdaoimpl.sendEmailToUser(newuser.getEmail(), passwords.get("rawPassword"));
+        		LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+                DatabaseLog dblog = new DatabaseLog();
+
+                dblog.setActivity("External Registration for " + username);
+        	                    dblog.setDetails("Registration successful");
+        	                    dblog.setUserid(userID);
+        	                    logDao.save(dblog, "internal_log");
         		redir.addFlashAttribute("error_msg","Registration successful. Password sent to" + newuser.getEmail());
         	}
         }
         else
         {
+        	LogDaoImpl logDao = ctx.getBean("DatabaseLogDao", LogDaoImpl.class);
+            DatabaseLog dblog = new DatabaseLog();
+
+            dblog.setActivity("External Registration for " + username);
+    	                    dblog.setDetails("Registration Failed as Email or phone number already exists");
+    	                    dblog.setUserid(userID);
+    	                    logDao.save(dblog, "internal_log");
         	redir.addFlashAttribute("error_msg","Email or phone number already exists. Please use different credentials and register again");
         }
         }

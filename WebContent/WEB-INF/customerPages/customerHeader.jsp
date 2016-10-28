@@ -79,5 +79,7 @@
 						<a href="merchantpayment">Merchant Panel</a>
 					</li>
 				</c:if>
+				<li><a href="/CSE545-SS/customer/addMoneyOption">Add Money</a></li>
+				<li><a href="/CSE545-SS/customer/withdrawMoneyOption">Withdraw Money</a></li>
 			</ul>
 		</nav>

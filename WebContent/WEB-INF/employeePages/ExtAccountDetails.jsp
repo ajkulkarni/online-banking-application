@@ -108,8 +108,8 @@
 			</c:if>
 			<c:if test="${role == 'ROLE_ADMIN' && userType == 'internal'}">
 				<a href="#modifyaccount" class="btn btn-primary btn-sm" data-toggle="modal">Modify Account</a>
-				<form action = "deletecustomer" method = "post" style="float:right">
-	                <input type="hidden" name="extUserID" value="${extUserObj.id}">
+				<form action = "deleteemployee" method = "post" style="float:right">
+	                <input type="hidden" name="UserID" value="${extUserObj.id}">
 	                <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	                <button type="submit" class="btn btn-sm btn-danger">Delete Account</button>
 	            </form>

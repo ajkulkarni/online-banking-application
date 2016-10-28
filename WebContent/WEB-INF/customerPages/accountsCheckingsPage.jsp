@@ -20,8 +20,6 @@
                     <div class="row">
                         <div class="col-sm-2"><b>Account Balance:</b></div>
                         <div class="col-sm-3">${checkingAccount.balance}</div>
-                        <div class="col-sm-6"><a href="accountsBalance"><button type="button" class="btn btn-primary" style="float:right">Add/Withdraw Money</button></a></div>
-                                            
                     </div>
                     <hr>
                     <h4><center>Transaction History</center></h4>
@@ -104,7 +102,7 @@
             </div>
             <div>
             
-            <button type="button" onclick="generatePDF()" class="btn btn-primary">Download statements</button></div>
+            <button type="button" onclick="generatePDF(${checkingAccount.account_number},${checkingAccount.balance})" class="btn btn-primary">Download statements</button></div>
             
             
             
@@ -113,13 +111,60 @@
     </div> <!-- .content-wrapper -->
     
 <script>
-        function generatePDF() {    
-            var doc = new jsPDF('p', 'pt');
-            var elem = document.getElementById("trans-table");
-            var res = doc.autoTableHtmlToJson(elem);
-            doc.autoTable(res.columns, res.data);
-            doc.save("table.pdf");
-        }
+function generatePDF(num,bal) {    
+    function generatePDF() {
+          var pdfsize = 'a4';
+          var pdf = new jsPDF('l', 'pt', pdfsize);
+          var res = pdf.autoTableHtmlToJson(document.getElementById("trans-table"));
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth()+1; 
+          var yyyy = today.getFullYear();
+          if(dd<10) {
+              dd='0'+dd
+          } 
+          if(mm<10) {
+              mm='0'+mm
+          } 
+          today = mm+'/'+dd+'/'+yyyy;
+          
+          
+          var header = function(data) {
+            pdf.setFontSize(18);
+            pdf.setTextColor(40);
+            pdf.setFontStyle('normal');
+            pdf.text(("Transaction Summary for checking account\t\t\t\t\tDate:"+today+"\n"+"Account Number:  "+num+"\n"+"Account Balance:  $"+bal), data.settings.margin.left, 50);
+          }
+          pdf.autoTable(res.columns, res.data, {
+            beforePageContent: header,
+            startY: 100,
+            drawHeaderRow: function(row, data) {
+              row.height = 46;
+            },
+        
+            drawRow: function(row, data) {
+              if (row.index === -1) return false;
+            },
+            margin: {
+              top: 100
+            },
+            styles: {
+              overflow: 'linebreak',
+              fontSize: 10,
+              tableWidth: 'auto',
+              columnWidth: 'auto',
+            },
+            columnStyles: {
+              1: {
+                columnWidth: 'auto'
+              }
+            },
+          });
+        
+          pdf.save("Transaction_Summary_Checking_"+num+"_"+today+".pdf");
+        };
+        generatePDF();
+    }
 </script>
 <script type="text/javascript">
     $(document).ready(function() {

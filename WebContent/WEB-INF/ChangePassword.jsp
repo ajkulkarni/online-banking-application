@@ -27,18 +27,24 @@
 	<script>
 		$(function(){
 			$('#password').keyboard();
-		});
+			$('#confirm').keyboard();
+	});
 	</script>
 	<script>
 			
 		$(document).ready(function(){
-		$('#submit').click(function(){
-		var userEmail=$('#inputEmail').val();	
-		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-		if(!filter.test(userEmail))
+		$('#validateform').click(function(){
+		var password=$('#password').val();	
+		var filter = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{6,16}$/;
+		var confirm = $('#confirm').val();
+		if(password === confirm)
 		{
-			$("#inputEmail").focus();
-	    	alert("Please Enter a Valid Email Address");
+			return false;
+		}
+		if(!filter.test(password))
+		{
+			$("#password").focus();
+	    	alert("Please Enter a valid password");
 			return false;
 		}
 		
@@ -69,15 +75,15 @@
 		  				<strong>${message}</strong>
 					</div>
 					</c:if>					
-					<form class="form-horizontal" action="changepassword" method="POST">
+					<form class="form-horizontal" action="changepassword" method="POST" id="submit">
 				    		<div class="form-group">
       							<label for="newpassword" class="col-lg-3 control-label">New Password</label>
       							<div class="col-lg-9 form-margin">
-        							<input type="password" class="form-control" name="newpassword" placeholder="New Password" required>
+        							<input type="password" class="form-control" name="newpassword" placeholder="New Password" id = "password" required>
       							</div>
       							<label for="confirmpassword" class="col-lg-3 control-label">Confirm</label>
       							<div class="col-lg-9 form-margin">
-        							<input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" required>
+        							<input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" id ="confirm" required>
       							</div>
        							<input type="hidden" name="userID" value="${userID}">					
        							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>

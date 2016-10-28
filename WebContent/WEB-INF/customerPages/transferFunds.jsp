@@ -6,23 +6,6 @@
 	pageEncoding="UTF-8"%>
 
 <%@include file="customerHeader.jsp"%>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript">
-	$(function() {
-		$('#etpdatetimepicker').datetimepicker();
-	});
-</script>
-<script type="text/javascript">
-	$(function() {
-		$('#itpdatetimepicker').datetimepicker();
-	});
-</script>
-<%-- <script src="<c:url value="/resources/js/transferfunds.js" />"></script> --%>
 
 <script>
 	function validateEmailPhone() {
@@ -126,11 +109,6 @@
 		return validInput;
 	}
 </script>
-<script type="text/javascript">
-	$(function() {
-		$('#eptpdatetimepicker').datetimepicker();
-	});
-</script>
 
 
 <div class="content-wrapper">
@@ -185,19 +163,7 @@
 											name="etpinputAmount" placeholder="Enter Amount" required>
 									</div>
 								</div>
-								<!-- <div class="form-group">
-							<label for="etpdatetimepicker" class="col-lg-2 control-label">Date
-								: </label>
-							<div id="etpdatetimepicker" class="col-lg-5 input-group date">
-								<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"
-									id="etpdatetimepicker_result" class="form-control"
-									name="etpdatetimepicker_result"></input> <span
-									class="input-group-addon"> <span
-									class="glyphicon glyphicon-calendar"></span>
-								</span>
-							</div>
-						</div>
- -->
+								
 								<div class="form-group">
 									<label for="textArea" class="col-lg-2 control-label">Description
 										: </label>
@@ -266,17 +232,7 @@
 											name="itpinputAmount" placeholder="Enter Amount">
 									</div>
 								</div>
-								<!-- <div class="form-group">
-							<label for="itpdatetimepicker" class="col-lg-2 control-label">Date
-								: </label>
-							<div id="itpdatetimepicker" class="col-lg-5 input-group date">
-								<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"
-									id="itpdatetimepicker_result" class="form-control"></input> <span
-									class="input-group-addon"> <span
-									class="glyphicon glyphicon-calendar"></span>
-								</span>
-							</div>
-						</div> -->
+								
 								<div class="form-group">
 									<label for="textArea" class="col-lg-2 control-label">Description
 										: </label>
@@ -352,17 +308,7 @@
 											name="eptpinputAmount" placeholder="Enter Amount">
 									</div>
 								</div>
-								<!-- <div class="form-group">
-							<label for="eptpdatetimepicker" class="col-lg-2 control-label">Date
-								: </label>
-							<div id="eptpdatetimepicker" class="col-lg-5 input-group date">
-								<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"
-									id="eptpdatetimepicker_result" class="form-control"></input> <span
-									class="input-group-addon"> <span
-									class="glyphicon glyphicon-calendar"></span>
-								</span>
-							</div>
-						</div> -->
+								
 								<div class="form-group">
 									<label for="textArea" class="col-lg-2 control-label">Description
 										: </label>

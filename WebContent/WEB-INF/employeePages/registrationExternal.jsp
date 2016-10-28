@@ -85,45 +85,38 @@
 		
 		$(document).ready(function(){
 		$('#submit').click(function(){
-		var firstName=$('#firstName').val();
-		var lastName=$('#lastName').val();
-		var userEmail=$('#userEmail').val();
-		var city = $('#city').val(); 
-		var password = $('#password').val();
-		var userSsn = $('#userSsn').val();
+		var name=$('#name').val();
+		var userEmail=$('#email').val();
+		var ssn = $('#ssn').val();
+		var address = $('#address').val();
 		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		if(!filter.test(userEmail))
 		{
-			$("#userEmail").focus();
+			$("#email").focus();
 		    $("#errorBox").html("Please Enter a Valid Email Address");
 		return false;
 		}
 		filter = /^[A-z]+$/;
 		
-		if(!filter.test(firstName))
+		if(!filter.test(name))
 		{
-			$("#firstName").focus();
+			$("#name").focus();
 		    $("#errorBox").html("Name can contain only alphabets");
 		return false;
 		}
-		else if(!filter.test(lastName))
+		
+		
+		filter = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
+		if(!filter.test(address))
 		{
-			$("#lastName").focus();
-		    $("#errorBox").html("Name can contain only alphabets");
-		return false;
-		}
-		console.log(password);
-		filter = /^[A-z]+$/;
-		if(!filter.test(city))
-		{
-			console.log("hahah");
-			$("#city").focus();
-		    $("#errorBox").html("Please Enter a Valid City");
+			//console.log("hahah");
+			$("#address").focus();
+		    $("#errorBox").html("Please Enter a Valid address");
 		return false;
 		}	
 		
 		var strongRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-		console.log(userSsn);
+		//console.log(userSsn);
 		if(!strongRegex.test(password))
 		{
 			console.log(password);
@@ -132,10 +125,10 @@
 		return false;
 		}	
 		var filter1 =  /^[0-9]{3}\-?[0-9]{2}\-?[0-9]{4}$/; 
-		if(!filter1.test(userSsn))
+		if(!filter1.test(ssn))
 		{
-			console.log(userSsn);
-			$("#userSsn").focus();
+			//console.log(userSsn);
+			$("#ssn").focus();
 		    $("#errorBox").html("Please Enter a Valid SSN");
 		return false;
 		}	
