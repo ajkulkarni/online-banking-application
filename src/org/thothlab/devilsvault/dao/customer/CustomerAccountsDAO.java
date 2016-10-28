@@ -112,10 +112,7 @@ public class CustomerAccountsDAO{
 		Connection con = null;
 		PreparedStatement ps = null;
 		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
-		String query_addBalance ="update bank_accounts set balance = balance + "+amount+" WHERE external_users_id="+user.getId()+" and account_type='"+accountType+"'";
 		String query_AddToPending = "INSERT INTO transaction_pending (payer_id, payee_id,amount, hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?)";
-		String query_AddToCompleted = "INSERT INTO transaction_completed (id,payer_id, payee_id,amount, hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		String query_deleteFromPending = "";
 		try
 		{
 			con = dataSource.getConnection();
@@ -127,7 +124,7 @@ public class CustomerAccountsDAO{
 			ps.setString(4,"hasvalue");
 			ps.setString(5,"creditfunds");
 			ps.setString(6,"Deposit money to account");
-			ps.setString(7,"approved");
+			ps.setString(7,"pending");
 			ps.setString(8,"External user");
 			ps.setInt(9, 0);
 			ps.setTimestamp(10,createdDateTime);
@@ -140,27 +137,7 @@ public class CustomerAccountsDAO{
 	                System.out.println("ID----" + rs.getInt(1));
 	                transaction.setId(rs.getInt(1));
 			 }
-			ps = con.prepareStatement(query_AddToCompleted);
-			ps.setInt(1, transaction.getId());
-			ps.setInt(2, account.getAccount_number());
-			ps.setInt(3, account.getAccount_number());
-			ps.setBigDecimal(4, amount);
-			ps.setString(5,"hasvalue");
-			ps.setString(6,"creditfunds");
-			ps.setString(7,"Deposit money to account");
-			ps.setString(8,"approved");
-			ps.setString(9,"External user");
-			ps.setInt(10, 0);
-			ps.setTimestamp(11,createdDateTime);
-			ps.setTimestamp(12,createdDateTime);
-			ps.executeUpdate();
-		
-			ps = con.prepareStatement(query_addBalance);
-			ps.executeUpdate();
-			query_deleteFromPending = "delete from transaction_pending where id = "+transaction.getId();
-			ps = con.prepareStatement(query_deleteFromPending);
 			
-			ps.executeUpdate();
 			con.commit();
 			status =true;
 			
@@ -185,10 +162,8 @@ public class CustomerAccountsDAO{
 		Connection con = null;
 		PreparedStatement ps = null;
 		java.sql.Timestamp createdDateTime = new java.sql.Timestamp(new java.util.Date().getTime());
-		String query_addBalance ="update bank_accounts set balance = balance - "+amount+" WHERE external_users_id="+user.getId()+" and account_type='"+accountType+"'";
+		String query_addBalance ="update bank_accounts set hold = hold + "+amount+" WHERE external_users_id="+user.getId()+" and account_type='"+accountType+"'";
 		String query_AddToPending = "INSERT INTO transaction_pending (payer_id, payee_id,amount, hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?)";
-		String query_AddToCompleted = "INSERT INTO transaction_completed (id,payer_id, payee_id,amount, hashvalue,transaction_type,description,status,approver,critical,timestamp_created,timestamp_updated) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		String query_deleteFromPending = "";
 		try
 		{
 			con = dataSource.getConnection();
@@ -200,7 +175,7 @@ public class CustomerAccountsDAO{
 			ps.setString(4,"hasvalue");
 			ps.setString(5,"debitfunds");
 			ps.setString(6,"Withdrawal of money from account");
-			ps.setString(7,"approved");
+			ps.setString(7,"pending");
 			ps.setString(8,"External user");
 			ps.setInt(9, 0);
 			ps.setTimestamp(10,createdDateTime);
@@ -213,27 +188,11 @@ public class CustomerAccountsDAO{
 	                System.out.println("ID----" + rs.getInt(1));
 	                transaction.setId(rs.getInt(1));
 			 }
-			ps = con.prepareStatement(query_AddToCompleted);
-			ps.setInt(1, transaction.getId());
-			ps.setInt(2, account.getAccount_number());
-			ps.setInt(3, account.getAccount_number());
-			ps.setBigDecimal(4, amount);
-			ps.setString(5,"hasvalue");
-			ps.setString(6,"Ext user add money");
-			ps.setString(7,"Withdrawal of money from account");
-			ps.setString(8,"approved");
-			ps.setString(9,"External user");
-			ps.setInt(10, 0);
-			ps.setTimestamp(11,createdDateTime);
-			ps.setTimestamp(12,createdDateTime);
-			ps.executeUpdate();
-		
+			 ps.close();
 			ps = con.prepareStatement(query_addBalance);
 			ps.executeUpdate();
-			query_deleteFromPending = "delete from transaction_pending where id = "+transaction.getId();
-			ps = con.prepareStatement(query_deleteFromPending);
-			ps.executeUpdate();
 			con.commit();
+			
 			status =true;
 		}catch(SQLException e){
 			con.rollback();

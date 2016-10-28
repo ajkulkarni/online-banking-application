@@ -12,7 +12,7 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Internal Requests</h3>
 				</div>
-				<div class="panel-body no-padding">
+				<div class="panel-body no-padding" style="overflow-y: scroll; max-height:400px;">
 					<table id="content-table">
 						<thead>
 							<tr>
@@ -56,7 +56,7 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">External Requests</h3>
 				</div>
-				<div class="panel-body no-padding">
+				<div class="panel-body no-padding" style="overflow-y: scroll; max-height:400px;">
 					<table id="content-table">
 						<thead>
 							<tr>

@@ -55,9 +55,9 @@ public class Registration {
 		String username = newuser.getEmail();
         String role = newuser.getDesignation();
         String address = newuser.getAddress();
-        BigInteger phone = new BigInteger(newuser.getPhone());
-        String date_of_birth = Encryption.Encode(newuser.getDate_of_birth().toString());
-        String ssn = Encryption.Encode(newuser.getSsn());
+        String phoneString =newuser.getPhone();
+        String date_of_birth = newuser.getDate_of_birth().toString();
+        String ssn = newuser.getSsn();
         HashMap<String,String> passwords = new HashMap<String,String>();
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
         UserAuthenticationDaoImpl userauthenticationdaoimpl = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
@@ -68,7 +68,7 @@ public class Registration {
         {
             if(validate.validateName(name))
             {
-                if(validate.validateNumber(phone.toString()))
+                if(validate.validateNumber(phoneString) && phoneString.length() == 10)
                 {
                     if(validate.validateSSN(ssn))
                     {
@@ -77,13 +77,13 @@ public class Registration {
                     else
                     {
                         isValidated = false;
-                        redir.addFlashAttribute("error_message","SSN not valid it can only have numbers");
+                        redir.addFlashAttribute("error_message","SSN not valid it can be in the following format Eg: xxx-xx-xxxx");
                     }
                 }
                 else
                 {
                     isValidated = false;
-                    redir.addFlashAttribute("error_message","Please enter correct phone number");
+                    redir.addFlashAttribute("error_message","Please enter correct 10 digit phone number only numbers accepted");
                 }
             }
             else
@@ -98,6 +98,7 @@ public class Registration {
         }
         if(isValidated)
         {
+        	BigInteger phone = new BigInteger(phoneString);
         if(userauthenticationdaoimpl.validateuserDetails(username, phone,"internal_user"))
         {
         	passwords = userauthenticationdaoimpl.randomPasswordGenerator();
@@ -105,6 +106,8 @@ public class Registration {
         	{
         		UserAuthentication userdetails = userauthenticationdaoimpl.setNewUsers(username, passwords.get("hashedPassword"), role);
         		userauthenticationdaoimpl.save(userdetails);
+        		date_of_birth = Encryption.Encode(newuser.getDate_of_birth().toString());
+                ssn = Encryption.Encode(newuser.getSsn());
         		InternalUser internaluser = internaluserDao.setInternalUser(name, role, address, phone, username, date_of_birth, ssn);
         		internaluserDao.save(internaluser);
         	}
@@ -117,7 +120,7 @@ public class Registration {
     	                    dblog.setDetails("Registration Successful");
     	                    dblog.setUserid(userID);
     	                    logDao.save(dblog, "internal_log");
-        	redir.addFlashAttribute("error_msg","Registration successful. Password sent to" + newuser.getEmail());
+        	redir.addFlashAttribute("error_msg","Registration successful. Password sent to " + newuser.getEmail());
         }else
         {
         	
@@ -148,9 +151,9 @@ public class Registration {
 		String username = newuser.getEmail();
         String role = newuser.getDesignation();
         String address = newuser.getAddress();
-        BigInteger phone = new BigInteger(newuser.getPhone());
-        String date_of_birth = Encryption.Encode(newuser.getDate_of_birth().toString());
-        String ssn = Encryption.Encode(newuser.getSsn());
+        String phoneString = newuser.getPhone();
+        String date_of_birth = newuser.getDate_of_birth().toString();
+        String ssn = newuser.getSsn();
         HashMap<String,String> passwords = new HashMap<String,String>();
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
         UserAuthenticationDaoImpl userauthenticationdaoimpl = ctx.getBean("userAuthenticationDao", UserAuthenticationDaoImpl.class);
@@ -163,7 +166,7 @@ public class Registration {
         {
             if(validate.validateName(name))
             {
-                if(validate.validateNumber(phone.toString()))
+                if(validate.validateNumber(phoneString) && phoneString.length() == 10)
                 {
                     if(validate.validateSSN(ssn))
                     {
@@ -172,13 +175,13 @@ public class Registration {
                     else
                     {
                         isValidated = false;
-                        redir.addFlashAttribute("error_message","SSN not valid it can only have numbers");
+                        redir.addFlashAttribute("error_message","SSN not valid it can be in the following format Eg: xxx-xx-xxxx");
                     }
                 }
                 else
                 {
                     isValidated = false;
-                    redir.addFlashAttribute("error_message","Please enter correct phone number");
+                    redir.addFlashAttribute("error_message","Please enter correct 10 digit phone number only numbers accepted");
                 }
             }
             else
@@ -193,6 +196,7 @@ public class Registration {
         }
         if(isValidated)
         {
+        	BigInteger phone = new BigInteger(phoneString);
         if(userauthenticationdaoimpl.validateuserDetails(username, phone,"external_users"))
         {
         	passwords = userauthenticationdaoimpl.randomPasswordGenerator();
@@ -201,6 +205,8 @@ public class Registration {
         	{
         		UserAuthentication userdetails = userauthenticationdaoimpl.setNewUsers(username, passwords.get("hashedPassword"), role);
         		userauthenticationdaoimpl.save(userdetails);
+        		date_of_birth = Encryption.Encode(newuser.getDate_of_birth().toString());
+                ssn = Encryption.Encode(newuser.getSsn());
         		Customer externaluser = externaluserDao.setExternalUser(name, address, phone, username, date_of_birth, ssn);
         		Integer userId = externaluserDao.createUser(externaluser);
         		Integer creditAccNo = bankaccountDao.CreateAndGetCreditAccountNo(userId);
@@ -213,7 +219,7 @@ public class Registration {
         	                    dblog.setDetails("Registration successful");
         	                    dblog.setUserid(userID);
         	                    logDao.save(dblog, "internal_log");
-        		redir.addFlashAttribute("error_msg","Registration successful. Password sent to" + newuser.getEmail());
+        		redir.addFlashAttribute("error_msg","Registration successful. Password sent to " + newuser.getEmail());
         	}
         }
         else
@@ -237,7 +243,7 @@ public class Registration {
 		}
     }
 	
-	@RequestMapping(value="/employee/externalregistrationform")//, method = RequestMethod.POST)
+	@RequestMapping(value="/employee/externalregistrationform", method = RequestMethod.POST)
     public ModelAndView registerExternalForm() {
 		try{
 		ModelAndView model = new ModelAndView("employeePages/registrationExternal");
@@ -247,7 +253,7 @@ public class Registration {
 		}
     }
 	
-	@RequestMapping(value="/employee/internalregistrationform")//, method = RequestMethod.POST)
+	@RequestMapping(value="/employee/internalregistrationform", method = RequestMethod.POST)
     public ModelAndView registerInternalForm() {
 		try{
 		ModelAndView model = new ModelAndView("employeePages/registrationInternal");

@@ -12,10 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thothlab.devilsvault.dao.customer.InternalCustomerDAO;
 import org.thothlab.devilsvault.dao.employee.InternalUserDaoImpl;
 
@@ -28,7 +24,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		String gRecaptchaResponse = arg0.getParameter("g-recaptcha-response");
         @SuppressWarnings("unused")
 		boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-        if(verify){
+//        if(verify){
         	HttpSession session = arg0.getSession();
             User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc/config/DaoDetails.xml");
@@ -57,9 +53,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     			ctx.close();
     			arg1.sendRedirect("/CSE545-SS/customer/home");
     		}
-        }else{
-        	arg1.sendRedirect("/CSE545-SS/captchafailed");
-        }
+//        }else{
+//        	arg1.sendRedirect("captchafailed");
+//        }
 	}
 
 }

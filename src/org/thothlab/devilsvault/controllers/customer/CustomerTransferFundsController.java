@@ -156,12 +156,7 @@ public class CustomerTransferFundsController {
 
 			// Check if payee account input is in the expected format
 			String payeeAccount_str = request.getParameter("etpselectPayeeAccount");
-			if(!payeeAccount_str.matches("[a-zA-Z ]+\\w\\s*:\\d+")){
-				model.addObject("success", false);
-				model.addObject("error_msg", " Invalid Credentials!");
-				ctx.close();
-				return model;
-			}
+			
 			
 			//Check if payer account input is in the expected format
 			String payerAccount_str = request.getParameter("etpselectPayerAccount");
@@ -178,6 +173,12 @@ public class CustomerTransferFundsController {
 			int payeeAccountNumber = -1;
 
 			if(payeeAccount_str.contains(":")){
+				if(!payeeAccount_str.matches("[a-zA-Z ]+\\w\\s*:\\d+")){
+					model.addObject("success", false);
+					model.addObject("error_msg", " Invalid Payee Account!");
+					ctx.close();
+					return model;
+				}
 				payeeAccountNumber = Integer.parseInt(request.getParameter("etpselectPayeeAccount").split(":")[1]);
 				String payeeName = request.getParameter("etpselectPayeeAccount").split(":")[0];
 				if(!(populatedPayeeAccounts.contains(payeeName+":"+payeeAccountNumber) 
@@ -190,6 +191,7 @@ public class CustomerTransferFundsController {
 				model.addObject("payee_info", payeeName + "-" + payeeAccountNumber);
 			}
 			else{
+				
 				String payee_account_str = request.getParameter("etpselectPayeeAccount");
 				if(!payee_account_str.matches("\\d+")){
 					model.addObject("success", false);

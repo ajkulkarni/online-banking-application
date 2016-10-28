@@ -76,6 +76,7 @@
 							<tr>
 								<th class="active">Account Number</th>
 								<th class="active">Account Type</th>
+								<th class="active">Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -90,6 +91,24 @@
 										<tr>
 											<td style="text-align:center">${row_value.account_number}</td>
 											<td style="text-align:center">${row_value.account_type}</td>
+											<td style="text-align:center">
+												<c:if test="${row_value.account_type == 'SAVINGS'}">
+													<form action = "viewsavingsaccount" method = "post">
+			                                  		<input type="hidden" name="extUserID" value="${extUserObj.id}">
+			                                  		<input type="hidden" name="savingsPicker" value='last month'>
+			                                  		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+			                                  		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+		                                 		</form>
+												</c:if>
+												<c:if test="${row_value.account_type == 'CHECKING'}">		
+		                                 		<form action = "viewcheckingaccount" method = "post">
+		                                  		<input type="hidden" name="extUserID" value="${extUserObj.id}">
+		                                  		<input type="hidden" name="checkingPicker" value='last month'>
+		                                  		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                  		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+		                                 		</form>
+		                                 		</c:if>		
+											</td>
 										</tr>
 									</c:forEach>
                         		</c:otherwise>
@@ -140,7 +159,7 @@
         							<input type="text" class="form-control" name="newValue" placeholder="New Detail" required>
       							</div>
        							<input type="hidden" name="userID" value="${extUserObj.id}">	
-       							<input type="hidden" name="userType" value="external">				
+       							<input type="hidden" name="userType" value="${userType}">				
        							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
        							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
 	       							<button style="float:right;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>

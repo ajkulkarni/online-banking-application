@@ -51,7 +51,9 @@ public class UserLoginManagementDaoImpl {
 	public Boolean unlockUserAccount(String username,String requestType)
 	{
 		String query = "UPDATE users set " + requestType.toLowerCase() +"NonLocked = '1' where username='" + username + "';";
+		String query1 = "DELETE FROM user_attempts WHERE username='" + username + "'";
 		jdbcTemplate.update(query);
+		jdbcTemplate.update(query1);
 		return null;
 	}
 	        

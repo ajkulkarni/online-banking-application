@@ -121,5 +121,10 @@ callServlet();
         </div>
     </fieldset>
 </form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		sideNavigationSettings();
+	});
+	</script>
 </body>
 </html>

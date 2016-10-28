@@ -33,7 +33,7 @@ public class Validator implements InternalUserDao {
 	public Boolean validateName(String name)
 	{
 		
-		String namePattern = "[a-zA-Z]+";
+		String namePattern = "[a-zA-Z\\s]+";
 
 		pattern = Pattern.compile(namePattern);
 		Matcher matcher = pattern.matcher(name);

@@ -16,32 +16,12 @@
 			</div>
 		</c:if>
 			<h4>Transactions</h4>
-			
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">Filters</h3>
-				</div>
-				<div class="panel-body">
-					<div class="col-lg-7">
-						<form class="form-horizontal" action="transactionsearch" method='POST' onSubmit="return checkInputOr()">
-							<label for="requestID" class="col-lg-3 control-label">Transaction ID : </label>
-							<div class="col-lg-9">
-		       					<input type="text" class="form-control" name="transactionID" placeholder="Transaction ID">
-		      				</div>
-		      				<br><br>
-		      				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-						    <button type="submit" class="btn btn-primary">Submit</button>
-						    <a href="transaction" class="btn btn-primary">All Transaction</a>
-						</form>
-					</div>
-				</div>
-			</div>
-			
+						
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">Pending Transaction Requests</h3>
 				</div>
-				<div class="panel-body no-padding">
+				<div class="panel-body no-padding" style="overflow-y: scroll; max-height:400px;">
 					<table id="content-table">
 						<thead>
 							<tr>
@@ -64,6 +44,29 @@
                         		<c:otherwise>
                         			<c:forEach items="${pending_list}" var="transaction">
                         				<c:choose>
+                        				<c:when test="${transaction.transaction_type == 'debitfunds' || transaction.transaction_type == 'creditfunds'}">
+                        					<tr>
+                                    		<td style="text-align:center">${transaction.id}</td>
+											<td style="text-align:center">${transaction.payer_id}</td>
+											<td style="text-align:center">${transaction.payee_id}</td>
+											<td style="text-align:center">${transaction.amount}</td>
+											<td style="text-align:center">${transaction.transaction_type}</td>
+											<td style="text-align:center">${transaction.critical}</td>
+											<td style="text-align:center">
+												<form action = "processdebitcredit" method = "post">
+		                                    		<input type="hidden" name="transactionID" value="${transaction.id}">
+		                                    		<input type="hidden" name="extUserID" value="external">
+		                                    		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
+		                                    		<select id="requestType" name="requestType" required>
+				       									<option value="">Select Type</option>
+				          								<option value="approve">Approve</option>
+				          								<option value="reject">Reject</option>
+				       								</select>
+		                                    		<button type="submit" class="btn btn-xs btn-primary">Submit</button>
+		                                   		</form>
+											</td>
+                                		</tr>
+                        				</c:when>
                         				<c:when test="${transaction.transaction_type == 'CC_FEES' || transaction.transaction_type == 'CC_PAYMENT' || transaction.transaction_type == 'MERCHANT'}">
                         					<tr>
                                     		<td style="text-align:center">${transaction.id}</td>
@@ -145,7 +148,7 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Complete Transactions Requests</h3>
 				</div>
-				<div class="panel-body no-padding">
+				<div class="panel-body no-padding" style="overflow-y: scroll; max-height:400px;">
 					<table id="content-table">
 						<thead>
 							<tr>

@@ -14,7 +14,13 @@
 			<c:if test="${not empty error_msg}">
 			<div class="alert alert-dismissible alert-success">
   				<button type="button" class="close" data-dismiss="alert">&times;</button>
-  				<strong>${message}</strong>
+  				<strong>${error_msg}</strong>
+			</div>
+			</c:if>
+			<c:if test="${not empty error_message}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${error_message}</strong>
 			</div>
 			</c:if>
             <c:if test="${role == 'ROLE_REGULAR'}">

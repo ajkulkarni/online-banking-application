@@ -80,7 +80,7 @@ public class LoginController {
 		return error;
 	}
 	
-	@RequestMapping(value = "/CSE545-SS/captchafailed")
+	@RequestMapping(value = "/captchafailed")
 	public String captcha_failed(RedirectAttributes redir,HttpServletRequest request, HttpServletResponse response) {
         String message = "Captcha verification failed !! Please try again !!";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

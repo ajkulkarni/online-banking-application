@@ -92,6 +92,12 @@
       							</div>
 				    		</div>
 				    </form>
+				    <p class="guidelines" id="guide_1">1) The password must be between 6-16 characters long.</p>
+						<p class="guidelines" id="guide_1">2) It must contain at least one letter.</p>
+						<p class="guidelines" id="guide_1">3) It must have at least one number.</p>
+						<p class = "guidelines" id="guide_1">4) It must contain one lower case letter.</p>
+						<p class = "guidelines" id="guide_1">4) It must contain one upper case letter.</p>
+						<p class="guidelines" id="guide_1">4) It must have at at least one of the following special characters [@#$%^&   ].</small></p>
 				<%-- </c:if> --%>
 					
 			</div>
