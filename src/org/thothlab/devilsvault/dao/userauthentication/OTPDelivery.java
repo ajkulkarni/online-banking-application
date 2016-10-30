@@ -1,5 +1,7 @@
 package org.thothlab.devilsvault.dao.userauthentication;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -12,12 +14,20 @@ import javax.mail.internet.MimeMessage;
 
 public class OTPDelivery {
 	public String send(String email) {
-		
-		String OTP = "";
-		//TODO: Conceal these details in a text file
-		final String username = "securebanking.ss4@gmail.com";
-		final String password = "ss@12345";
 
+		Properties prop = new Properties();
+		try {
+			prop.load(OTPDelivery.class.getClassLoader().getResourceAsStream("smtp.properties"));	
+			
+		} catch(FileNotFoundException fne) {
+			return "Failed OTP Generation ";
+		} catch(IOException ioe) {
+			return "Failed OTP Generation ";
+		}
+		
+		final String username = prop.getProperty("username");
+		final String password = prop.getProperty("password");
+		String OTP = "";
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");

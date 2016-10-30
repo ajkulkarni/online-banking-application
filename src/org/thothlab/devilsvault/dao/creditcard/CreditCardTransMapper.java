@@ -18,7 +18,7 @@ public class CreditCardTransMapper implements RowMapper<TransactionModel> {
 		obj.setStatus(rs.getString("status"));
 		obj.setTimestamp_updated(rs.getDate("timestamp_created"));
 		obj.setTimestamp_updated(rs.getDate("timestamp_updated"));
-		obj.setPendingStrg(rs.getBoolean("isPending"));
+		obj.setIsPending(rs.getInt("isPending"));
 		obj.setDescription(rs.getString("Description"));
 		// obj.setOwner(rs.get);
 		return obj;

@@ -71,7 +71,7 @@ public class TransferDAO {
 
 	public List<Integer> getMultipleAccounts(Integer payerID) {
 
-		String query = "Select account_number from bank_accounts where external_users_id=" + payerID;
+		String query = "Select account_number from bank_accounts where account_type <> \'CREDIT\' AND external_users_id=" + payerID;
 		List<Integer> userMultipleAccounts = jdbcTemplate.query(query, new AccountsMapper());
 
 		return userMultipleAccounts;
@@ -137,7 +137,7 @@ public class TransferDAO {
 				new Object[] { payerAccountNumber }, new BankAccountMapper());
 
 		if (amount.compareTo((ba.getBalance().subtract(ba.getHold()))) == 1
-				|| amount.compareTo(new BigDecimal("1")) == -1) {
+				|| amount.compareTo(new BigDecimal("0")) == -1) {
 			return false;
 		}
 		return true;
@@ -245,67 +245,53 @@ public class TransferDAO {
 	}
 	
 	public HashMap<String,String> processPayment(int merchantID, int sentAmount, int userID) throws SQLException {
-
-		HashMap<String,String> sendToController = new HashMap<>();
-
-			String query = "select account_number from bank_accounts where external_users_id = " + userID + " and account_type = \"CREDIT\"";
-
-			System.out.println(query+"fhsdkhfksd");
-
-			Connection con = dataSource.getConnection();
-			Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-
-			ResultSet rs = st.executeQuery(query);
-			int accountNumber = -1;
-			rs.first();
-			accountNumber = rs.getInt("account_number");
-			System.out.println(accountNumber);
-			System.out.println("found acocunt number"+accountNumber);
-
-
-
-			//getting MinimumValidAmount
-			if((accountNumber==-1) ){
-				sendToController.put("userAccount","-1");
-			}
-			else{
-				sendToController.put("userAccount",""+accountNumber);
-			}
-			String getMinimumValidAmount = "select (credit_limit - available_balance) as balance from credit_card_account_details where account_number = " + accountNumber;
-
-			System.out.println(getMinimumValidAmount);
-			rs = st.executeQuery(getMinimumValidAmount);
-			int minimumBalance=-1;
-			rs.first();
-			minimumBalance = rs.getInt("balance");
-			if(sentAmount > minimumBalance){
-				sendToController.put("accepted","-1");
-				return sendToController;
-			}
-			sendToController.put("accepted","+1");
-
-			System.out.println("minimumBalance"+minimumBalance);
-
-			String getMerchantCheckingsAccount = "select account_number from bank_accounts where external_users_id ="+ merchantID+" and account_type in ( \"CHECKINGS\",\"CHECKING\") ";
-
-			System.out.println("getting merchant checking accounts:"+getMerchantCheckingsAccount);
-			rs = st.executeQuery(getMerchantCheckingsAccount);
-			int merchantAccountNumber = -1;
-			rs.next();
-			merchantAccountNumber = rs.getInt("account_number");
-			System.out.println("merchant Account Number:"+merchantAccountNumber);
-
-
-
-			if((merchantAccountNumber==-1)){
-				sendToController.put("merchantCheckingAccount","-1");
-			}
-			else{
-				sendToController.put("merchantCheckingAccount",""+merchantAccountNumber);
-			}
-			return sendToController;
-		}
+	    HashMap<String,String> sendToController = new HashMap<>();
+	        String query = "select account_number from bank_accounts where external_users_id = " + userID + " and account_type = \"CREDIT\"";
+	        //System.out.println(query+"fhsdkhfksd");
+	        Connection con = dataSource.getConnection();
+	        PreparedStatement ps = null;
+	        Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+	                ResultSet.CONCUR_UPDATABLE);
+	        ResultSet rs = st.executeQuery(query);
+	        int accountNumber = -1;
+	        rs.first();
+	        accountNumber = rs.getInt("account_number");
+	        //System.out.println(accountNumber);
+	        //System.out.println("found acocunt number"+accountNumber);
+	        //getting MinimumValidAmount
+	        if((accountNumber==-1) ){
+	            sendToController.put("userAccount","-1");
+	        }
+	        else{
+	            sendToController.put("userAccount",""+accountNumber);
+	        }
+	        String getMinimumValidAmount = "select (credit_limit - available_balance) as balance from credit_card_account_details where account_number = " + accountNumber;
+	        //System.out.println(getMinimumValidAmount);
+	        rs = st.executeQuery(getMinimumValidAmount);
+	        int minimumBalance=-1;
+	        rs.first();
+	        minimumBalance = rs.getInt("balance");
+	        if(sentAmount > minimumBalance){
+	            sendToController.put("accepted","-1");
+	        }else{
+	            sendToController.put("accepted","1");
+	        }
+	        //System.out.println("minimumBalance"+minimumBalance);
+	        String getMerchantCheckingsAccount = "select account_number from bank_accounts where external_users_id ="+ merchantID+" and account_type in ( \"CHECKINGS\",\"CHECKING\") ";
+	        //System.out.println("getting merchant checking accounts:"+getMerchantCheckingsAccount);
+	        rs = st.executeQuery(getMerchantCheckingsAccount);
+	        int merchantAccountNumber = -1;
+	        rs.next();
+	        merchantAccountNumber = rs.getInt("account_number");
+	        //System.out.println("merchant Account Number:"+merchantAccountNumber);
+	        if((merchantAccountNumber==-1)){
+	            sendToController.put("merchantCheckingAccount","-1");
+	        }
+	        else{
+	            sendToController.put("merchantCheckingAccount",""+merchantAccountNumber);
+	        }
+	        return sendToController;
+	    }
 	
 	public List<String> getNewMerchantAccounts(int userID) throws SQLException {
 
@@ -386,6 +372,20 @@ public class TransferDAO {
 		}
 		return merchantAccounts;
 	}
+	
+	 public Boolean updateAvailableBalance(BigDecimal amount, int payerAccount) throws SQLException {
+		    String query = "update credit_card_account_details set available_balance = available_balance + "+amount+" where account_number = "+payerAccount+"";
+		        System.out.println(query);
+		        Connection con = dataSource.getConnection();
+		        Statement st = con.createStatement();
+		        int i = st.executeUpdate(query);
+		        System.out.println(i+"what it returns ");
+		        if (i == 1) {
+		            return true;
+		        }
+		        return false;
+		    }
+
 
 
 }

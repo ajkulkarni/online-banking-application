@@ -10,7 +10,19 @@
   				<strong>${message}</strong>
 			</div>
 			</c:if>
-            <form action = "externalRegistration" method = "post" style="float:right;">
+			<c:if test="${not empty error_msg}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${error_msg}</strong>
+			</div>
+			</c:if>
+			<c:if test="${not empty error_message}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${error_message}</strong>
+			</div>
+			</c:if>
+            <form action = "externalregistrationform" method = "post" style="float:right;">
 	       		<input type="hidden" name="userType" value="external">
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	       		<button type="submit" class="btn btn-sm btn-primary">New Registration</button>
@@ -18,7 +30,7 @@
             <h3>User Management</h3>
             <form class="form-margin" action = "searchexternaluser" method = "post">
             	<div class="col-md-3" style="padding-left:0px;">
-            		<input class="form-control" type="text" name="customerID" placeholder="Customer ID">
+            		<input class="form-control" type="text" name="customerID" placeholder="Customer ID" required>
             	</div>
 	       		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 	       		<button type="submit" class="btn btn-sm btn-primary">Search Customer</button>
@@ -39,7 +51,7 @@
                         <tbody>
                         	<tr>
                         		<c:choose>
-	                        		<c:when test="${empty customerObj}">
+	                        		<c:when test="${customerObj.id == 0 || empty customerObj}">
 	                        			<tr>
 	                                    	<td colspan="3">No Results</td>
 	                                	</tr>

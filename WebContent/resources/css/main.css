@@ -664,6 +664,7 @@ Sidebar
 	margin:0px;
 }
 
+
 table#content-table{
     width:100%;
     max-width: 100%;
@@ -697,4 +698,10 @@ table#content-table td.full-row{
 
 .form-margin{
 	margin-bottom:15px;
+}
+
+@media only screen and (min-width: 768px) {
+  #login-page {
+    width:40%;
+  }
 }

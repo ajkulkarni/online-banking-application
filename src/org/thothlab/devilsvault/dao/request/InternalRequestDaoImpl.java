@@ -170,5 +170,16 @@ public class InternalRequestDaoImpl extends RequestDaoImpl {
         super.saveRaisedRequest(request, "external_request_pending");
         
     }
+	
+	public Boolean validateRequest(Integer userID,String requesttype,String table)
+    {
+        String query = "SELECT COUNT(*) FROM " + table +" WHERE requesterid ='" + userID + "' AND request_type ='" + requesttype + "';";
+       Integer count = jdbcTemplate.queryForObject(query,Integer.class);
+       if(count > 0)
+       {
+           return false;
+       }
+        return true;
+    }
 
 }

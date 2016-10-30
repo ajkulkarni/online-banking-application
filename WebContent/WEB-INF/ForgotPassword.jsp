@@ -33,12 +33,12 @@
 			
 		$(document).ready(function(){
 		$('#submit').click(function(){
-		var userEmail=$('#userEmail').val();	
+		var userEmail=$('#inputEmail').val();	
 		var filter = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		if(!filter.test(userEmail))
 		{
-			$("#userEmail").focus();
-	    	$("#errorBox").html("Please Enter a Valid Email Address");
+			$("#inputEmail").focus();
+	    	alert("Please Enter a Valid Email Address");
 			return false;
 		}
 		
@@ -51,17 +51,17 @@
 <body>
 	<header class="cd-main-header">
 		<!--<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>-->
-		<a href="/" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
+		<a href="/CSE545-SS" style="padding-left: 20px"><img src="<c:url value="/resources/img/Sparky.png"/>"
 						 style="vertical-align:top;"
 						 width="35px" height="65px" alt="Sparky"></a>
-		<a href="/"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
+		<a href="/CSE545-SS"><img class="text-logo" src="<c:url value="/resources/img/Picture1.png"/>"
 													style="padding: 7px 0 7px 0"
 													width="200px" height="65px" alt="Devil's Vault"></a>
 
 	</header> <!-- .cd-main-header -->
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
-			<div class="col-md-12" id="page-content">
+			<div class="col-md-12" id="login-page">
 				<%-- <c:if test="${not empty verifyemail}"> --%>
 					<c:if test="${not empty message}">
 					<div class="alert alert-dismissible alert-success">
@@ -69,11 +69,12 @@
 		  				<strong>${message}</strong>
 					</div>
 					</c:if>
+					
 					<form action="verifyemail" method="POST">
 						<div class="form-group">
 		      				<label for="inputEmail" class="col-lg-2 control-label">Enter Email</label>
 		      				<div class="col-lg-10 form-margin">
-		        				<input type="text" class="form-control" id="inputEmail" name="Email" placeholder="Email">
+		        				<input type="email" class="form-control" id="inputEmail" name="Email" placeholder="Email">
 		      				</div>
 		      				<div class="form-group">
 						      <div class="col-lg-10 col-lg-offset-2 form-margin">
@@ -83,40 +84,6 @@
 						    </div>
 		    			</div>
 					</form>
-					
-					<form action="verifyotp" method="POST">
-						<div class="form-group">
-		      				<label for="inputEmail" class="col-lg-2 control-label">Enter OTP</label>
-		      				<div class="col-lg-10 form-margin">
-		        				<input type="text" class="form-control" id="inputEmail" name="otp" placeholder="OTP">
-		      				</div>
-		      				<div class="form-group">
-						      <div class="col-lg-10 col-lg-offset-2 form-margin">
-						      <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-						        <button type="submit" class="btn btn-primary">Submit</button>
-						      </div>
-						    </div>
-		    			</div>
-					</form>
-					
-					<form class="form-horizontal" action="changepassword" method="POST">
-				    		<div class="form-group">
-      							<label for="newpassword" class="col-lg-3 control-label">New Password</label>
-      							<div class="col-lg-9 form-margin">
-        							<input type="password" class="form-control" name="newpassword" placeholder="New Password" required>
-      							</div>
-      							<label for="confirmpassword" class="col-lg-3 control-label">Confirm</label>
-      							<div class="col-lg-9 form-margin">
-        							<input type="password" class="form-control" name="confirmpassword" placeholder="Confirm Password" required>
-      							</div>
-       							<input type="hidden" name="userID" value="${userID}">					
-       							<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
-       							<div class="col-lg-10 col-lg-offset-2" style="margin-top:15px;">
-	       							<button style="float:right;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        				<button style="float:right;margin-right:15px;" type="submit" class="btn btn-primary">Submit</button>
-      							</div>
-				    		</div>
-				    </form>
 				<%-- </c:if> --%>
 					
 			</div>

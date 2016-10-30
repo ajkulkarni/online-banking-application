@@ -6,7 +6,6 @@
 	pageEncoding="UTF-8"%>
 
 <%@include file="customerHeader.jsp"%>
-<script src="<c:url value="/resources/js/transferfunds.js" />"></script>
 <div class="content-wrapper">
 
 	<div class="col-md-12" id="transferConfirmation">

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.thothlab.devilsvault.db.model.BankAccountDB;
 import org.thothlab.devilsvault.db.model.BankAccountExternal;
 import org.thothlab.devilsvault.db.model.Customer;
 @Repository ("ExtUserDaoImpl")
@@ -23,7 +24,7 @@ public class ExtUserDaoImpl{
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	public BankAccountExternal getAccount(Customer user,BankAccountExternal bankAccount,String accountType)
+	public BankAccountDB getAccount(Customer user,BankAccountDB bankAccount,String accountType)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -37,8 +38,9 @@ public class ExtUserDaoImpl{
 			{
 				bankAccount.setAccount_number(rs.getInt("account_number"));
 				bankAccount.setAccount_type(rs.getString("account_type"));
-				bankAccount.setBalance(rs.getFloat("balance"));
-				bankAccount.setExternal_users_id(rs.getInt("external_users_id"));
+				bankAccount.setHold(rs.getBigDecimal("hold"));
+				bankAccount.setBalance(rs.getBigDecimal("balance").subtract(bankAccount.getHold()));
+				bankAccount.setExternal_user_id(rs.getInt("external_users_id"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -53,6 +55,7 @@ public class ExtUserDaoImpl{
 		}
 		return bankAccount;
      }
+	
 	public Double getSavingsBalance(Customer user)
 	{
 		Connection con = null;
@@ -110,7 +113,7 @@ public class ExtUserDaoImpl{
 		return balance;
      }
 	
-	public Customer setExternalUser(String name,String address,BigInteger phone,String email, Date date_of_birth,String ssn)
+	public Customer setExternalUser(String name,String address,BigInteger phone,String email, String date_of_birth,String ssn)
     {
         Customer userDetails = new Customer();
         userDetails.setName(name);
@@ -139,7 +142,7 @@ public class ExtUserDaoImpl{
             ps.setInt(7, 123);
             ps.setLong(8, userdetails.getPhone().longValue());
             ps.setString(9, userdetails.getEmail());
-            ps.setDate(10, userdetails.getDate_of_birth());
+            ps.setString(10, userdetails.getDate_of_birth());
             ps.setString(11, userdetails.getSsn());
             int out = ps.executeUpdate();
             if(out !=0){
@@ -159,4 +162,65 @@ public class ExtUserDaoImpl{
         }
         return 0;
     }
+	
+	public BankAccountDB getCreditCardBalance(BankAccountDB account)
+	{
+		boolean status=false;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String query_CCbalance ="select available_balance from credit_card_account_details where account_number = "+account.getAccount_number();
+		System.out.println("credit card account num - "+account.getAccount_number());
+		try
+		{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(query_CCbalance);
+			rs = ps.executeQuery();
+			rs.next();
+			account.setBalance(rs.getBigDecimal(1));
+				
+		}catch(SQLException e){
+			status = false;
+			e.printStackTrace();
+		}finally{
+			try {
+					ps.close();
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return account;
+     }
+	
+	public BankAccountExternal getAccount(Customer user,BankAccountExternal bankAccount,String accountType)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql ="SELECT * FROM  bank_accounts WHERE external_users_id="+user.getId()+" and account_type='"+accountType+"'";
+		try{
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next())
+			{
+				bankAccount.setAccount_number(rs.getInt("account_number"));
+				bankAccount.setAccount_type(rs.getString("account_type"));
+				bankAccount.setBalance(rs.getFloat("balance"));
+				bankAccount.setExternal_users_id(rs.getInt("external_users_id"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bankAccount;
+     }
 }

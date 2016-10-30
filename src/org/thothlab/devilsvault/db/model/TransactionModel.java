@@ -19,15 +19,11 @@ public class TransactionModel {
 	
 	private String pendingStrg;
 	
-	public void setPendingStrg(Boolean x) {
-		if(x == false)
-			this.pendingStrg="Completed";
-		else
-			this.pendingStrg= "Pending";
-	}
-	
 	public String getPendingStrg() {
-		return pendingStrg;
+		if(this.isPending == 0)
+			return "Completed";
+		else
+			return "Pending";
 	}
 	public int getIsPending() {
 		return isPending;

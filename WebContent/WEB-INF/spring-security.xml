@@ -5,6 +5,12 @@
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
  	<http use-expressions="true" auto-config="true">
+ 		<intercept-url pattern="/employee/externalregistrationform" access="hasAnyRole('ROLE_REGULAR','ROLE_MANAGER')"></intercept-url>
+ 		<intercept-url pattern="/employee/internalregistrationform" access="hasRole('ROLE_ADMIN')"></intercept-url>
+ 		<intercept-url pattern="/employee/internalregister" access="hasRole('ROLE_ADMIN')"></intercept-url>
+ 		<intercept-url pattern="/employee/externalregister" access="hasAnyRole('ROLE_REGULAR','ROLE_MANAGER')"></intercept-url>
+ 		<intercept-url pattern="/employee/transaction" access="hasRole('ROLE_MANAGER')"></intercept-url>
+ 		<intercept-url pattern="/employee/systemlogs" access="hasRole('ROLE_ADMIN')"></intercept-url>
         <intercept-url pattern="/employee/**" access="hasAnyRole('ROLE_REGULAR','ROLE_MANAGER','ROLE_ADMIN')"></intercept-url>
         <intercept-url pattern="/customer/**" access="hasAnyRole('ROLE_CUSTOMER','ROLE_MERCHANT')"></intercept-url>
 

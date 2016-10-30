@@ -3,11 +3,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.thothlab.devilsvault.controllers.security.ExceptionHandlerClass;
 import org.thothlab.devilsvault.dao.creditcard.CreditCardDOA;
 import org.thothlab.devilsvault.dao.creditcard.CustomerDAOHelper;
 import org.thothlab.devilsvault.dao.customer.CustomerDAO;
@@ -19,108 +23,112 @@ import org.thothlab.devilsvault.db.model.TransactionModel;
 public class CreditCardDashboardController {
 	public ModelAndView model_ch = new ModelAndView("customerPages/creditHomePage");
 
+	String role;
+	int userID;
+	String username;
+	
+	public void setGlobals(HttpServletRequest request){
+		role = (String) request.getSession().getAttribute("role");
+		userID = (int) request.getSession().getAttribute("userID");
+		username = (String) request.getSession().getAttribute("username");	
+	}
+	
+	@ExceptionHandler(ExceptionHandlerClass.class)
+    public String handleResourceNotFoundException() {
+        return "redirect:/raiseexception";
+    }
+	
 	@RequestMapping("/customer/credithome")
-	public ModelAndView showCreditHome(){
+	public ModelAndView showCreditHome(HttpServletRequest request){
+		setGlobals(request);
 		
-//		
-//		CreditAccount account = getCreditInfoForUser (134);
-//		
-//		model_ch.addObject("creditAccount",account);
-//		
-//		CreditCardDOA transdao = CustomerDAOHelper.creditCardDAO();
-//		List<TransactionModel> transactions = transdao.getAllTransactions(account);
-//		model_ch.addObject("transations", transactions );
-//		
-//		
-//		int month = new Date().getMonth();
-//		int year = new Date().getYear() + 1900;
-//		
-//		List<String> months = new ArrayList<>();
-//		for (int i = 0; i <= month; i ++ ) {
-//			String value = getMonthFromNum(i);
-//			
-//			value = value +  " " + year;
-//			months.add(value);
-//		}
-//		String selectedMonth = getMonthFromNum(month) +" " + year;
-//		model_ch.addObject("selectedMonth",selectedMonth);
-//		model_ch.addObject("months",months);
-//		
-//		
-//		
-//		return model_ch;
-		
-ModelAndView model = new ModelAndView("customerPages/creditHomePage");
-		
-		CreditAccount account = getCreditInfoForUser (134);
-		
-		model.addObject("creditAccount",account);
-		
-		CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
-		
-		
-		
-		int month = new Date().getMonth();
-		int year = new Date().getYear() + 1900;
-		
-		List<String> months = new ArrayList<>();
-		for (int i = 0; i <= month; i ++ ) {
-			String value = getMonthFromNum(i);
+		try{
+			ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 			
-			value = value +  " " + year;
-			months.add(value);
+			CreditAccount account = getCreditInfoForUser (userID);
+			
+			model.addObject("creditAccount",account);
+			
+			CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
+			
+			
+			
+			int month = new Date().getMonth();
+			int year = new Date().getYear() + 1900;
+			
+			List<String> months = new ArrayList<>();
+			for (int i = 0; i <= month + 1; i ++ ) {
+				String value = getMonthFromNum(i);
+				
+				value = value +  " " + year;
+				months.add(value);
+			}
+			
+			model.addObject("selectedMonth",month);
+			model.addObject("months",months);
+			List<TransactionModel> transactions6 = transdao1.getTransactionForMonth(account, month+1);
+			model.addObject("transations", transactions6 );
+			
+			return model;
 		}
-		
-		model.addObject("selectedMonth",month);
-		model.addObject("months",months);
-		List<TransactionModel> transactions6 = transdao1.getTransactionForMonth(account, month);
-		model.addObject("transations", transactions6 );
-		
-		return model;
+		catch (Exception e){
+			throw new ExceptionHandlerClass(); 
+		}
 	}
 
-
-	@RequestMapping(value="getTransactions", method = RequestMethod.POST)
-	public ModelAndView getTransactionsBasedOnInterval(@RequestParam("monthPicker") String interval) {
-
 	
-		ModelAndView model = new ModelAndView("customerPages/creditHomePage");
-		
-		CreditAccount account = getCreditInfoForUser (100);
-		
-		model.addObject("creditAccount",account);
-		
-		CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
-		int monthNum = getMonthFromString(interval);
-		
-		
-		int month = new Date().getMonth();
-		int year = new Date().getYear() + 1900;
-		
-		List<String> months = new ArrayList<>();
-		for (int i = 0; i <= month; i ++ ) {
-			String value = getMonthFromNum(i);
+
+	@RequestMapping(value="/customer/getTransactions", method = RequestMethod.POST)
+	public ModelAndView getTransactionsBasedOnInterval(HttpServletRequest request,@RequestParam("monthPicker") String interval) {
+
+		setGlobals(request);
+		try{
+			ModelAndView model = new ModelAndView("customerPages/creditHomePage");
 			
-			value = value +  " " + year;
-			months.add(value);
+			CreditAccount account = getCreditInfoForUser (userID);
+			
+			model.addObject("creditAccount",account);
+			
+			CreditCardDOA transdao1 = CustomerDAOHelper.creditCardDAO();
+			int monthNum = getMonthFromString(interval);
+			
+			
+			int month = new Date().getMonth();
+			int year = new Date().getYear() + 1900;
+			
+			List<String> months = new ArrayList<>();
+			for (int i = 0; i <= month + 1; i ++ ) {
+				String value = getMonthFromNum(i);
+				
+				value = value +  " " + year;
+				months.add(value);
+			}
+			
+			model.addObject("selectedMonth",interval);
+			model.addObject("months",months);
+			List<TransactionModel> transactions6 = transdao1.getTransactionForMonth(account, monthNum);
+			model.addObject("transations", transactions6 );
+			
+			return model;
+		}catch (Exception e){
+			throw new ExceptionHandlerClass(); 
 		}
 		
-		model.addObject("selectedMonth",interval);
-		model.addObject("months",months);
-		List<TransactionModel> transactions6 = transdao1.getTransactionForMonth(account, monthNum);
-		model.addObject("transations", transactions6 );
-		
-		return model;
 
 	}
 	
 	private CreditAccount getCreditInfoForUser(int userId) {
-		CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
-		CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
-		Customer cust = cust_dao.getCustomer(userId);
+		try{
+			CreditCardDOA doa = CustomerDAOHelper.creditCardDAO();
+			CustomerDAO cust_dao = CustomerDAOHelper.customerDAO();
+			Customer cust = cust_dao.getCustomer(userId);
+			
+			CreditAccount account = doa.getCreditAccount(cust);
+			return account;
+		}catch (Exception e){
+			throw new ExceptionHandlerClass(); 
+		}
 		
-		CreditAccount account = doa.getCreditAccount(cust);
-		return account;
 	}
 	
 	private int getMonthFromString(String monthStr) {

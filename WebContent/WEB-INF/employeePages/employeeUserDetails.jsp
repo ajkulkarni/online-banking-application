@@ -12,6 +12,12 @@
   				<strong>${message}</strong>
 			</div>
 			</c:if>
+			<c:if test="${not empty error_msg}">
+			<div class="alert alert-dismissible alert-success">
+  				<button type="button" class="close" data-dismiss="alert">&times;</button>
+  				<strong>${error_msg}</strong>
+			</div>
+			</c:if>
 			<c:if test="${role != 'ROLE_ADMIN' }">
 			<a href="#modifyaccount" class="btn btn-primary btn-sm" style="margin-bottom:20px;" data-toggle="modal">Modify Account</a>
 			<a href="#changepassword" class="btn btn-primary btn-sm" style="margin-left: 15px;margin-bottom:20px;" data-toggle="modal">Change Password</a>
@@ -47,6 +53,27 @@
 								<td class="active">Address</td>
 								<td>${user.address}</td>
 							</tr>
+						</tbody>
+					</table>
+				</div>					
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">PII Information</h3>
+				</div>
+				<div class="panel-body no-padding">
+					<table id="content-table">
+						<thead>
+							<tr>
+								<th class="active">SSN</th>
+								<th class="active">Date Of Birth</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>${user.ssn}</td>
+							<td>${user.date_of_birth}</td>
+						</tr>	
 						</tbody>
 					</table>
 				</div>					

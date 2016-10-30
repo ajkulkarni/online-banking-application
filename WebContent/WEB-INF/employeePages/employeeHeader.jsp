@@ -59,7 +59,7 @@
 				</li>
 				<c:if test="${role == 'ROLE_MANAGER' }">
 				<li>
-					<a href="transaction">Transaction<span class="count">${transaction_count}</span></a>
+					<a href="transaction">Transaction</a>
 				</li>
 				</c:if>
 				<c:if test="${role == 'ROLE_ADMIN' }">

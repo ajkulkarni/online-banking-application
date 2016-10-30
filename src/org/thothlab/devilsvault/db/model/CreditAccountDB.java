@@ -1,11 +1,12 @@
 package org.thothlab.devilsvault.db.model;
 
+import java.math.BigInteger;
 import java.sql.Date;
 
 public class CreditAccountDB {
 	private Integer id;
 	private Integer interest;
-	private Long credit_card_number;
+	private BigInteger credit_card_number;
 	private Integer available_balance;
 	private Integer last_bill_amount;
 	private Date due_date;
@@ -27,10 +28,10 @@ public class CreditAccountDB {
 	public void setInterest(Integer interest) {
 		this.interest = interest;
 	}
-	public Long getCredit_card_number() {
+	public BigInteger getCredit_card_number() {
 		return credit_card_number;
 	}
-	public void setCredit_card_number(Long credit_card_number) {
+	public void setCredit_card_number(BigInteger credit_card_number) {
 		this.credit_card_number = credit_card_number;
 	}
 	public Integer getAvailable_balance() {

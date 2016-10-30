@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
@@ -77,6 +78,17 @@ public class LoginController {
 		}
 
 		return error;
+	}
+	
+	@RequestMapping(value = "/captchafailed")
+	public String captcha_failed(RedirectAttributes redir,HttpServletRequest request, HttpServletResponse response) {
+        String message = "Captcha verification failed !! Please try again !!";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth != null){    
+	        new SecurityContextLogoutHandler().logout(request, response, auth);
+	    }
+        redir.addFlashAttribute("exception_message",message);
+	    return "redirect:/login";
 	}
 
 }

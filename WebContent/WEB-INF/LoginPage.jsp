@@ -45,8 +45,17 @@
 		});
 	});
 	</script>
-
-}
+	
+	<script>
+		window.onload = function() {
+		  var recaptcha = document.forms["myForm"]["g-recaptcha-response"];
+		  recaptcha.required = true;
+		  recaptcha.oninvalid = function(e) {
+		    // do something
+		    alert("Please complete the captcha");
+		  }
+		}	
+	</script>
 </head>
 <body>
 	<header class="cd-main-header">
@@ -61,7 +70,7 @@
 	</header> <!-- .cd-main-header -->
 	<main class="cd-main-content">
 		<div class="content-wrapper" id="login-container">
-			<div class="col-md-12" id="page-content" style="width: 70%;margin: 0 25%;">
+			<div class="col-md-12" id="login-page">
 				<h3>Login Page</h3>
 				  <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
       				<font color="red">
@@ -70,19 +79,28 @@
         			<%-- <h2>${msg}</h2> --%>
       				</font>
     			  </c:if>
-    			  <h2>${msg}</h2>					
+    			  <c:if test="${not empty exception_message}">
+					<div class="alert alert-dismissible alert-danger">
+  					<button type="button" class="close" data-dismiss="alert">&times;</button>
+  					<strong>${exception_message}</strong>
+					</div>
+				</c:if>
 				<form action="<c:url value='j_spring_security_check' />" method='POST'>
-      				<label for="username" class="col-lg-1 control-label no-padding">Username</label>
-      				<div class="col-lg-11 form-margin no-padding">
+      				<label for="username" class="col-lg-2 control-label no-padding">Username</label>
+      				<div class="col-lg-10 form-margin no-padding">
         				<input type="email" class="form-control no-padding" name="username" id="userEmail" placeholder="Username" required>
       				</div>
-      				<label for="password" class="col-lg-1 control-label no-padding">Password</label>
-      				<div class="col-lg-11 form-margin no-padding">
+      				<label for="password" class="col-lg-2 control-label no-padding">Password</label>
+      				<div class="col-lg-10 form-margin no-padding">
         				<input type="password" class="form-control no-padding" name="password" id="password" placeholder="Password" required>
       				</div>
-      				<!-- <div class="g-recaptcha" data-sitekey="6LcMeggUAAAAAPjZlkFO3kTfHhSqJ-qo3nQivY2S"></div><br> -->
+     				<div class="col-lg-12 form-margin no-padding">
+      				<div class="g-recaptcha" data-sitekey="6LecawoUAAAAAGxDiLpqTZ9CZSr5I0QAyWEuXWRW"></div>
+      				</div>
+      				<div class="col-lg-12 form-margin no-padding">
       				<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 				    <input type="submit" class="btn btn-primary" value="Login" class="btn" id="submit"/>
+				    </div>
 				    <br>
 				    <br>
 				</form>

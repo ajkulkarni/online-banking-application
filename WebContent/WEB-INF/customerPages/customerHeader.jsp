@@ -44,6 +44,9 @@
 	<main class="cd-main-content">
 		<nav class="cd-side-nav is-fixed">
 			<ul>
+			<li>
+					<a href="home">Home</a>
+				</li>
 				<li class="has-children">
 					<a href="#0">Accounts</a>
 					
@@ -76,5 +79,7 @@
 						<a href="merchantpayment">Merchant Panel</a>
 					</li>
 				</c:if>
+				<li><a href="/CSE545-SS/customer/addMoneyOption">Add Money</a></li>
+				<li><a href="/CSE545-SS/customer/withdrawMoneyOption">Withdraw Money</a></li>
 			</ul>
 		</nav>

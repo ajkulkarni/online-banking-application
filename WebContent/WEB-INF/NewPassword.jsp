@@ -36,7 +36,7 @@
 			$("#saveForm").click(function() {
 				rules: {
 				password: {
-					var strongRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+					var strongRegex = ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{6,16}$;
 						var password = $('#password').val();
 						if(!strongRegex.test(password))
 						{

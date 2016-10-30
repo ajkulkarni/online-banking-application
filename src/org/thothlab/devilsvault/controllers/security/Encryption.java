@@ -1,6 +1,6 @@
 package org.thothlab.devilsvault.controllers.security;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -15,13 +15,14 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.thothlab.devilsvault.dao.userauthentication.OTPDelivery;
 
 public class Encryption {
-
+	
 	public static String Encode(String data) {
 		try {
 			KeyStore keyStore = KeyStore.getInstance("JCEKS");
-			FileInputStream stream = new FileInputStream("./keystore/mykeystore.jks");
+			InputStream stream = OTPDelivery.class.getClassLoader().getResourceAsStream("mykeystore.jks");
 			keyStore.load(stream, "password".toCharArray());
 			Key key = keyStore.getKey("mykey", "password".toCharArray());
 
@@ -38,7 +39,7 @@ public class Encryption {
 	public static String Decode(String encryptedData) {
 		try {
 			KeyStore keyStore = KeyStore.getInstance("JCEKS");
-			FileInputStream stream = new FileInputStream("./keystore/mykeystore.jks");
+			InputStream stream = OTPDelivery.class.getClassLoader().getResourceAsStream("mykeystore.jks");
 			keyStore.load(stream, "password".toCharArray());
 			Key key = keyStore.getKey("mykey", "password".toCharArray());
 
