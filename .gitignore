@@ -5,4 +5,4 @@ target/
 bin/
 .DS_Store
 src/jdbc/config/backup
-src/main/resouces/backup
+src/main/resources/backup
