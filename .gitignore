@@ -6,3 +6,4 @@ bin/
 .DS_Store
 src/jdbc/config/backup
 src/main/resources/backup
+target/
