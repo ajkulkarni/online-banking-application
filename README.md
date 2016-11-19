@@ -10,9 +10,13 @@ A secure banking system (SBS) is a software system developed primarily to facili
 
 1. Clone the repo to your machine.
 2. Import as a Maven project in Eclipse.
-3. Build project with maven goals: `clean install`
-4. Install a server like `Tomcat`
-5. Run the application on the server.
+3. Run the database script
+4. Update you database config in the file: `database.properties`
+5. Update your smtp server details (to send OTP) in the file: `smtp.properties`
+6. Add your keystore file which stores your certificate and private key: `keystore.jks`
+7. Build project with maven goals: `clean install`
+8. Install a server like `Tomcat`
+9. Run the application on the server.
 
 ## Contributing
 
